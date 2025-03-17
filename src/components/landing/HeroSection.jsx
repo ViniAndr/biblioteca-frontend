@@ -5,7 +5,7 @@ import Badge from "../common/Bagde";
 // Icons
 import { IoIosSearch } from "react-icons/io";
 
-function SectionTop() {
+function HeroSection() {
   return (
     <section className="flex py-20">
       <div className="m-auto px-4">
@@ -24,20 +24,20 @@ function SectionTop() {
           <div className="rounded-3xl border-1 border-zinc-500 py-1 pl-3 pr-1 flex items-center">
             <IoIosSearch className="text-2xl" />
             <input type="text" placeholder="O que você deseja ler hoje?" className="mx-2 outline-0 w-full" />
-            <Button text={"Explorar"} rounded={true} />
+            <Button text={"Explorar"} rounded={"rounded-3xl"} />
           </div>
         </div>
 
         <div className="flex justify-center gap-2 mt-4">
-          <Badge text={"Literatura"} variant={"outline"} />
-          <Badge text={"Ficção"} variant={"outline"} />
-          <Badge text={"Romance"} variant={"outline"} />
-          <Badge text={"Poesia"} variant={"outline"} />
-          <Badge text={"Biografia"} variant={"outline"} />
+          <Badge text={"Literatura"} variant={"outlineHover"} />
+          <Badge text={"Ficção"} variant={"outlineHover"} />
+          <Badge text={"Romance"} variant={"outlineHover"} />
+          <Badge text={"Poesia"} variant={"outlineHover"} />
+          <Badge text={"Biografia"} variant={"outlineHover"} />
         </div>
       </div>
     </section>
   );
 }
 
-export default SectionTop;
+export default HeroSection;

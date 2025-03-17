@@ -1,5 +1,6 @@
 // Components
-import SectionTop from "../components/landing/SectionTop";
+import HeroSection from "../components/landing/HeroSection";
+import TopBooksSection from "../components/landing/TopBooksSection";
 
 export default function Home() {
   return (
@@ -9,7 +10,8 @@ export default function Home() {
         backgroundSize: "20px 20px",
       }}
     >
-      <SectionTop />
+      <HeroSection />
+      <TopBooksSection />
     </div>
   );
 }
