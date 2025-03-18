@@ -8,8 +8,8 @@ import { PiBookOpenLight } from "react-icons/pi";
 function Footer() {
   return (
     <footer className=" py-12 border-t border-zinc-200">
-      <div className="container mx-auto">
-        <div className="flex container justify-center gap-16 mx-auto pb-8">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-wrap md:justify-center gap-8 md:gap-16 pb-8">
           {/* Coluna Esquerda */}
           <div>
             {/* logo */}
@@ -18,7 +18,7 @@ function Footer() {
               <p className="text-xl font-bold tracking-tight">Biblioteca</p>
             </div>
             {/* Breve Descrição */}
-            <p className="text-sm text-zinc-600 my-3 max-w-96">
+            <p className="text-sm text-zinc-600 my-3 md:max-w-96">
               Sua biblioteca digital com milhares de títulos para explorar, aprender e se inspirar.
             </p>
             {/* Rede Social */}
@@ -37,7 +37,7 @@ function Footer() {
 
           {/* Coluna Direita */}
           <div>
-            <h3 className="font-medium">Contato</h3>
+            <h3 className="font-medium pb-3">Contato</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-1 text-sm text-zinc-600">
                 <LuMapPin className="h-4 w-4" />

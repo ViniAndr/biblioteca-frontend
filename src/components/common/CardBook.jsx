@@ -28,7 +28,7 @@ function CardBook({ image, title, author, category, loans, position }) {
 
       {/* Área de texto */}
       <div className="p-3">
-        <h1 className="font-bold text-xl line-clamp-2 leading-tight">{title}</h1>
+        <h1 className="font-bold text-xl line-clamp-1 leading-tight">{title}</h1>
         <p className="text-sm text-zinc-500 line-clamp-1 leading-tight py-1">{author}</p>
         <Badge text={category} variant={"outline"} size="xs" />
         <div className="flex justify-between">

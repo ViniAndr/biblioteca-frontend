@@ -28,7 +28,7 @@ function HeroSection() {
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex flex-wrap justify-center gap-2 mt-4">
           <Badge text={"Literatura"} variant={"outlineHover"} />
           <Badge text={"Ficção"} variant={"outlineHover"} />
           <Badge text={"Romance"} variant={"outlineHover"} />

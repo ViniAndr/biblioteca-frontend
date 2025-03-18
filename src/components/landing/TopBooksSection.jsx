@@ -67,7 +67,7 @@ function TopBooksSection() {
         <div className="relative px-8">
           <button
             onClick={() => scroll("prev")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hidden md:flex border border-zinc-300 items-center"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white active:bg-zinc-100 p-2 rounded-full shadow-md hidden md:flex border border-zinc-300 items-center cursor-pointer"
           >
             <IoIosArrowBack className="h-6 w-6 text-zinc-600" />
           </button>
@@ -83,7 +83,7 @@ function TopBooksSection() {
 
           <button
             onClick={() => scroll("next")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hidden md:flex border border-zinc-300 items-center"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white active:bg-zinc-100 p-2 rounded-full shadow-md hidden md:flex border border-zinc-300 items-center cursor-pointer"
           >
             <IoIosArrowForward className="h-6 w-6 text-zinc-600" />
           </button>
