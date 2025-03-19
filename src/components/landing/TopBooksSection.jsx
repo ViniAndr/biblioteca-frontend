@@ -60,7 +60,7 @@ function TopBooksSection() {
             <GoFlame className="text-3xl" />
             <h2 className="text-3xl font-bold tracking-tight">Os Mais Populares</h2>
           </div>
-          <Button text="Ver Todos" variant="ghost" />
+          <Button variant="ghost">Ver Todos</Button>
         </div>
 
         {/* Botões de navegação */}

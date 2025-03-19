@@ -36,7 +36,7 @@ function CardBook({ image, title, author, category, loans, position }) {
             <LuUsers />
             <span>{loans} empréstimos</span>
           </div>
-          <Button text="Reservar" size="sm" />
+          <Button size="sm">Reservar</Button>
         </div>
       </div>
     </div>

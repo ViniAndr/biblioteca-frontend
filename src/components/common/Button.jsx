@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const Button = ({ text, to, size = "md", variant = "primary", rounded = "" }) => {
+const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, className = "", children }) => {
   const navigate = useNavigate();
 
   const sizes = {
@@ -14,6 +14,7 @@ const Button = ({ text, to, size = "md", variant = "primary", rounded = "" }) =>
     cancel: "bg-red-500 hover:bg-red-600 text-white font-bold", // Botão de cancelar (vermelho)
     back: "bg-gray-500 hover:bg-gray-600 text-white font-bold", // Botão de voltar (cinza)
     ghost: "font-medium hover:bg-gray-200",
+    outline: "border",
   };
 
   // Definindo as classes base
@@ -21,6 +22,7 @@ const Button = ({ text, to, size = "md", variant = "primary", rounded = "" }) =>
     ${sizes[size]} 
     ${variants[variant]}
     ${rounded}
+    ${className}
   `;
 
   function handleClick() {
@@ -30,8 +32,8 @@ const Button = ({ text, to, size = "md", variant = "primary", rounded = "" }) =>
   }
 
   return (
-    <button className={baseClass} onClick={handleClick}>
-      {text}
+    <button className={baseClass} onClick={onClick || handleClick}>
+      {children}
     </button>
   );
 };

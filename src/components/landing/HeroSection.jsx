@@ -24,7 +24,7 @@ function HeroSection() {
           <div className="rounded-3xl border-1 border-zinc-500 py-1 pl-3 pr-1 flex items-center">
             <IoIosSearch className="text-2xl" />
             <input type="text" placeholder="O que você deseja ler hoje?" className="mx-2 outline-0 w-full" />
-            <Button text={"Explorar"} rounded={"rounded-3xl"} />
+            <Button rounded={"rounded-3xl"}>Explorar</Button>
           </div>
         </div>
 

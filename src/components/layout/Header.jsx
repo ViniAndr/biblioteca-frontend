@@ -31,7 +31,7 @@ export default function Header() {
         </nav>
 
         <div>
-          <Button text="Entrar" to="/login/client" />
+          <Button to="/login/client">Entrar</Button>
         </div>
       </div>
     </header>

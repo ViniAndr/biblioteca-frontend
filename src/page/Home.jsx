@@ -1,6 +1,7 @@
 // Components
 import HeroSection from "../components/landing/HeroSection";
 import TopBooksSection from "../components/landing/TopBooksSection";
+import BenefitsSection from "../components/landing/BenefitsSection";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
     >
       <HeroSection />
       <TopBooksSection />
+      <BenefitsSection />
     </div>
   );
 }
