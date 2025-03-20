@@ -6,7 +6,7 @@ import Button from "../common/Button";
 // Icons
 import { PiBookOpenLight } from "react-icons/pi";
 
-export default function Header() {
+const Header = () => {
   return (
     <header className="border-b-1 border-zinc-200 px-4 py-3">
       <div className="container mx-auto flex justify-between items-center">
@@ -36,4 +36,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

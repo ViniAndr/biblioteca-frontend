@@ -2,8 +2,9 @@
 import HeroSection from "../components/landing/HeroSection";
 import TopBooksSection from "../components/landing/TopBooksSection";
 import BenefitsSection from "../components/landing/BenefitsSection";
+import CategoriesSection from "../components/landing/CategoriesSection";
 
-export default function Home() {
+const Home = () => {
   return (
     <div
       style={{
@@ -14,6 +15,9 @@ export default function Home() {
       <HeroSection />
       <TopBooksSection />
       <BenefitsSection />
+      <CategoriesSection />
     </div>
   );
-}
+};
+
+export default Home;

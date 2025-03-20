@@ -1,15 +1,18 @@
-import { LuUsers } from "react-icons/lu";
+// Components
 import Badge from "../common/Bagde";
 import Button from "../common/Button";
 
-function CardBook({ image, title, author, category, loans, position }) {
+// Icones
+import { LuUsers } from "react-icons/lu";
+
+const CardBook = ({ image, title, author, category, loans, position }) => {
   return (
     <div
-      className="relative bg-white min-w-52 shadow-md rounded-md overflow-hidden flex flex-col 
+      className="relative bg-white min-w-54 shadow-md rounded-md overflow-hidden flex flex-col 
       group transition-all duration-300 hover:shadow-lg"
     >
       {/* Badge para mostrar a posição no ranking */}
-      <Badge className="absolute top-2 right-2 z-10" text={`#${position}`} />
+      <Badge className="absolute top-2 right-2 z-10">{`#${position}`}</Badge>
 
       {/* Container para manter tamanho fixo */}
       <div className="relative overflow-hidden aspect-[2/3]">
@@ -30,17 +33,19 @@ function CardBook({ image, title, author, category, loans, position }) {
       <div className="p-3">
         <h1 className="font-bold text-xl line-clamp-1 leading-tight">{title}</h1>
         <p className="text-sm text-zinc-500 line-clamp-1 leading-tight py-1">{author}</p>
-        <Badge text={category} variant={"outline"} size="xs" />
-        <div className="flex justify-between">
+        <Badge variant={"outline"} size="xs">
+          {category}
+        </Badge>
+        <div className="flex justify-between pt-1">
           <div className="text-xs flex items-center gap-1 text-zinc-500">
             <LuUsers />
             <span>{loans} empréstimos</span>
           </div>
-          <Button size="sm">Reservar</Button>
+          <Button size="xs">Reservar</Button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default CardBook;

@@ -1,19 +1,22 @@
 import { useState } from "react";
 
+// Components
+import Button from "../common/Button";
+import Benefit from "./Benefit";
+
+// Imagens
 import conhecimento from "/images/conhecimento.jpg";
 import comunicacao from "/images/comunicacao.jpg";
 import criatividade from "/images/criatividade.jpg";
 
-import Button from "../common/Button";
-import Benefit from "./Benefit";
-
+// Icones
 import { LuBrain, LuRocket, LuLightbulb } from "react-icons/lu";
 
-export default function BenefitsSection() {
+const BenefitsSection = () => {
   const [activeTab, setActiveTab] = useState("conhecimento");
 
   // Benefícios da leitura
-  const beneficiosLeitura = {
+  const benefits = {
     conhecimento: {
       icon: <LuBrain className="w-10 h-10" />,
       title: "Expansão do Conhecimento",
@@ -105,7 +108,7 @@ export default function BenefitsSection() {
 
         {/* Conteúdo dinâmico baseado na tab ativa */}
         <div className="relative">
-          {Object.entries(beneficiosLeitura).map(([key, beneficio]) => (
+          {Object.entries(benefits).map(([key, benefitDetails]) => (
             <div
               key={key}
               className={`transition-all duration-500 ${
@@ -113,7 +116,7 @@ export default function BenefitsSection() {
               }`}
               style={{ display: activeTab === key ? "block" : "none" }}
             >
-              <Benefit beneficio={beneficio} />
+              <Benefit benefitDetails={benefitDetails} />
             </div>
           ))}
         </div>
@@ -135,4 +138,6 @@ export default function BenefitsSection() {
       </div>
     </section>
   );
-}
+};
+
+export default BenefitsSection;

@@ -5,7 +5,7 @@ import Badge from "../common/Bagde";
 // Icons
 import { IoIosSearch } from "react-icons/io";
 
-function HeroSection() {
+const HeroSection = () => {
   return (
     <section className="flex py-20">
       <div className="m-auto px-4">
@@ -29,15 +29,15 @@ function HeroSection() {
         </div>
 
         <div className="flex flex-wrap justify-center gap-2 mt-4">
-          <Badge text={"Literatura"} variant={"outlineHover"} />
-          <Badge text={"Ficção"} variant={"outlineHover"} />
-          <Badge text={"Romance"} variant={"outlineHover"} />
-          <Badge text={"Poesia"} variant={"outlineHover"} />
-          <Badge text={"Biografia"} variant={"outlineHover"} />
+          <Badge variant={"outlineHover"}>Literatura</Badge>
+          <Badge variant={"outlineHover"}>Ficção</Badge>
+          <Badge variant={"outlineHover"}>Romance</Badge>
+          <Badge variant={"outlineHover"}>Poesia</Badge>
+          <Badge variant={"outlineHover"}>Poesia</Badge>
         </div>
       </div>
     </section>
   );
-}
+};
 
 export default HeroSection;

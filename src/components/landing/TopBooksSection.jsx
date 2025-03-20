@@ -25,7 +25,7 @@ const books = [
   { image: capa, title: "Dom Casmurro", author: "Machado de Assis", category: "Romance", loans: 5 },
 ];
 
-function TopBooksSection() {
+const TopBooksSection = () => {
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const carouselRef = useRef(null);
 
@@ -73,7 +73,7 @@ function TopBooksSection() {
           </button>
 
           {/* Carrossel de livros */}
-          <div ref={carouselRef} className="scrollbar-hide overflow-x-hidden">
+          <div ref={carouselRef} className=" overflow-x-scroll lg:overflow-hidden ">
             <div className="flex gap-6 pb-4">
               {books.map((book, index) => (
                 <CardBook key={index} {...book} position={index + 1} />
@@ -91,6 +91,6 @@ function TopBooksSection() {
       </div>
     </section>
   );
-}
+};
 
 export default TopBooksSection;

@@ -1,4 +1,4 @@
-function Badge({ text, variant = "primary", size = "sm", className = "" }) {
+const Badge = ({ variant = "primary", size = "sm", className = "", children }) => {
   const sizes = {
     xs: "text-[10px] px-2 py-0.5",
     sm: "text-xs px-2",
@@ -13,8 +13,8 @@ function Badge({ text, variant = "primary", size = "sm", className = "" }) {
   const styleBase = `inline-block rounded-full transition duration-300 ease-in-out ${variants[variant]} ${sizes[size]} ${className}`;
   return (
     // <Badge className="mb-4 px-3 py-1 text-sm animate-pulse">Novos livros toda semana</Badge>
-    <div className={styleBase}>{text}</div>
+    <div className={styleBase}>{children}</div>
   );
-}
+};
 
 export default Badge;

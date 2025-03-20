@@ -5,7 +5,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { LuMapPin, LuPhone, LuMail, LuInstagram, LuFacebook } from "react-icons/lu";
 import { PiBookOpenLight } from "react-icons/pi";
 
-function Footer() {
+const Footer = () => {
   return (
     <footer className=" py-12 border-t border-zinc-200">
       <div className="container mx-auto px-4">
@@ -61,6 +61,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
