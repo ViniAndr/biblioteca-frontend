@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Context
 import { useAuth } from "../../contexts/AuthContext";
+import { useAlert } from "../../contexts/AlertContext";
 
 // Hooks
 import useForm from "../../hooks/useForm"; // Hook personalizado
@@ -14,6 +16,9 @@ import { validateEmail, validatePassword } from "../../utils/validations";
 import { ClientLogin as loginApi } from "../../services/auth";
 
 const ClientLogin = () => {
+  const { showAlert } = useAlert();
+  const navegate = useNavigate();
+
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
@@ -32,12 +37,13 @@ const ClientLogin = () => {
     try {
       const response = await loginApi(values.email, values.password, login);
       if (!response.error) {
-        console.log(response.message);
+        showAlert(response.message, "success");
+        navegate("/");
       } else {
-        console.log(response.message);
+        showAlert(response.message, "error");
       }
     } catch (error) {
-      console.log("Erro inesperado. Por favor, tente novamente.");
+      showAlert("Erro inesperado. Por favor, tente novamente.", "error");
     } finally {
       setLoading(false);
     }
