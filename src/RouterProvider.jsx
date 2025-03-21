@@ -5,6 +5,7 @@ import DefaultLayout from "./components/layout/DefaultLayout";
 
 // Page
 import Home from "./page/Home";
+import ClientLogin from "./page/auth/ClientLogin";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         index: true, // Rota padrão para a página inicial ("/")
         element: <Home />, // Componente a ser renderizado na rota "/"
+      },
+      {
+        path: "/login/cliente",
+        element: <ClientLogin />, // Componente a ser renderizado na rota "/"
       },
     ],
   },

@@ -31,7 +31,7 @@ const Header = () => {
         </nav>
 
         <div>
-          <Button to="/login/client">Entrar</Button>
+          <Button to="/login/cliente">Entrar</Button>
         </div>
       </div>
     </header>
