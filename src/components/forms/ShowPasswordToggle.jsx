@@ -1,16 +1,14 @@
 import { useState } from "react";
 
-const ShowPasswordToggle = ({ inputId }) => {
+const ShowPasswordToggle = ({ onToggle }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => {
-      const input = document.getElementById(inputId);
-      if (input) {
-        input.type = !prevShowPassword ? "text" : "password";
-      }
-      return !prevShowPassword;
+    setShowPassword((prev) => {
+      return !prev;
     });
+
+    onToggle(!showPassword);
   };
 
   return (

@@ -20,7 +20,7 @@ const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, c
   };
 
   // Definindo as classes base
-  let baseClass = "rounded cursor-pointer transition duration-300 ease-in-out";
+  let baseClass = "rounded cursor-pointer transition duration-300 ease-in-out ";
   baseClass += sizes[size] + " ";
   // baseClass += variants[variant] + " ";
   baseClass += (disabled ? variants.disabled : variants[variant]) + " ";

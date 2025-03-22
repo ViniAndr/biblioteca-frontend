@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { formatPhone } from "../utils/formatters";
+
 const useForm = (initialState, validators) => {
   const [values, setValues] = useState(initialState);
   const [errors, setErrors] = useState({});
@@ -7,10 +9,13 @@ const useForm = (initialState, validators) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const formatters = {
+      phone: formatPhone,
+    };
+
+    // Formatar o valor se necessário
+    const formattedValue = formatters[name] ? formatters[name](value) : value;
+    setValues((prev) => ({ ...prev, [name]: formattedValue }));
 
     // Valida cada campo ao alterar
     if (validators[name]) {

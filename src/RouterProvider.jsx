@@ -6,6 +6,7 @@ import DefaultLayout from "./components/layout/DefaultLayout";
 // Page
 import Home from "./page/Home";
 import ClientLogin from "./page/auth/ClientLogin";
+import MigrateAccount from "./page/auth/migrateAccount";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/login/cliente",
-        element: <ClientLogin />, // Componente a ser renderizado na rota "/"
+        element: <ClientLogin />,
+      },
+      {
+        path: "/migrar-conta",
+        element: <MigrateAccount />,
       },
     ],
   },

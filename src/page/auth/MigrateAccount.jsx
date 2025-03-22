@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Context
-import { useAuth } from "../../contexts/AuthContext";
 import { useAlert } from "../../contexts/AlertContext";
 
 // Hooks
@@ -12,20 +11,19 @@ import useForm from "../../hooks/useForm"; // Hook personalizado
 import Form from "../../components/forms/Form";
 
 // utils e Service
-import { validateEmail, validatePassword } from "../../utils/validations";
-import { ClientLogin as loginApi } from "../../services/auth";
+import { validateEmail, validatePassword, validatePhone } from "../../utils/validations";
+import { handleMigrateAccount } from "../../services/auth";
 
-const ClientLogin = () => {
+const MigrateAccount = () => {
   const { showAlert } = useAlert();
   const navegate = useNavigate();
 
-  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
   // Hook de gerenciamento de formulário
   const { values, errors, handleChange, validateAll } = useForm(
-    { email: "", password: "" },
-    { email: validateEmail, password: validatePassword }
+    { email: "", phone: "", password: "" },
+    { email: validateEmail, phone: validatePhone, password: validatePassword }
   );
 
   const handleLogin = async (e) => {
@@ -35,10 +33,10 @@ const ClientLogin = () => {
     setLoading(true);
 
     try {
-      const response = await loginApi(values.email, values.password, login);
+      const response = await handleMigrateAccount({ email: values.email, telefone: values.phone, senha: values.password });
       if (!response.error) {
         showAlert(response.message, "success");
-        navegate("/");
+        navegate("/clientes/login");
       } else {
         showAlert(response.message, "attention");
       }
@@ -61,6 +59,16 @@ const ClientLogin = () => {
       error: errors.email,
     },
     {
+      label: "Telefone",
+      name: "phone",
+      type: "text",
+      placeholder: "Digite sua telefone",
+      required: true,
+      value: values.phone,
+      onChange: handleChange,
+      error: errors.phone,
+    },
+    {
       label: "Senha",
       name: "password",
       type: "password",
@@ -74,23 +82,15 @@ const ClientLogin = () => {
   return (
     <Form
       formStructure={{
-        title: "Entrar",
-        description: "Preencha os campos abaixo para poder entrar na sua conta",
+        title: "Migrar Conta",
+        description: "Tem uma conta presencial e deseja usar o site, basta preencher com os dados abaixo:",
       }}
       inputData={inputData}
       handleForm={handleLogin}
       loading={loading}
-      buttonText="Entrar"
-    >
-      <hr className="my-2 opacity-30" />
-      <p className="text-zinc-500 text-sm">
-        Ainda não tem uma conta?{" "}
-        <Link to="/migrar-conta" className="text-blue-700">
-          clique aqui
-        </Link>
-      </p>
-    </Form>
+      buttonText="Migrar"
+    />
   );
 };
 
-export default ClientLogin;
+export default MigrateAccount;

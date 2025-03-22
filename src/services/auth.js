@@ -10,10 +10,34 @@ export const ClientLogin = async (email, password, login) => {
       login(token); // Decodifica e armazena o token no contexto
     }
 
-    return { error: false, message: "Login efetuado com sucesso." };
+    return { error: false, message: response.data.mensagem };
   } catch (error) {
-    if (error.response && error.response.status === 401) {
+    const status = error.response?.status;
+    if (status === 401) {
       return { error: true, message: error.response.data.error };
+    } else {
+      return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    }
+  }
+};
+
+export const handleMigrateAccount = async (clientData) => {
+  try {
+    const response = await api.post("/clientes/verificar-conta", clientData);
+    console.log(response);
+    return { error: false, message: "Migração realizada com sucesso, agora pode fazer login." };
+  } catch (error) {
+    const status = error.response?.status;
+
+    if (status === 404) {
+      return {
+        error: true,
+        message: "Verificamos que você não tem cadastro presencial. Faço o cadastro aqui no site",
+      };
+    } else if (status === 400) {
+      return { error: true, message: "Cliente já cadastrado, tente fazer login" };
+    } else if (status === 409) {
+      return { error: true, message: "Esse email já está em uso." };
     } else {
       return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
     }
