@@ -43,3 +43,45 @@ export const handleMigrateAccount = async (clientData) => {
     }
   }
 };
+
+export const createOnlineCustomerAccount = async (clientData, login) => {
+  console.log(clientData);
+  // Backend em português e front no ingles
+  const data = {
+    nome: clientData.name,
+    sobrenome: clientData.lastname,
+    email: clientData.email,
+    senha: clientData.password,
+    telefone: clientData.phone,
+    logradouro: clientData.street,
+    numero: clientData.number,
+    bairro: clientData.neighborhood,
+    cidade: clientData.city,
+    estado: clientData.state,
+    cep: clientData.cep,
+  };
+  console.log(data);
+
+  try {
+    const response = await api.post(`clientes/online`, data);
+    console.log(response);
+    const { token } = response.data;
+
+    if (token) {
+      login(token);
+    }
+
+    return { error: false, message: "Cliente cadastrado com sucesso." };
+  } catch (error) {
+    const status = error.response?.status;
+    const message = error.response.data.error;
+
+    if (status === 409) {
+      return { error: true, message };
+    } else if (status === 400) {
+      return { error: true, message };
+    } else {
+      return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    }
+  }
+};

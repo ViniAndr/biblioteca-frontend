@@ -24,3 +24,8 @@ export const validatePhone = (phone) => {
   if (/^(\d)\1+$/.test(plainPhone)) return "Telefone inválido. Não use todos os dígitos iguais.";
   return null;
 };
+
+export const validateRequiredField = (value) => {
+  if (!value) return "Esse campo é obrigatório.";
+  return null;
+};

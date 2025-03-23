@@ -28,7 +28,7 @@ const ClientLogin = () => {
     { email: validateEmail, password: validatePassword }
   );
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateAll()) return; // Se houver erro, não envia
@@ -55,7 +55,6 @@ const ClientLogin = () => {
       name: "email",
       type: "email",
       placeholder: "Digite seu email",
-      required: true,
       value: values.email,
       onChange: handleChange,
       error: errors.email,
@@ -65,7 +64,6 @@ const ClientLogin = () => {
       name: "password",
       type: "password",
       placeholder: "Digite sua senha",
-      required: true,
       value: values.password,
       onChange: handleChange,
       error: errors.password,
@@ -78,7 +76,7 @@ const ClientLogin = () => {
         description: "Preencha os campos abaixo para poder entrar na sua conta",
       }}
       inputData={inputData}
-      handleForm={handleLogin}
+      handleForm={handleSubmit}
       loading={loading}
       buttonText="Entrar"
     >

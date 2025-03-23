@@ -30,7 +30,8 @@ const Header = () => {
           </Link>
         </nav>
 
-        <div>
+        <div className="flex gap-4">
+          <Button to="/cliente/cadastrar-conta">Cadastrar</Button>
           <Button to="/login/cliente">Entrar</Button>
         </div>
       </div>

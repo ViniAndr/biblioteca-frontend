@@ -7,6 +7,7 @@ import DefaultLayout from "./components/layout/DefaultLayout";
 import Home from "./page/Home";
 import ClientLogin from "./page/auth/ClientLogin";
 import MigrateAccount from "./page/auth/migrateAccount";
+import Register from "./page/auth/Register";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/migrar-conta",
         element: <MigrateAccount />,
+      },
+      {
+        path: "/cliente/cadastrar-conta",
+        element: <Register />,
       },
     ],
   },

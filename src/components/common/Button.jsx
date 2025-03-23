@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, className = "", disabled, children }) => {
+const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, className = "", disabled, type, children }) => {
   const navigate = useNavigate();
 
   const sizes = {
@@ -34,7 +34,7 @@ const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, c
   }
 
   return (
-    <button className={baseClass} onClick={onClick || handleClick} disabled={disabled}>
+    <button className={baseClass} onClick={onClick || handleClick} disabled={disabled} type={type && type}>
       {children}
     </button>
   );

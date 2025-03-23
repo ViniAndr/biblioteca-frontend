@@ -1,4 +1,4 @@
-const Input = ({ id, name, type = "text", error, label, required = false, placeholder, value, onChange }) => {
+const Input = ({ id, name, type = "text", error, label, required = true, placeholder, value, onChange }) => {
   return (
     <div>
       <label htmlFor={id} className="font-medium leading-none mb-1">
