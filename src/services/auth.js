@@ -13,8 +13,9 @@ export const ClientLogin = async (email, password, login) => {
     return { error: false, message: response.data.mensagem };
   } catch (error) {
     const status = error.response?.status;
+    const message = error.response?.data.error;
     if (status === 401) {
-      return { error: true, message: error.response.data.error };
+      return { error: true, message };
     } else {
       return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
     }
@@ -22,22 +23,22 @@ export const ClientLogin = async (email, password, login) => {
 };
 
 export const handleMigrateAccount = async (clientData) => {
+  // Backend em português e front no ingles
+  const data = {
+    email: clientData.email,
+    senha: clientData.password,
+    telefone: clientData.phone,
+  };
   try {
-    const response = await api.post("/clientes/verificar-conta", clientData);
+    const response = await api.post("/clientes/verificar-conta", data);
     console.log(response);
     return { error: false, message: "Migração realizada com sucesso, agora pode fazer login." };
   } catch (error) {
     const status = error.response?.status;
+    const message = error.response?.data.error;
 
-    if (status === 404) {
-      return {
-        error: true,
-        message: "Verificamos que você não tem cadastro presencial. Faço o cadastro aqui no site",
-      };
-    } else if (status === 400) {
-      return { error: true, message: "Cliente já cadastrado, tente fazer login" };
-    } else if (status === 409) {
-      return { error: true, message: "Esse email já está em uso." };
+    if (status === 404 || status === 400 || status === 409) {
+      return { error: true, message };
     } else {
       return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
     }
@@ -45,7 +46,6 @@ export const handleMigrateAccount = async (clientData) => {
 };
 
 export const createOnlineCustomerAccount = async (clientData, login) => {
-  console.log(clientData);
   // Backend em português e front no ingles
   const data = {
     nome: clientData.name,
@@ -53,32 +53,28 @@ export const createOnlineCustomerAccount = async (clientData, login) => {
     email: clientData.email,
     senha: clientData.password,
     telefone: clientData.phone,
-    logradouro: clientData.street,
+    logradouro: clientData.address,
     numero: clientData.number,
     bairro: clientData.neighborhood,
     cidade: clientData.city,
     estado: clientData.state,
     cep: clientData.cep,
   };
-  console.log(data);
 
   try {
     const response = await api.post(`clientes/online`, data);
-    console.log(response);
     const { token } = response.data;
 
     if (token) {
       login(token);
     }
 
-    return { error: false, message: "Cliente cadastrado com sucesso." };
+    return { error: false, message: response.data.mensagem };
   } catch (error) {
     const status = error.response?.status;
     const message = error.response.data.error;
 
-    if (status === 409) {
-      return { error: true, message };
-    } else if (status === 400) {
+    if (status === 409 || status === 400) {
       return { error: true, message };
     } else {
       return { error: true, message: "Erro inesperado. Por favor, tente novamente." };

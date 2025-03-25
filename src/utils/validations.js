@@ -29,3 +29,19 @@ export const validateRequiredField = (value) => {
   if (!value) return "Esse campo é obrigatório.";
   return null;
 };
+
+export const validateHouseNumber = (value) => {
+  //
+  const regex = /^[0-9]{1,6}[a-zA-Z]{0,4}(\s?\/?\s?[a-zA-Z0-9]{1,4})?$/;
+
+  if (!value) return "O número da casa é obrigatório.";
+  if (!regex.test(value)) return "Número da casa inválido.";
+  return null;
+};
+
+export const validateString = (value) => {
+  const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
+  if (!value) return "O campo é obrigatório.";
+  if (!regex.test(value)) return "Digte apenas letras.";
+  return null;
+};

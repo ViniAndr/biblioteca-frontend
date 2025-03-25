@@ -6,7 +6,7 @@ import DefaultLayout from "./components/layout/DefaultLayout";
 // Page
 import Home from "./page/Home";
 import ClientLogin from "./page/auth/ClientLogin";
-import MigrateAccount from "./page/auth/migrateAccount";
+import MigrateAccount from "./page/auth/MigrateAccount";
 import Register from "./page/auth/Register";
 
 const router = createBrowserRouter([

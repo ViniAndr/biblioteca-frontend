@@ -9,7 +9,7 @@ import Form from "../../components/forms/Form";
 import useForm from "../../hooks/useForm";
 
 // Utils e Services
-import { validateEmail, validatePassword, validatePhone, validateRequiredField } from "../../utils/validations";
+import * as validate from "../../utils/validations";
 import { createOnlineCustomerAccount } from "../../services/auth";
 
 const Register = () => {
@@ -18,17 +18,17 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const validateForm = {
-    name: validateRequiredField,
-    lastname: validateRequiredField,
-    email: validateEmail,
-    password: validatePassword,
-    phone: validatePhone,
-    street: validateRequiredField,
-    number: validateRequiredField,
-    neighborhood: validateRequiredField,
-    city: validateRequiredField,
-    state: validateRequiredField,
-    cep: validateRequiredField,
+    name: validate.validateString,
+    lastname: validate.validateString,
+    email: validate.validateEmail,
+    password: validate.validatePassword,
+    phone: validate.validatePhone,
+    address: validate.validateRequiredField,
+    number: validate.validateHouseNumber,
+    neighborhood: validate.validateRequiredField,
+    city: validate.validateString,
+    state: validate.validateRequiredField,
+    cep: validate.validateRequiredField,
   };
 
   const { values, errors, handleChange, handleCepSearch, loadingCep, validateAll } = useForm(
@@ -158,7 +158,7 @@ const Register = () => {
       if (response?.error) {
         showAlert(response.message, "error");
       } else {
-        showAlert("Conta criada com sucesso!", "success");
+        showAlert(response.message, "success");
       }
     } catch {
       showAlert("Erro inesperado. Por favor, tente novamente.", "error");

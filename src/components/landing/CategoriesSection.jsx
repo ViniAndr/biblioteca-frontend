@@ -1,5 +1,5 @@
 // Components
-import CategoryCard from "../common/categoryCard";
+import CategoryCard from "../common/CategoryCard";
 
 // Icones
 import { LuCompass, LuFlashlight, LuHeart, LuPyramid, LuPuzzle } from "react-icons/lu";

@@ -33,14 +33,14 @@ const MigrateAccount = () => {
     setLoading(true);
 
     try {
-      const response = await handleMigrateAccount({ email: values.email, telefone: values.phone, senha: values.password });
+      const response = await handleMigrateAccount(values);
       if (!response.error) {
         showAlert(response.message, "success");
         navegate("/clientes/login");
       } else {
         showAlert(response.message, "attention");
       }
-    } catch (error) {
+    } catch {
       showAlert("Erro inesperado. Por favor, tente novamente.", "error");
     } finally {
       setLoading(false);

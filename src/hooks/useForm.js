@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { formatPhone } from "../utils/formatters";
+import { formatPhone, formatCep } from "../utils/formatters";
 
 const useForm = (initialState, validators) => {
   const [values, setValues] = useState(initialState);
@@ -12,6 +12,7 @@ const useForm = (initialState, validators) => {
 
     const formatters = {
       phone: formatPhone,
+      cep: formatCep,
     };
 
     // Formatar o valor se necessário

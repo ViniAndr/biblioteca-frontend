@@ -26,9 +26,11 @@ const Form = ({ formStructure, inputData, handleForm, loading, buttonText, child
           {inputData?.map((data, index) => (
             <div className={`${data.handleCepSearch ? "flex items-end gap-2" : ""}`} key={index}>
               <Input id={data.name} {...data} type={data.name === "password" ? passwordType : data.type} />
+              {/* Se o input for de senha, adiciona o mostrar senha */}
               {data.name === "password" && (
                 <ShowPasswordToggle onToggle={(show) => setPasswordType(show ? "text" : "password")} />
               )}
+              {/* Se o impit for de CEP, adiconar o botão para consultar uma API Externa */}
               {data.handleCepSearch && (
                 <div className="min-w-29">
                   <Button onClick={data.handleCepSearch} variant="back" size="full" disabled={data.loadingCep} type="button">

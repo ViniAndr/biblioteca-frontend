@@ -42,7 +42,7 @@ const ClientLogin = () => {
       } else {
         showAlert(response.message, "attention");
       }
-    } catch (error) {
+    } catch {
       showAlert("Erro inesperado. Por favor, tente novamente.", "error");
     } finally {
       setLoading(false);
@@ -82,7 +82,7 @@ const ClientLogin = () => {
     >
       <hr className="my-2 opacity-30" />
       <p className="text-zinc-500 text-sm">
-        Ainda não tem uma conta?{" "}
+        Deseja transformar sua conta presencial em online?{" "}
         <Link to="/migrar-conta" className="text-blue-700">
           clique aqui
         </Link>
