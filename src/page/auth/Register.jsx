@@ -48,6 +48,36 @@ const Register = () => {
     { ...validateForm }
   );
 
+  const ufs = [
+    "AC",
+    "AL",
+    "AP",
+    "AM",
+    "BA",
+    "CE",
+    "DF",
+    "ES",
+    "GO",
+    "MA",
+    "MT",
+    "MS",
+    "MG",
+    "PA",
+    "PB",
+    "PR",
+    "PE",
+    "PI",
+    "RJ",
+    "RN",
+    "RS",
+    "RO",
+    "RR",
+    "SC",
+    "SP",
+    "SE",
+    "TO",
+  ];
+
   const inputData = [
     {
       label: "Nome",
@@ -128,7 +158,7 @@ const Register = () => {
     {
       label: "Estado",
       name: "state",
-      placeholder: "Digite seu estado",
+      options: ufs,
       value: values.state,
       onChange: handleChange,
       error: errors.state,

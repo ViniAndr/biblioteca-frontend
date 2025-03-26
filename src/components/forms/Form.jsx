@@ -4,6 +4,7 @@ import { useState } from "react";
 import Button from "../common/Button";
 import ShowPasswordToggle from "./ShowPasswordToggle";
 import Input from "./Input";
+import Select from "./Select";
 
 const Form = ({ formStructure, inputData, handleForm, loading, buttonText, children }) => {
   const [passwordType, setPasswordType] = useState("password");
@@ -23,23 +24,27 @@ const Form = ({ formStructure, inputData, handleForm, loading, buttonText, child
       {/* Formulario com os Inputs */}
       <form onSubmit={handleForm}>
         <div className={`${designBaseForm} mb-3`}>
-          {inputData?.map((data, index) => (
-            <div className={`${data.handleCepSearch ? "flex items-end gap-2" : ""}`} key={index}>
-              <Input id={data.name} {...data} type={data.name === "password" ? passwordType : data.type} />
-              {/* Se o input for de senha, adiciona o mostrar senha */}
-              {data.name === "password" && (
-                <ShowPasswordToggle onToggle={(show) => setPasswordType(show ? "text" : "password")} />
-              )}
-              {/* Se o impit for de CEP, adiconar o botão para consultar uma API Externa */}
-              {data.handleCepSearch && (
-                <div className="min-w-29">
-                  <Button onClick={data.handleCepSearch} variant="back" size="full" disabled={data.loadingCep} type="button">
-                    {data.loadingCep ? "Buscando..." : "Buscar CEP"}
-                  </Button>
-                </div>
-              )}
-            </div>
-          ))}
+          {inputData?.map((data, index) =>
+            data.placeholder ? (
+              <div className={`${data.handleCepSearch ? "flex items-end gap-2" : ""}`} key={index}>
+                <Input id={data.name} {...data} type={data.name === "password" ? passwordType : data.type} />
+                {/* Se o input for de senha, adiciona o mostrar senha */}
+                {data.name === "password" && (
+                  <ShowPasswordToggle onToggle={(show) => setPasswordType(show ? "text" : "password")} />
+                )}
+                {/* Se o input for de CEP, adicionar o botão para consultar uma API Externa */}
+                {data.handleCepSearch && (
+                  <div className="min-w-29">
+                    <Button onClick={data.handleCepSearch} variant="back" size="full" disabled={data.loadingCep} type="button">
+                      {data.loadingCep ? "Buscando..." : "Buscar CEP"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Select id={data.name} {...data} />
+            )
+          )}
         </div>
 
         <Button size="full" disabled={loading}>
