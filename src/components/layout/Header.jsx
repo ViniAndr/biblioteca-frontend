@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 
+// Context
+import { useAuth } from "../../contexts/AuthContext";
+
 // Components
 import Button from "../common/Button";
 
@@ -7,6 +10,7 @@ import Button from "../common/Button";
 import { PiBookOpenLight } from "react-icons/pi";
 
 const Header = () => {
+  const { user, logout } = useAuth();
   return (
     <header className="border-b-1 border-zinc-200 px-4 py-3">
       <div className="container mx-auto flex justify-between items-center">
@@ -30,9 +34,35 @@ const Header = () => {
           </Link>
         </nav>
 
-        <div className="flex gap-4">
-          <Button to="/cliente/cadastrar-conta">Cadastrar</Button>
-          <Button to="/login/cliente">Entrar</Button>
+        <div>
+          {user ? (
+            <div className="flex gap-2">
+              {/* Mostrar diferentes opções com base no user.role */}
+              {user.role === "cliente" && (
+                <>
+                  <Button variant="ghost" to="/profile/cliente">
+                    Meu Perfil
+                  </Button>
+                </>
+              )}
+
+              {user.role === "funcionario" && (
+                <Button variant="ghost" to="/dashboard/funcionario">
+                  Meu Perfil
+                </Button>
+              )}
+
+              {user.role === "admin" && <Button to="/dashboard/admin">Dashboard Admin</Button>}
+
+              {/* Botão de logout comum para todos */}
+              <Button onClick={logout}>Sair</Button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <Button to="/cliente/cadastrar-conta">Cadastrar</Button>
+              <Button to="/login/cliente">Entrar</Button>
+            </div>
+          )}
         </div>
       </div>
     </header>
