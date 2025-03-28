@@ -8,6 +8,7 @@ import Home from "./page/Home";
 import ClientLogin from "./page/auth/ClientLogin";
 import MigrateAccount from "./page/auth/MigrateAccount";
 import Register from "./page/auth/Register";
+import EmployeeAdminLogin from "./page/auth/LoginEmployeeAndAdmin";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/cliente/cadastrar-conta",
         element: <Register />,
+      },
+      {
+        path: "/login/area-restrita",
+        element: <EmployeeAdminLogin />,
       },
     ],
   },

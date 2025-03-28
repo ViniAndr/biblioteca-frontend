@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Context
 import { useAuth } from "../../contexts/AuthContext";
@@ -15,7 +15,7 @@ import Form from "../../components/forms/Form";
 import { validateEmail, validatePassword } from "../../utils/validations";
 import { UserLogin } from "../../services/auth";
 
-const ClientLogin = () => {
+const LoginEmployeeAndAdmin = () => {
   const { showAlert } = useAlert();
   const navegate = useNavigate();
 
@@ -24,7 +24,7 @@ const ClientLogin = () => {
 
   // Hook de gerenciamento de formulário
   const { values, errors, handleChange, validateAll } = useForm(
-    { email: "", password: "" },
+    { email: "", password: "", loginType: "employee" },
     { email: validateEmail, password: validatePassword }
   );
 
@@ -35,7 +35,7 @@ const ClientLogin = () => {
     setLoading(true);
 
     try {
-      const response = await UserLogin(values.email, values.password, login);
+      const response = await UserLogin(values.email, values.password, login, values.loginType);
       if (!response.error) {
         showAlert(response.message, "success");
         navegate("/");
@@ -68,27 +68,30 @@ const ClientLogin = () => {
       onChange: handleChange,
       error: errors.password,
     },
+    {
+      title: "Tipo de Login",
+      name: "loginType", // Nome para o grupo de rádio
+      options: [
+        { label: "Funcionário", value: "employee" },
+        { label: "Administrador", value: "admin" },
+      ],
+      selectedValue: values.loginType, // Use values.loginType
+      onChange: handleChange, // Use handleChange do hook
+    },
   ];
+
   return (
     <Form
       formStructure={{
-        title: "Entrar",
-        description: "Preencha os campos abaixo para poder entrar na sua conta",
+        title: "Área Restrita",
+        description: "Login para Funcionário e Administradores",
       }}
       inputData={inputData}
       handleForm={handleSubmit}
       loading={loading}
       buttonText="Entrar"
-    >
-      <hr className="my-2 opacity-30" />
-      <p className="text-zinc-500 text-sm">
-        Deseja transformar sua conta presencial em online?{" "}
-        <Link to="/migrar-conta" className="text-blue-700">
-          clique aqui
-        </Link>
-      </p>
-    </Form>
+    />
   );
 };
 
-export default ClientLogin;
+export default LoginEmployeeAndAdmin;

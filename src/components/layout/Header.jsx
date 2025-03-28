@@ -48,11 +48,11 @@ const Header = () => {
 
               {user.role === "funcionario" && (
                 <Button variant="ghost" to="/dashboard/funcionario">
-                  Meu Perfil
+                  Dashboard
                 </Button>
               )}
 
-              {user.role === "admin" && <Button to="/dashboard/admin">Dashboard Admin</Button>}
+              {user.role === "admin" && <Button to="/dashboard/admin">Dashboard</Button>}
 
               {/* Botão de logout comum para todos */}
               <Button onClick={logout}>Sair</Button>

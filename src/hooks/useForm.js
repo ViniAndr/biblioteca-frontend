@@ -8,15 +8,19 @@ const useForm = (initialState, validators) => {
   const [loadingCep, setLoadingCep] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    let formattedValue = value;
 
-    const formatters = {
-      phone: formatPhone,
-      cep: formatCep,
-    };
+    if (type === "radio") {
+      formattedValue = value; // Mantém o valor do radio
+    } else {
+      const formatters = {
+        phone: formatPhone,
+        cep: formatCep,
+      };
+      formattedValue = formatters[name] ? formatters[name](value) : value;
+    }
 
-    // Formatar o valor se necessário
-    const formattedValue = formatters[name] ? formatters[name](value) : value;
     setValues((prev) => ({ ...prev, [name]: formattedValue }));
 
     // Valida cada campo ao alterar

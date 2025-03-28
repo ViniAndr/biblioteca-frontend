@@ -1,9 +1,14 @@
 import api from "../utils/api";
 
 // Função para login
-export const ClientLogin = async (email, password, login) => {
+export const UserLogin = async (email, password, login, entity) => {
+  let rightRoute = "/clientes/login";
+
+  if (entity && entity == "employee") rightRoute = "/funcionarios/login";
+  else if (entity && entity == "admin") rightRoute = "/admin/login";
+
   try {
-    const response = await api.post("/clientes/login", { email, senha: password });
+    const response = await api.post(rightRoute, { email, senha: password });
     const { token } = response.data;
 
     if (token) {
