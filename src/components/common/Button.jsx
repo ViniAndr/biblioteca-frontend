@@ -8,11 +8,12 @@ const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, c
     md: "w-auto py-1 px-3 text-base",
     sm: "w-auto py-1 px-2 text-sm",
     xs: "w-auto py-1 px-2 text-xs",
+    square: "p-1",
   };
 
   const variants = {
     primary: "bg-emerald-500 hover:bg-emerald-600 text-white font-bold", // Botão azul
-    cancel: "bg-red-500 hover:bg-red-600 text-white font-bold", // Botão de cancelar (vermelho)
+    delete: "bg-red-400 hover:bg-red-500 text-white font-bold", // Botão de cancelar (vermelho)
     back: "bg-gray-500 hover:bg-gray-600 text-white font-bold", // Botão de voltar (cinza)
     ghost: "font-medium hover:bg-gray-200",
     outline: "border  ",

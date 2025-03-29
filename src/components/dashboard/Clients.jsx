@@ -1,8 +1,13 @@
+// Componentes
+import Table from "../table/Table";
+
 // hooks
 import { useClients } from "../../hooks/useClients";
 
 const Clients = () => {
-  const { clients, loading } = useClients();
+  const { clients, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = useClients();
+
+  const headerColumn = ["", "Nome", "telefone", "cidade", "estado", ""];
 
   return (
     <div>
@@ -11,30 +16,15 @@ const Clients = () => {
       ) : clients.length === 0 ? (
         <div className="p-5 text-center">Nenhum cliente encontrado</div>
       ) : (
-        <div>
-          <table>
-            {/* Cabeçario */}
-            <thead>
-              <tr>
-                {Object.keys(clients[0]).map((key) => (
-                  <th key={key}>{key}</th>
-                ))}
-              </tr>
-            </thead>
-
-            {/* Corpo */}
-            <tbody>
-              {clients.map((client) => (
-                <tr key={client.id}>
-                  {/* Tranformo o objeto com os dados em Array */}
-                  {Object.values(client).map((value, index) => (
-                    <td key={index}>{value}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          data={clients}
+          headerColumn={headerColumn}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          setItemsPerPage={setItemsPerPage}
+        />
       )}
     </div>
   );
