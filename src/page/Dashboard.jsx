@@ -2,6 +2,7 @@ import { useState } from "react";
 
 // Components
 import Sidebar from "../components/dashboard/Sidebar";
+import Clients from "../components/dashboard/Clients";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Emprestimos");
@@ -11,6 +12,7 @@ const Dashboard = () => {
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="pl-64 lg:container mx-auto p-6">
         <h1 className="font-bold text-4xl mb-2">{activeTab}</h1>
+        <Clients />
       </div>
     </div>
   );
