@@ -2,12 +2,14 @@ import { createBrowserRouter } from "react-router-dom";
 
 // Layout
 import DefaultLayout from "./components/layout/DefaultLayout";
+import NoLayout from "./components/layout/NoLayout";
 
 // Page
 import Home from "./page/Home";
 import ClientLogin from "./page/auth/ClientLogin";
 import MigrateAccount from "./page/auth/MigrateAccount";
 import Register from "./page/auth/Register";
+import Dashboard from "./page/Dashboard";
 import EmployeeAdminLogin from "./page/auth/LoginEmployeeAndAdmin";
 
 const router = createBrowserRouter([
@@ -35,6 +37,16 @@ const router = createBrowserRouter([
       {
         path: "/login/area-restrita",
         element: <EmployeeAdminLogin />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <NoLayout />,
+    children: [
+      {
+        path: "/dashboard/funcionario",
+        element: <Dashboard />,
       },
     ],
   },
