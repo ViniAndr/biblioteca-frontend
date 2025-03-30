@@ -14,7 +14,7 @@ const Publishers = () => {
       {loading ? (
         <div className="p-5 text-center">Carregando...</div>
       ) : bookData.length === 0 ? (
-        <div className="p-5 text-center">Nenhum cliente encontrado</div>
+        <div className="p-5 text-center">Nenhum editora encontrado</div>
       ) : (
         <Table
           data={bookData}

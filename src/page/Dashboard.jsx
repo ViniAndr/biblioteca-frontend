@@ -5,6 +5,7 @@ import Sidebar from "../components/dashboard/Sidebar";
 import Clients from "../components/dashboard/Clients";
 import Publishers from "../components/dashboard/Publishers";
 import Authors from "../components/dashboard/Authors";
+import Categories from "../components/dashboard/Categories";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Clientes");
@@ -15,6 +16,8 @@ const Dashboard = () => {
         return <Authors />;
       case "Editoras":
         return <Publishers />;
+      case "Categorias":
+        return <Categories />;
       case "Clientes":
         return <Clients />;
       default:

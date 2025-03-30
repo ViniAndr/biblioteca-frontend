@@ -4,17 +4,17 @@ import Table from "../table/Table";
 // Hooks
 import { BookAttributes } from "../../hooks/useBookAttributes";
 
-const Authors = () => {
-  const { bookData, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = BookAttributes("author");
+const Categories = () => {
+  const { bookData, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = BookAttributes("category");
 
-  const headerColumn = ["#", "Autor", "Livros com esse autor", ""];
+  const headerColumn = ["#", "Categoria", "Livros com essa categoria", ""];
 
   return (
     <div>
       {loading ? (
         <div className="p-5 text-center">Carregando...</div>
       ) : bookData.length === 0 ? (
-        <div className="p-5 text-center">Nenhum autor encontrado</div>
+        <div className="p-5 text-center">Nenhum categoria encontrado</div>
       ) : (
         <Table
           data={bookData}
@@ -30,4 +30,4 @@ const Authors = () => {
   );
 };
 
-export default Authors;
+export default Categories;
