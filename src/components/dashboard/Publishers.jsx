@@ -1,23 +1,23 @@
 // Componentes
 import Table from "../table/Table";
 
-// hooks
-import { useClients } from "../../hooks/useClients";
+// Hooks
+import { usePublishers } from "../../hooks/usePublishers";
 
-const Clients = () => {
-  const { clients, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = useClients();
+const Publishers = () => {
+  const { publishers, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = usePublishers();
 
-  const headerColumn = ["#", "Nome", "telefone", "cidade", "estado", ""];
+  const headerColumn = ["#", "Editora", "Livros com essa Editora", ""];
 
   return (
     <div>
       {loading ? (
         <div className="p-5 text-center">Carregando...</div>
-      ) : clients.length === 0 ? (
+      ) : publishers.length === 0 ? (
         <div className="p-5 text-center">Nenhum cliente encontrado</div>
       ) : (
         <Table
-          data={clients}
+          data={publishers}
           headerColumn={headerColumn}
           page={page}
           setPage={setPage}
@@ -30,4 +30,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Publishers;

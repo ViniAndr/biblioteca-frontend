@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Contextos
 import { useAlert } from "../contexts/AlertContext";
 
 // Servicos
-import { getAllClients } from "../services/clientService";
+import { getPublishers } from "../services/bookService";
 
-export const useClients = () => {
+export const usePublishers = () => {
   const { showAlert } = useAlert();
 
   const [loading, setLoading] = useState(true);
 
-  const [clients, setClients] = useState([]);
+  const [publishers, setPublishers] = useState([]);
 
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(1);
@@ -19,14 +19,19 @@ export const useClients = () => {
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [totalItens, settotalItens] = useState(0);
 
-  // Buscar Clientes
-  const fetchClients = async () => {
-    setLoading(true);
-
+  // Buscar Editoras
+  const fetchPublishers = async () => {
     try {
-      const response = await getAllClients(filter, page, itemsPerPage);
+      setLoading(true);
+      const response = await getPublishers(filter, page, itemsPerPage);
 
-      setClients(response.data.clientes || []);
+      // Transformando os dados - esse array de objetos tem um outro objeto dentro que mostra quantos livro usa essa editora
+      const formattedPublishers = response.data.editora.map(({ _count, ...rest }) => ({
+        ...rest,
+        livros: `${_count.livros} - Livros`, // Adiciona "livros" como um campo separado
+      }));
+
+      setPublishers(formattedPublishers || []);
       setTotalPages(response.data.qtdTotalDePaginas || 1);
       setPage(response.data.paginaAtual || 1);
       settotalItens(response.data.total || 0);
@@ -38,14 +43,14 @@ export const useClients = () => {
   };
 
   useEffect(() => {
-    fetchClients();
+    fetchPublishers();
   }, [page, filter, itemsPerPage]);
 
   return {
-    clients,
-    loading,
+    publishers,
     filter,
     setFilter,
+    loading,
     page,
     setPage,
     totalPages,

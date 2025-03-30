@@ -1,11 +1,11 @@
 import api from "../utils/api";
 
-export const getAllClients = async (params, page, itemsPerPage) => {
+export const getAllClients = async (param, page, itemsPerPage) => {
   // O back espera os parametros em português
   let urlBase = `clientes/?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
 
   // Caso tenha filtro de nome, adiciona o parâmetro
-  if (params && params.nome) urlBase += `&nomeCliente=${params.nome}`;
+  if (param) urlBase += `&nomeCliente=${param}`;
 
   try {
     const response = await api.get(urlBase);
