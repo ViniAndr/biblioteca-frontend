@@ -3,15 +3,23 @@ import { useEffect, useState } from "react";
 // Contextos
 import { useAlert } from "../contexts/AlertContext";
 
-// Servicos
-import { getPublishers } from "../services/bookService";
+// service
+import { getAttributeData } from "../services/bookService";
 
-export const usePublishers = () => {
+// Recebe o Service certo para buscar na API, e a entindade para buscar na resposta
+export const BookAttributes = (entity) => {
+  // Back em português
+  const selectedEntity = {
+    publisher: "editora",
+    author: "autor",
+    category: "categoria",
+  };
+
   const { showAlert } = useAlert();
 
   const [loading, setLoading] = useState(true);
 
-  const [publishers, setPublishers] = useState([]);
+  const [bookData, setbookData] = useState([]);
 
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(1);
@@ -19,19 +27,19 @@ export const usePublishers = () => {
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [totalItens, settotalItens] = useState(0);
 
-  // Buscar Editoras
-  const fetchPublishers = async () => {
+  // Buscar atributos
+  const fetchBookData = async () => {
     try {
       setLoading(true);
-      const response = await getPublishers(filter, page, itemsPerPage);
+      const response = await getAttributeData(filter, page, itemsPerPage, selectedEntity[entity]);
 
       // Transformando os dados - esse array de objetos tem um outro objeto dentro que mostra quantos livro usa essa editora
-      const formattedPublishers = response.data.editora.map(({ _count, ...rest }) => ({
+      const formattedData = response.data[selectedEntity[entity]].map(({ _count, ...rest }) => ({
         ...rest,
         livros: `${_count.livros} - Livros`, // Adiciona "livros" como um campo separado
       }));
 
-      setPublishers(formattedPublishers || []);
+      setbookData(formattedData || []);
       setTotalPages(response.data.qtdTotalDePaginas || 1);
       setPage(response.data.paginaAtual || 1);
       settotalItens(response.data.total || 0);
@@ -43,11 +51,11 @@ export const usePublishers = () => {
   };
 
   useEffect(() => {
-    fetchPublishers();
+    fetchBookData();
   }, [page, filter, itemsPerPage]);
 
   return {
-    publishers,
+    bookData,
     filter,
     setFilter,
     loading,

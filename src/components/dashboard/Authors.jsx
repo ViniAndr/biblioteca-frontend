@@ -4,10 +4,10 @@ import Table from "../table/Table";
 // Hooks
 import { BookAttributes } from "../../hooks/useBookAttributes";
 
-const Publishers = () => {
-  const { bookData, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = BookAttributes("publisher");
+const Authors = () => {
+  const { bookData, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = BookAttributes("author");
 
-  const headerColumn = ["#", "Editora", "Livros com essa editora", ""];
+  const headerColumn = ["#", "Autor", "Livros com esse autor", ""];
 
   return (
     <div>
@@ -30,4 +30,4 @@ const Publishers = () => {
   );
 };
 
-export default Publishers;
+export default Authors;

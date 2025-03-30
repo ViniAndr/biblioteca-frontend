@@ -4,12 +4,15 @@ import { useState } from "react";
 import Sidebar from "../components/dashboard/Sidebar";
 import Clients from "../components/dashboard/Clients";
 import Publishers from "../components/dashboard/Publishers";
+import Authors from "../components/dashboard/Authors";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Clientes");
 
   const renderContent = () => {
     switch (activeTab) {
+      case "Autores":
+        return <Authors />;
       case "Editoras":
         return <Publishers />;
       case "Clientes":

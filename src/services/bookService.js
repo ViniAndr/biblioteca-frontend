@@ -1,7 +1,7 @@
 import api from "../utils/api";
 
-export const getPublishers = async (param, page) => {
-  let urlBase = `/livros/atributos/editora?page=${page}`;
+export const getAttributeData = async (param, page, itemsPerPage, entity) => {
+  let urlBase = `/livros/atributos/${entity}?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
   if (param) urlBase += `&nome=${param}`;
 
   try {
