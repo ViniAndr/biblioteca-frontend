@@ -4,6 +4,9 @@ import { createBrowserRouter } from "react-router-dom";
 import DefaultLayout from "./components/layout/DefaultLayout";
 import NoLayout from "./components/layout/NoLayout";
 
+// Protetor de rotas
+import PrivateRoute from "./components/routes/PrivateRoute";
+
 // Page
 import Home from "./page/Home";
 import ClientLogin from "./page/auth/ClientLogin";
@@ -46,7 +49,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard/funcionario",
-        element: <Dashboard />,
+        element: (
+          <PrivateRoute allowedRoles={["funcionario", "admin"]} redirectPath="/login/area-restrita">
+            <Dashboard />
+          </PrivateRoute>
+        ),
       },
     ],
   },
