@@ -1,5 +1,16 @@
 import api from "../utils/api";
 
+export const getAllBooks = async (page, itemsPerPage) => {
+  let urlBase = `livros?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
+
+  try {
+    const response = await api.get(urlBase);
+    return { error: false, data: response.data };
+  } catch (error) {
+    return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+  }
+};
+
 export const getAttributeData = async (param, page, itemsPerPage, entity) => {
   let urlBase = `/livros/atributos/${entity}?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
   if (param) urlBase += `&nome=${param}`;
