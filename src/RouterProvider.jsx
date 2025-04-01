@@ -6,6 +6,7 @@ import NoLayout from "./components/layout/NoLayout";
 
 // Protetor de rotas
 import PrivateRoute from "./components/routes/PrivateRoute";
+import PublicRoute from "./components/routes/PublicRoute";
 
 // Page
 import Home from "./page/Home";
@@ -27,19 +28,36 @@ const router = createBrowserRouter([
       },
       {
         path: "/login/cliente",
-        element: <ClientLogin />,
+        element: (
+          <PublicRoute>
+            <ClientLogin />
+          </PublicRoute>
+        ),
       },
       {
         path: "/migrar-conta",
-        element: <MigrateAccount />,
+
+        element: (
+          <PublicRoute>
+            <MigrateAccount />
+          </PublicRoute>
+        ),
       },
       {
         path: "/cliente/cadastrar-conta",
-        element: <Register />,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
       },
       {
         path: "/login/area-restrita",
-        element: <EmployeeAdminLogin />,
+        element: (
+          <PublicRoute>
+            <EmployeeAdminLogin />
+          </PublicRoute>
+        ),
       },
     ],
   },
