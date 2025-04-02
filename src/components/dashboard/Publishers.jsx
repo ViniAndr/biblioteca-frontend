@@ -13,7 +13,7 @@ const Publishers = () => {
 
   return (
     <div>
-      <div className="mb-8">
+      <div className="mb-6">
         <Search filters={filter} handleSearch={(e) => setFilter(e.target.value)} />
       </div>
 

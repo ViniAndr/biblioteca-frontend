@@ -160,6 +160,7 @@ const Register = () => {
       name: "state",
       options: ufs,
       value: values.state,
+      defaultOptionLabel: "Selecione um Estado",
       onChange: handleChange,
       error: errors.state,
     },

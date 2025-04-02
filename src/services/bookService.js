@@ -1,8 +1,11 @@
 import api from "../utils/api";
 
-export const getAllBooks = async (param, page, itemsPerPage) => {
+export const getAllBooks = async (params, page, itemsPerPage) => {
   let urlBase = `livros?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
-  if (param) urlBase += `&titulo=${param}`;
+  if (params && params.title) urlBase += `&titulo=${params.title}`;
+  if (params && params.author) urlBase += `&autor=${params.author}`;
+  if (params && params.category) urlBase += `&categoria=${params.category}`;
+  if (params && params.publisher) urlBase += `&editora=${params.publisher}`;
 
   try {
     const response = await api.get(urlBase);
