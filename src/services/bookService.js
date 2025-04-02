@@ -1,7 +1,8 @@
 import api from "../utils/api";
 
-export const getAllBooks = async (page, itemsPerPage) => {
+export const getAllBooks = async (param, page, itemsPerPage) => {
   let urlBase = `livros?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
+  if (param) urlBase += `&titulo=${param}`;
 
   try {
     const response = await api.get(urlBase);

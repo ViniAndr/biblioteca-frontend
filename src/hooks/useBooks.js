@@ -13,6 +13,7 @@ export const useBooks = () => {
 
   const [books, setBooks] = useState([]);
 
+  const [filter, setFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -22,11 +23,11 @@ export const useBooks = () => {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const response = await getAllBooks(page, itemsPerPage);
-      console.log(response);
+      const response = await getAllBooks(filter, page, itemsPerPage);
 
       // formatar dados e ordenar
       const formattedData = response.data.livros.map(({ autor, editora, categoria, ...rest }) => ({
+        id: rest.id,
         titulo: rest.titulo,
         isbn: rest.isbn,
         autor: autor.nome,
@@ -47,11 +48,13 @@ export const useBooks = () => {
 
   useEffect(() => {
     fetchBooks();
-  }, [page, itemsPerPage]);
+  }, [filter, page, itemsPerPage]);
 
   return {
     books,
     loading,
+    filter,
+    setFilter,
     page,
     setPage,
     totalPages,
