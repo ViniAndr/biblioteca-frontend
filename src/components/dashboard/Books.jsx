@@ -2,9 +2,13 @@
 import Table from "../table/Table";
 import Search from "../common/Search";
 import Select from "../forms/Select";
+import Button from "../common/Button";
 
 // Hooks
 import { useBooks } from "../../hooks/useBooks";
+
+// Icones
+import { LuPlus } from "react-icons/lu";
 
 const Books = () => {
   const {
@@ -50,6 +54,11 @@ const Books = () => {
               onChange={handleFilterChange}
             />
           ))}
+        </div>
+        <div>
+          <Button className="flex gap-2 items-center h-full">
+            Adicionar <LuPlus />
+          </Button>
         </div>
       </div>
 
