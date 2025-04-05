@@ -5,7 +5,7 @@ import Select from "../forms/Select";
 import Button from "../common/Button";
 
 // Hooks
-import { useBooks } from "../../hooks/useBooks";
+import { useBooksAdmin } from "../../hooks/books/useBooksAdmin";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
@@ -25,7 +25,7 @@ const Books = () => {
     itemsPerPage,
     setItemsPerPage,
     totalItens,
-  } = useBooks();
+  } = useBooksAdmin();
 
   // Cabeçario da tabela
   const headerColumn = ["#", "Titulo", "ISBN", "Autor", "Quantidade", "Quantidade Disponível", ""];

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 
 // Contextos
-import { useAlert } from "../contexts/AlertContext";
+import { useAlert } from "../../contexts/AlertContext";
 
 // Servicos
-import { getAllBooks } from "../services/bookService";
-// import { getAllBooks, getAuthors, getPublishers, getCategories } from "../services/bookService";
+import { getAllBooks } from "../../services/bookService";
+import { formatBookForDashboard } from "../../utils/formatters";
 
-export const useBooks = () => {
+// view serve para dados úteis para home ou dashboard
+export const useBooksAdmin = () => {
   const { showAlert } = useAlert();
 
   const [loading, setLoading] = useState(true);
@@ -31,16 +32,10 @@ export const useBooks = () => {
     setLoading(true);
     try {
       const response = await getAllBooks(filters, page, itemsPerPage);
-
       // formatar dados e ordenar
-      const formattedData = response.data.livros.map(({ autor, editora, categoria, ...rest }) => ({
-        id: rest.id,
-        titulo: rest.titulo,
-        isbn: rest.isbn,
-        autor: autor.nome,
-        editora: editora.nome,
-        qtdCopias: rest.qtdCopias,
-      }));
+      const formattedData = response.data.livros.map((book) => {
+        return formatBookForDashboard(book);
+      });
 
       setBooks(formattedData || []);
       setTotalPages(response.data.qtdTotalDePaginas || 1);

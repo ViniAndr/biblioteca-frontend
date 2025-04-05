@@ -5,10 +5,10 @@ import Button from "../common/Button";
 // Icones
 import { LuUsers } from "react-icons/lu";
 
-const CardBook = ({ image, title, author, category, loans, position }) => {
+const CardBook = ({ title, cover, author, category, totalLoans, position }) => {
   return (
     <div
-      className="relative bg-white min-w-54 shadow-md rounded-md overflow-hidden flex flex-col 
+      className="relative bg-white w-full max-w-54 shadow-md rounded-md overflow-hidden flex flex-col 
       group transition-all duration-300 hover:shadow-lg"
     >
       {/* Badge para mostrar a posição no ranking */}
@@ -17,7 +17,7 @@ const CardBook = ({ image, title, author, category, loans, position }) => {
       {/* Container para manter tamanho fixo */}
       <div className="relative overflow-hidden aspect-[2/3]">
         <img
-          src={image}
+          src={cover}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -39,7 +39,7 @@ const CardBook = ({ image, title, author, category, loans, position }) => {
         <div className="flex justify-between pt-1">
           <div className="text-xs flex items-center gap-1 text-zinc-500">
             <LuUsers />
-            <span>{loans} empréstimos</span>
+            <span>{totalLoans} empréstimos</span>
           </div>
           <Button size="xs">Reservar</Button>
         </div>

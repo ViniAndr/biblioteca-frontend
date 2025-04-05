@@ -1,5 +1,6 @@
 import api from "../utils/api";
 
+// Buscar todos os cliente para a dashboard
 export const getAllClients = async (param, page, itemsPerPage) => {
   // O back espera os parametros em português
   let urlBase = `clientes/?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;

@@ -14,3 +14,21 @@ export const formatCep = (cep) => {
     .replace(/(\d{5})(\d)/, "$1-$2") // Coloca o hífen no CEP
     .slice(0, 9); // Limita a 9 caracteres
 };
+
+export const formatBookForDashboard = (book) => ({
+  id: book.id,
+  title: book.titulo,
+  isbn: book.isbn,
+  autor: book.autor.nome,
+  editora: book.editora.nome,
+  qtdCopias: book.qtdCopias,
+});
+
+export const formatBookForHome = (book) => ({
+  id: book.id,
+  title: book.titulo,
+  cover: book.capa,
+  author: book.autor.nome,
+  totalLoans: book.totalEmprestimos,
+  category: book.categoria.map((cat) => cat.nome).join(", "),
+});

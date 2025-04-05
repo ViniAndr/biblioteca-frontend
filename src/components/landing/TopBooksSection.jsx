@@ -1,47 +1,20 @@
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 
 // Componets
 import Button from "../common/Button";
 import CardBook from "../common/CardBook";
 
+// hooks
+import { useTopBooks } from "../../hooks/books/useTopBooks";
+
 // Icons
 import { GoFlame } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-// Images
-import capa from "/images/teste-capa.jpg";
-import capa2 from "/images/teste-capa2.jpg";
-
-const books = [
-  { image: capa, title: "Harry Potter e a Pedra Filosofal", author: "J.K. Rowling", category: "Fantasia", loans: 12 },
-  { image: capa2, title: "O Senhor dos Anéis", author: "J.R.R. Tolkien", category: "Fantasia", loans: 10 },
-  { image: capa, title: "Percy Jackson", author: "Rick Riordan", category: "Aventura", loans: 8 },
-  { image: capa2, title: "O Hobbit", author: "J.R.R. Tolkien", category: "Fantasia", loans: 6 },
-  { image: capa2, title: "O Hobbit", author: "J.R.R. Tolkien", category: "Fantasia", loans: 6 },
-  { image: capa2, title: "O Hobbit", author: "J.R.R. Tolkien", category: "Fantasia", loans: 6 },
-  { image: capa2, title: "O Hobbit", author: "J.R.R. Tolkien", category: "Fantasia", loans: 6 },
-  { image: capa, title: "Dom Casmurro", author: "Machado de Assis", category: "Romance", loans: 5 },
-  { image: capa, title: "Dom Casmurro", author: "Machado de Assis", category: "Romance", loans: 5 },
-  { image: capa, title: "Dom Casmurro", author: "Machado de Assis", category: "Romance", loans: 5 },
-];
-
 const TopBooksSection = () => {
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const { books } = useTopBooks();
+
   const carouselRef = useRef(null);
-
-  // Ajusta quantos itens aparecem por vez conforme a tela
-  useEffect(() => {
-    const updateItemsPerPage = () => {
-      if (window.innerWidth < 640) setItemsPerPage(1);
-      else if (window.innerWidth < 768) setItemsPerPage(2);
-      else if (window.innerWidth < 1024) setItemsPerPage(3);
-      else setItemsPerPage(4);
-    };
-
-    updateItemsPerPage();
-    window.addEventListener("resize", updateItemsPerPage);
-    return () => window.removeEventListener("resize", updateItemsPerPage);
-  }, []);
 
   // Função para mover o carrossel horizontalmente
   const scroll = (direction) => {

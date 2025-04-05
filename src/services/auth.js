@@ -27,6 +27,7 @@ export const UserLogin = async (email, password, login, entity) => {
   }
 };
 
+// Cliente pode transformar sua conta local para online
 export const handleMigrateAccount = async (clientData) => {
   // Backend em português e front no ingles
   const data = {
@@ -50,6 +51,7 @@ export const handleMigrateAccount = async (clientData) => {
   }
 };
 
+// Cliente pode se cadastrar
 export const createOnlineCustomerAccount = async (clientData, login) => {
   // Backend em português e front no ingles
   const data = {
