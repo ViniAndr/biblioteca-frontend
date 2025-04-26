@@ -6,7 +6,17 @@ import { useAuth } from "../../contexts/AuthContext";
 // Components
 import SidebarItem from "./SidebarItem";
 
-import { LuBookOpen, LuUsers, LuBookmark, LuBuilding2, LuUser, LuUserCog, LuHouse, LuLogOut, LuLayoutGrid } from "react-icons/lu";
+import {
+  LuBookOpen,
+  LuUsers,
+  LuBookmark,
+  LuBuilding2,
+  LuUser,
+  LuUserCog,
+  LuHouse,
+  LuLogOut,
+  LuLayoutGrid,
+} from "react-icons/lu";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
   const { logout, user } = useAuth();
@@ -26,7 +36,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   };
   const handleLogout = () => {
     navigate("/");
-    logout;
+    logout();
   };
 
   return (

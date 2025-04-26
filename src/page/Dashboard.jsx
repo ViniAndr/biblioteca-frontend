@@ -10,7 +10,7 @@ import Books from "../components/dashboard/Books";
 import Loans from "../components/dashboard/Loans";
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("Clientes");
+  const [activeTab, setActiveTab] = useState("Emprestimos");
 
   const renderContent = () => {
     switch (activeTab) {
