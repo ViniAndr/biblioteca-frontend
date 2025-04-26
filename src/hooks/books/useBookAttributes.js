@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 // Contextos
-import { useAlert } from "../contexts/AlertContext";
+import { useAlert } from "../../contexts/AlertContext";
 
 // service
-import { getAttributeData } from "../services/bookService";
+import { getAttributeData } from "../../services/bookService";
 
 // Recebe o Service certo para buscar na API, e a entindade para buscar na resposta
 export const BookAttributes = (entity) => {

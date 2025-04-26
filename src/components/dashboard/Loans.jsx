@@ -4,16 +4,14 @@ import Search from "../common/Search";
 import Button from "../common/Button";
 
 // Hooks
-import { BookAttributes } from "../../hooks/books/useBookAttributes";
+import { useLoans } from "../../hooks/useLoans";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
 
-const Categories = () => {
-  const { bookData, filter, setFilter, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } =
-    BookAttributes("category");
-
-  const headerColumn = ["#", "Categoria", "Livros com essa categoria", ""];
+const Loans = () => {
+  const { loans, loading, filter, setFilter, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = useLoans();
+  const headerColumn = ["#", "Livro", "ISBN", "Solicitado em", "Cliente", "Status", ""];
 
   return (
     <div>
@@ -22,18 +20,18 @@ const Categories = () => {
 
         <div>
           <Button className="flex gap-2 items-center h-full">
-            Adicionar <LuPlus />
+            Fazer Emprestimo <LuPlus />
           </Button>
         </div>
       </div>
 
       {loading ? (
         <div className="p-5 text-center">Carregando...</div>
-      ) : bookData.length === 0 ? (
-        <div className="p-5 text-center">Nenhum categoria encontrado</div>
+      ) : loans.length === 0 ? (
+        <div className="p-5 text-center">Nenhum Emprestimo encontrado</div>
       ) : (
         <Table
-          data={bookData}
+          data={loans}
           headerColumn={headerColumn}
           page={page}
           setPage={setPage}
@@ -46,4 +44,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Loans;

@@ -7,12 +7,15 @@ import Publishers from "../components/dashboard/Publishers";
 import Authors from "../components/dashboard/Authors";
 import Categories from "../components/dashboard/Categories";
 import Books from "../components/dashboard/Books";
+import Loans from "../components/dashboard/Loans";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Clientes");
 
   const renderContent = () => {
     switch (activeTab) {
+      case "Emprestimos":
+        return <Loans />;
       case "Livros":
         return <Books />;
       case "Autores":

@@ -4,7 +4,7 @@ import Search from "../common/Search";
 import Button from "../common/Button";
 
 // Hooks
-import { BookAttributes } from "../../hooks/useBookAttributes";
+import { BookAttributes } from "../../hooks/books/useBookAttributes";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
