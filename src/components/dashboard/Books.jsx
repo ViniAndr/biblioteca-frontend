@@ -75,6 +75,7 @@ const Books = () => {
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}
           setItemsPerPage={setItemsPerPage}
+          actions={{ view: true, edit: true, delete: true }}
         />
       )}
     </div>

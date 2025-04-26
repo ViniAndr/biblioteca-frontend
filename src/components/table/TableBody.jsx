@@ -2,7 +2,7 @@ import { LuClipboardPen, LuTrash2, LuEye } from "react-icons/lu";
 
 import Button from "../common/Button";
 
-const TableBody = ({ data }) => {
+const TableBody = ({ data, actions = { view: true, edit: true, delete: true } }) => {
   const handleView = (id) => {
     console.log("Ver: ", id);
   };
@@ -32,15 +32,21 @@ const TableBody = ({ data }) => {
             ))}
             {/* Última coluna com os botões de ação */}
             <td className="px-6 flex justify-end gap-2 py-3">
-              <Button size="square" onClick={() => handleView(item.id)}>
-                <LuEye />
-              </Button>
-              <Button size="square" variant="back" onClick={() => handleEdit(item.id)}>
-                <LuClipboardPen />
-              </Button>
-              <Button size="square" variant="delete" onClick={() => handleDelete(item.id)}>
-                <LuTrash2 />
-              </Button>
+              {actions.view && (
+                <Button size="square" onClick={() => handleView(item.id)}>
+                  <LuEye />
+                </Button>
+              )}
+              {actions.edit && (
+                <Button size="square" variant="back" onClick={() => handleEdit(item.id)}>
+                  <LuClipboardPen />
+                </Button>
+              )}
+              {actions.delete && (
+                <Button size="square" variant="delete" onClick={() => handleDelete(item.id)}>
+                  <LuTrash2 />
+                </Button>
+              )}
             </td>
           </tr>
         );

@@ -38,6 +38,7 @@ const Loans = () => {
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}
           setItemsPerPage={setItemsPerPage}
+          actions={{ view: true, edit: true, delete: false }}
         />
       )}
     </div>

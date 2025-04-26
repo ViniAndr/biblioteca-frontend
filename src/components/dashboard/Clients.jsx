@@ -10,7 +10,8 @@ import { useClients } from "../../hooks/useClients";
 import { LuPlus } from "react-icons/lu";
 
 const Clients = () => {
-  const { clients, filter, setFilter, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } = useClients();
+  const { clients, filter, setFilter, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } =
+    useClients();
 
   const headerColumn = ["#", "Nome", "telefone", "cidade", "estado", ""];
 
@@ -39,6 +40,7 @@ const Clients = () => {
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}
           setItemsPerPage={setItemsPerPage}
+          actions={{ view: true, edit: true, delete: true }}
         />
       )}
     </div>

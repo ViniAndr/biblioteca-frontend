@@ -40,6 +40,7 @@ const Categories = () => {
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}
           setItemsPerPage={setItemsPerPage}
+          actions={{ view: false, edit: true, delete: true }}
         />
       )}
     </div>
