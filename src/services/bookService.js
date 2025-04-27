@@ -38,3 +38,18 @@ export const getTopBooks = async () => {
     return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
   }
 };
+
+export const deleteAttribute = async (attribute, id) => {
+  const urlBase = `/livros/atributos/${attribute}/${id}/deletar`;
+
+  try {
+    const response = await api.delete(urlBase);
+    return { error: false, data: response.data };
+  } catch (error) {
+    if (error.response.status == 400 || error.response.status == 404) {
+      return { error: true, message: error.response };
+    } else {
+      return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    }
+  }
+};

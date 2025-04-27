@@ -4,14 +4,14 @@ import Search from "../common/Search";
 import Button from "../common/Button";
 
 // Hooks
-import { BookAttributes } from "../../hooks/books/useBookAttributes";
+import { useBookAttributes } from "../../hooks/books/attributes/useBookAttributes";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
 
 const Categories = () => {
-  const { bookData, filter, setFilter, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } =
-    BookAttributes("category");
+  const { data, loading, filter, setFilter, page, setPage, itemsPerPage, setItemsPerPage, totalPages } =
+    useBookAttributes("category");
 
   const headerColumn = ["#", "Categoria", "Livros com essa categoria", ""];
 
@@ -29,11 +29,11 @@ const Categories = () => {
 
       {loading ? (
         <div className="p-5 text-center">Carregando...</div>
-      ) : bookData.length === 0 ? (
+      ) : data.length === 0 ? (
         <div className="p-5 text-center">Nenhum categoria encontrado</div>
       ) : (
         <Table
-          data={bookData}
+          data={data}
           headerColumn={headerColumn}
           page={page}
           setPage={setPage}

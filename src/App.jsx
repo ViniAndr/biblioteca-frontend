@@ -3,12 +3,15 @@ import router from "./RouterProvider";
 
 import { AuthProvider } from "./contexts/AuthContext";
 import { AlertProvider } from "./contexts/AlertContext";
+import { ModalProvider } from "./contexts/ModalContext";
 
 function App() {
   return (
     <AlertProvider>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <ModalProvider>
+          <RouterProvider router={router} />
+        </ModalProvider>
       </AuthProvider>
     </AlertProvider>
   );
