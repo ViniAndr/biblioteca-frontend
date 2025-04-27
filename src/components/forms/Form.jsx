@@ -38,7 +38,7 @@ const Form = ({ formStructure, inputData, handleForm, loading, buttonText, child
                   {/* Se o input for de CEP, adicionar o botão para consultar uma API Externa */}
                   {data.handleCepSearch && (
                     <div className="min-w-29">
-                      <Button onClick={data.handleCepSearch} variant="back" size="full" disabled={data.loadingCep} type="button">
+                      <Button onClick={data.handleCepSearch} variant="back" size="full" disabled={data.loadingCep}>
                         {data.loadingCep ? "Buscando..." : "Buscar CEP"}
                       </Button>
                     </div>
@@ -55,7 +55,7 @@ const Form = ({ formStructure, inputData, handleForm, loading, buttonText, child
           })}
         </div>
 
-        <Button size="full" disabled={loading}>
+        <Button size="full" disabled={loading} type="submit">
           {loading ? "Processando..." : buttonText}
         </Button>
         {children && children}

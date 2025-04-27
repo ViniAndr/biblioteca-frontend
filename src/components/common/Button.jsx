@@ -1,8 +1,13 @@
-import { useNavigate } from "react-router-dom";
-
-const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, className = "", disabled, type, children }) => {
-  const navigate = useNavigate();
-
+const Button = ({
+  size = "md",
+  variant = "primary",
+  rounded = "",
+  onClick,
+  className = "",
+  disabled,
+  type = "button", // Valor padrão adicionado
+  children,
+}) => {
   const sizes = {
     full: "w-full py-2 px-4 text-base",
     md: "w-auto py-1 px-3 text-base",
@@ -12,30 +17,24 @@ const Button = ({ to, size = "md", variant = "primary", rounded = "", onClick, c
   };
 
   const variants = {
-    primary: "bg-emerald-500 hover:bg-emerald-600 text-white font-bold", // Botão azul
-    delete: "bg-red-400 hover:bg-red-500 text-white font-bold", // Botão de cancelar (vermelho)
-    back: "bg-gray-500 hover:bg-gray-600 text-white font-bold", // Botão de voltar (cinza)
+    primary: "bg-emerald-500 hover:bg-emerald-600 text-white font-bold",
+    delete: "bg-red-400 hover:bg-red-500 text-white font-bold",
+    back: "bg-gray-500 hover:bg-gray-600 text-white font-bold",
     ghost: "font-medium hover:bg-gray-200",
-    outline: "border  ",
+    outline: "border",
     disabled: "bg-gray-400 cursor-not-allowed flex justify-center text-white font-bold",
   };
 
-  // Definindo as classes base
-  let baseClass = "rounded cursor-pointer transition duration-300 ease-in-out ";
-  baseClass += sizes[size] + " ";
-  // baseClass += variants[variant] + " ";
-  baseClass += (disabled ? variants.disabled : variants[variant]) + " ";
-  baseClass += rounded + " ";
-  baseClass += className + " ";
-
-  function handleClick() {
-    if (to && !disabled) {
-      navigate(to);
-    }
-  }
+  const baseClass = `
+    rounded cursor-pointer transition duration-300 ease-in-out
+    ${sizes[size]}
+    ${disabled ? variants.disabled : variants[variant]}
+    ${rounded}
+    ${className}
+  `;
 
   return (
-    <button className={baseClass} onClick={onClick || handleClick} disabled={disabled} type={type && type}>
+    <button className={baseClass} onClick={onClick} disabled={disabled} type={type}>
       {children}
     </button>
   );
