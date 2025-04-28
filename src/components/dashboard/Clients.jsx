@@ -4,21 +4,27 @@ import Search from "../common/Search";
 import Button from "../common/Button";
 
 // hooks
-import { useClients } from "../../hooks/useClients";
+import { useClients } from "../../hooks/client/useClients";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
 
 const Clients = () => {
-  const { clients, filter, setFilter, loading, page, setPage, totalPages, itemsPerPage, setItemsPerPage } =
+  const { data, loading, filter, setFilter, page, setPage, itemsPerPage, setItemsPerPage, totalPages, refetch } =
     useClients();
 
   const headerColumn = ["#", "Nome", "telefone", "cidade", "estado", ""];
 
+  const tableActions = {
+    onView: true,
+    onEdit: true,
+    onDelete: true,
+  };
+
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search filters={filter} handleSearch={(e) => setFilter(e.target.value)} />
+        <Search value={filter} handleSearch={setFilter} />
 
         <div>
           <Button className="flex gap-2 items-center h-full">
@@ -29,18 +35,18 @@ const Clients = () => {
 
       {loading ? (
         <div className="p-5 text-center">Carregando...</div>
-      ) : clients.length === 0 ? (
+      ) : data.length === 0 ? (
         <div className="p-5 text-center">Nenhum cliente encontrado</div>
       ) : (
         <Table
-          data={clients}
+          data={data}
           headerColumn={headerColumn}
           page={page}
           setPage={setPage}
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}
           setItemsPerPage={setItemsPerPage}
-          actions={{ view: true, edit: true, delete: true }}
+          actions={tableActions}
         />
       )}
     </div>

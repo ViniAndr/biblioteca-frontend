@@ -1,12 +1,12 @@
 import api from "../utils/api";
 
 // Buscar todos os livros para Home e dashboard
-export const getAllBooks = async (params, page, itemsPerPage) => {
+export const getAllBooks = async (filter, page, itemsPerPage) => {
   let urlBase = `livros?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
-  if (params && params.title) urlBase += `&titulo=${params.title}`;
-  if (params && params.author) urlBase += `&autor=${params.author}`;
-  if (params && params.category) urlBase += `&categoria=${params.category}`;
-  if (params && params.publisher) urlBase += `&editora=${params.publisher}`;
+  if (filter && filter.title) urlBase += `&titulo=${filter.title}`;
+  if (filter && filter.author) urlBase += `&autor=${filter.author}`;
+  if (filter && filter.category) urlBase += `&categoria=${filter.category}`;
+  if (filter && filter.publisher) urlBase += `&editora=${filter.publisher}`;
 
   try {
     const response = await api.get(urlBase);
@@ -17,9 +17,12 @@ export const getAllBooks = async (params, page, itemsPerPage) => {
 };
 
 // Listar todos atributo(attribute) na dashboard
-export const getAttributeData = async (param, page, itemsPerPage, attribute) => {
-  let urlBase = `/livros/atributos/${attribute}?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
-  if (param) urlBase += `&nome=${param}`;
+export const getAttributeData = async (filter, page, itemsPerPage, entity) => {
+  let urlBase = `/livros/atributos/${entity}?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
+
+  if (filter) {
+    urlBase += `&nome=${filter}`;
+  }
 
   try {
     const response = await api.get(urlBase);
@@ -39,8 +42,8 @@ export const getTopBooks = async () => {
   }
 };
 
-export const deleteAttribute = async (attribute, id) => {
-  const urlBase = `/livros/atributos/${attribute}/${id}/deletar`;
+export const deleteAttribute = async (entity, id) => {
+  const urlBase = `/livros/atributos/${entity}/${id}/deletar`;
 
   try {
     const response = await api.delete(urlBase);

@@ -5,7 +5,7 @@ import Select from "../forms/Select";
 import Button from "../common/Button";
 
 // Hooks
-import { useBooksAdmin } from "../../hooks/books/useBooksAdmin";
+import { useBooks } from "../../hooks/books/useBooks";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
@@ -17,18 +17,18 @@ const Books = () => {
     publishers,
     categories,
     filters,
-    setFilters,
+    setFilter,
     loading,
     page,
     setPage,
     totalPages,
     itemsPerPage,
     setItemsPerPage,
-    totalItens,
-  } = useBooksAdmin();
+    totalItems,
+  } = useBooks();
 
   // Cabeçario da tabela
-  const headerColumn = ["#", "Titulo", "ISBN", "Autor", "Quantidade", "Quantidade Disponível", ""];
+  const headerColumn = ["#", "Titulo", "ISBN", "Autor", "Editora", "Quantidade Disponível", ""];
 
   // Dados para criação dos selects de filtro
   const attributeFilterSelect = [
@@ -37,22 +37,19 @@ const Books = () => {
     { name: "category", options: categories, defaultOptionLabel: "Todas as Categorias" },
   ];
 
-  const handleFilterChange = (e) => setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleFilterChange = (e) => {
+    setFilter(e.target.name, e.target.value);
+  };
 
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search filters={filters} handleSearch={(e) => setFilters((prev) => ({ ...prev, title: e.target.value }))} />
+        <Search value={filters.title} handleSearch={(value) => setFilter("title", value)} />
 
         {/* Selects de Filtros */}
         <div className="flex gap-4">
-          {attributeFilterSelect.map((selectSettings) => (
-            <Select
-              key={selectSettings.name}
-              {...selectSettings}
-              value={filters[selectSettings.name]}
-              onChange={handleFilterChange}
-            />
+          {attributeFilterSelect.map((select) => (
+            <Select key={select.name} {...select} value={filters[select.name]} onChange={handleFilterChange} />
           ))}
         </div>
         <div>

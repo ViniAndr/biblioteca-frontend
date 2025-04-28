@@ -3,14 +3,15 @@ import Table from "../table/Table";
 import Search from "../common/Search";
 import Button from "../common/Button";
 
+// Contexts
+import { useModal } from "../../contexts/ModalContext";
+
 // Hooks
 import { useBookAttributes } from "../../hooks/books/attributes/useBookAttributes";
 import { useBookAttributeActions } from "../../hooks/books/attributes/useBookAttributesActions";
-import { useModal } from "../../contexts/ModalContext";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
-// import { IoAlertCircleOutline } from "react-icons/io5";
 
 const Authors = () => {
   // Hooks para dados
@@ -20,7 +21,6 @@ const Authors = () => {
   // Hooks para ações
   const {
     actions: { delete: deleteAction },
-    actionState,
   } = useBookAttributeActions("author");
 
   // Hook para modais
@@ -52,13 +52,10 @@ const Authors = () => {
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search filters={filter} handleSearch={(e) => setFilter(e.target.value)} />
+        <Search value={filter} handleSearch={setFilter} />
 
         <div>
-          <Button
-            className="flex gap-2 items-center h-full"
-            loading={actionState.loading && actionState.currentAction === "create"}
-          >
+          <Button className="flex gap-2 items-center h-full">
             Adicionar <LuPlus />
           </Button>
         </div>

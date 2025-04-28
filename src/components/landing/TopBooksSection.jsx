@@ -12,7 +12,7 @@ import { GoFlame } from "react-icons/go";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const TopBooksSection = () => {
-  const { books } = useTopBooks();
+  const { data } = useTopBooks();
 
   const carouselRef = useRef(null);
 
@@ -48,7 +48,7 @@ const TopBooksSection = () => {
           {/* Carrossel de livros */}
           <div ref={carouselRef} className=" overflow-x-scroll lg:overflow-hidden ">
             <div className="flex gap-6 pb-4">
-              {books.map((book, index) => (
+              {data.map((book, index) => (
                 <CardBook key={index} {...book} position={index + 1} />
               ))}
             </div>

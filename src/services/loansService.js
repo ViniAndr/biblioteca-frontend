@@ -1,9 +1,9 @@
 import api from "../utils/api";
 
-export const getAllLoans = async (params, page, itemsPerPage) => {
+export const getAllLoans = async (filter, page, itemsPerPage) => {
   let urlBase = `emprestimos?page=${page}&qtdItensPorPagina=${itemsPerPage}`;
-  if (params && params.book) urlBase += `&livro=${params.book}`;
-  if (params && params.status) urlBase += `&status=${params.status}`;
+  if (filter && filter.book) urlBase += `&livro=${filter.book}`;
+  // if (filter && filter.status) urlBase += `&status=${filter.status}`;
 
   try {
     const response = await api.get(urlBase);
