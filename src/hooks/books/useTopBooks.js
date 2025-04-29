@@ -1,12 +1,12 @@
 // Hooks
-import { usePaginatedData } from "../../hooks/usePaginatedData";
+import { usePaginatedFetch } from "../../hooks/usePaginatedFetch";
 
 // Servicos e utilitarios
 import { getTopBooks } from "../../services/bookService";
 import { formatBookForHome } from "../../utils/formatters";
 
 export const useTopBooks = () => {
-  const { data } = usePaginatedData({
+  const { data } = usePaginatedFetch({
     initialFilter: "",
     fetchService: () => getTopBooks(),
   });

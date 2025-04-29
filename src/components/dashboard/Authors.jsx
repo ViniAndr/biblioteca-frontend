@@ -52,7 +52,7 @@ const Authors = () => {
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search value={filter} handleSearch={setFilter} />
+        <Search value={filter} handleSearch={setFilter} placeholder="Pesquisar autores..." />
 
         <div>
           <Button className="flex gap-2 items-center h-full">

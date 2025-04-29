@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 // Hooks
-import { usePaginatedData } from "../../hooks/usePaginatedData";
+import { usePaginatedFetch } from "../usePaginatedFetch";
 
 // Servicos
 import { getAllLoans } from "../../services/loansService";
@@ -13,8 +13,7 @@ export const useLoans = () => {
   });
 
   const { data, loading, page, setPage, itemsPerPage, setItemsPerPage, totalPages, totalItems, error, refetch } =
-    usePaginatedData({
-      initialFilter: "",
+    usePaginatedFetch({
       fetchService: (_, page, itemsPerPage) => getAllLoans(filters, page, itemsPerPage),
     });
 
@@ -43,7 +42,7 @@ export const useLoans = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       refetch();
-    }, 500); // Debounce de 500ms
+    }, 300); // Debounce de 500ms
 
     return () => clearTimeout(timer);
   }, [filters, refetch]);

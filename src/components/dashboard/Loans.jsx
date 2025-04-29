@@ -23,7 +23,11 @@ const Loans = () => {
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search value={filter} handleSearch={(value) => setFilter("book", value)} />
+        <Search
+          value={filter}
+          handleSearch={(value) => setFilter("book", value)}
+          placeholder="Pesquisar emprestimos..."
+        />
 
         <div>
           <Button className="flex gap-2 items-center h-full">

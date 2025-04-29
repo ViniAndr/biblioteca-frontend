@@ -44,7 +44,11 @@ const Books = () => {
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search value={filters.title} handleSearch={(value) => setFilter("title", value)} />
+        <Search
+          value={filters.title}
+          handleSearch={(value) => setFilter("title", value)}
+          placeholder="Pesquisar livros..."
+        />
 
         {/* Selects de Filtros */}
         <div className="flex gap-4">

@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { usePaginatedData } from "../usePaginatedData";
+
+// Hooks
+import { usePaginatedFetch } from "../usePaginatedFetch";
+
+// Serviços e uteis
 import { getAllBooks } from "../../services/bookService";
 import { formatBookForDashboard } from "../../utils/formatters";
 
@@ -19,9 +23,9 @@ export const useBooks = () => {
 
   // Hook base com estado compartilhado
   const { data, loading, page, setPage, itemsPerPage, setItemsPerPage, totalPages, totalItems, error, refetch } =
-    usePaginatedData({
+    usePaginatedFetch({
       initialFilter: "",
-      fetchService: (_, page, itemsPerPage) => getAllBooks(filters, page, itemsPerPage), // Ignora o filter do hook pai e usa nossos filtros locais
+      fetchService: (filter, page, itemsPerPage) => getAllBooks(filters, page, itemsPerPage), // Ignora o filter do hook pai e usa nossos filtros locais
     });
 
   // Coleta de atributos (autores, editoras, categorias)
@@ -80,7 +84,7 @@ export const useBooks = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       refetch();
-    }, 500); // Debounce de 500ms
+    }, 300); // Debounce de 500ms
 
     return () => clearTimeout(timer);
   }, [filters, refetch]);
