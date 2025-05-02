@@ -16,8 +16,10 @@ const Books = () => {
     authors,
     publishers,
     categories,
-    filters,
-    setFilter,
+    search,
+    setSearch,
+    filter,
+    setFilterField,
     loading,
     page,
     setPage,
@@ -26,35 +28,48 @@ const Books = () => {
     setItemsPerPage,
     totalItems,
   } = useBooks();
-
   // Cabeçario da tabela
   const headerColumn = ["#", "Titulo", "ISBN", "Autor", "Editora", "Quantidade Disponível", ""];
 
+  console.log("Component Book: ", search);
+
   // Dados para criação dos selects de filtro
   const attributeFilterSelect = [
-    { name: "author", options: authors, defaultOptionLabel: "Todos os Autores" },
-    { name: "publisher", options: publishers, defaultOptionLabel: "Todas as Editoras" },
-    { name: "category", options: categories, defaultOptionLabel: "Todas as Categorias" },
+    {
+      name: "author",
+      options: authors,
+      defaultOptionLabel: "Todos os Autores",
+    },
+    {
+      name: "publisher",
+      options: publishers,
+      defaultOptionLabel: "Todas as Editoras",
+    },
+    {
+      name: "category",
+      options: categories,
+      defaultOptionLabel: "Todas as Categorias",
+    },
   ];
-
-  const handleFilterChange = (e) => {
-    setFilter(e.target.name, e.target.value);
-  };
 
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search
-          value={filters.title}
-          handleSearch={(value) => setFilter("title", value)}
-          placeholder="Pesquisar livros..."
-        />
+        <Search value={search} onChange={setSearch} placeholder="Pesquisar livros..." />
 
         {/* Selects de Filtros */}
         <div className="flex gap-4">
-          {attributeFilterSelect.map((select) => (
-            <Select key={select.name} {...select} value={filters[select.name]} onChange={handleFilterChange} />
-          ))}
+          {attributeFilterSelect.map((select) => {
+            return (
+              <Select
+                key={select.name}
+                {...select}
+                value={filter[select.name] ?? ""}
+                onChange={setFilterField}
+                filterKey={select.name}
+              />
+            );
+          })}
         </div>
         <div>
           <Button className="flex gap-2 items-center h-full">

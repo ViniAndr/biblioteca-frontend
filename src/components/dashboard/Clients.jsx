@@ -10,7 +10,7 @@ import { useClients } from "../../hooks/client/useClients";
 import { LuPlus } from "react-icons/lu";
 
 const Clients = () => {
-  const { data, loading, filter, setFilter, page, setPage, itemsPerPage, setItemsPerPage, totalPages, refetch } =
+  const { data, loading, search, setSearch, page, setPage, itemsPerPage, setItemsPerPage, totalPages, refetch } =
     useClients();
 
   const headerColumn = ["#", "Nome", "telefone", "cidade", "estado", ""];
@@ -24,7 +24,7 @@ const Clients = () => {
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search value={filter} handleSearch={setFilter} placeholder="Pesquisar clientes..." />
+        <Search value={search} onChange={setSearch} placeholder="Pesquisar clientes..." />
 
         <div>
           <Button className="flex gap-2 items-center h-full">

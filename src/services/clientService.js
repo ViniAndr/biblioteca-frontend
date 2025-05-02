@@ -1,12 +1,12 @@
 import api from "../utils/api";
 
 // Buscar todos os cliente para a dashboard
-export const getAllClients = async (name, page, itemsPerPage) => {
+export const getAllClients = async (filter, page, itemsPerPage) => {
   // O back espera os parametros em português
   let urlBase = `clientes/?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
 
   // Caso tenha filtro de nome, adiciona o parâmetro
-  if (name) urlBase += `&nomeCliente=${name}`;
+  if (filter.search) urlBase += `&nomeCliente=${filter.search}`;
 
   try {
     const response = await api.get(urlBase);

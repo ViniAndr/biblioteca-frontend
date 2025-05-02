@@ -2,8 +2,9 @@ import api from "../utils/api";
 
 // Buscar todos os livros para Home e dashboard
 export const getAllBooks = async (filter, page, itemsPerPage) => {
+  console.log("filter", filter);
   let urlBase = `livros?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
-  if (filter && filter.title) urlBase += `&titulo=${filter.title}`;
+  if (filter && filter.search) urlBase += `&titulo=${filter.search}`;
   if (filter && filter.author) urlBase += `&autor=${filter.author}`;
   if (filter && filter.category) urlBase += `&categoria=${filter.category}`;
   if (filter && filter.publisher) urlBase += `&editora=${filter.publisher}`;
@@ -17,11 +18,11 @@ export const getAllBooks = async (filter, page, itemsPerPage) => {
 };
 
 // Listar todos atributo(attribute) na dashboard
-export const getAttributeData = async (name, page, itemsPerPage, entity) => {
+export const getAttributeData = async (filter, page, itemsPerPage, entity) => {
   let urlBase = `/livros/atributos/${entity}?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
 
-  if (name) urlBase += `&nome=${name}`;
-
+  if (filter.search) urlBase += `&nome=${filter.search}`;
+  console.log("urlBase", urlBase);
   try {
     const response = await api.get(urlBase);
     return { error: false, data: response.data };

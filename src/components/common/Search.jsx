@@ -1,12 +1,12 @@
 import { LuSearch } from "react-icons/lu";
 
-const Search = ({ value, handleSearch, placeholder = "Pesquisar..." }) => {
+const Search = ({ value, onChange, placeholder = "Pesquisar..." }) => {
   return (
     <div className="h-10 min-w-72 flex justify-between items-center rounded-lg border border-gray-300 shadow-sm p-2 flex-1">
       <input
         type="text"
         value={value}
-        onChange={(e) => handleSearch(e.target.value)} // Passa apenas o valor
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className="outline-none w-full"
       />

@@ -10,8 +10,20 @@ import { useLoans } from "../../hooks/loans/useLoans";
 import { LuPlus } from "react-icons/lu";
 
 const Loans = () => {
-  const { data, loading, filter, setFilter, page, setPage, itemsPerPage, setItemsPerPage, totalPages, refetch } =
-    useLoans();
+  const {
+    data,
+    loading,
+    search,
+    setSearch,
+    filter,
+    setFilter,
+    page,
+    setPage,
+    itemsPerPage,
+    setItemsPerPage,
+    totalPages,
+    refetch,
+  } = useLoans();
   const headerColumn = ["#", "Livro", "ISBN", "Solicitado em", "Cliente", "Status", ""];
 
   // Configura ações para a tabela
@@ -23,11 +35,7 @@ const Loans = () => {
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search
-          value={filter}
-          handleSearch={(value) => setFilter("book", value)}
-          placeholder="Pesquisar emprestimos..."
-        />
+        <Search value={search} onChange={setSearch} placeholder="Pesquisar emprestimos..." />
 
         <div>
           <Button className="flex gap-2 items-center h-full">

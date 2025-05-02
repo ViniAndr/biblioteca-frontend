@@ -3,10 +3,15 @@ import { useAlert } from "../contexts/AlertContext";
 
 export const usePaginatedFetch = ({ fetchService }) => {
   const { showAlert } = useAlert();
+  // State para armazenar apenas os filtros dos selects
+  const [filter, setFilter] = useState({});
+  // State para armazenar o valor do campo de busca
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+
   const [state, setState] = useState({
     data: [],
     loading: true,
-    filter: "",
     page: 1,
     itemsPerPage: 20,
     totalPages: 1,
@@ -18,11 +23,22 @@ export const usePaginatedFetch = ({ fetchService }) => {
   const fetchServiceRef = useRef(fetchService);
   fetchServiceRef.current = fetchService;
 
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const fetchData = useCallback(async () => {
     try {
       setState((prev) => ({ ...prev, loading: true, error: null }));
 
-      const response = await fetchServiceRef.current(state.filter, state.page, state.itemsPerPage);
+      const currentFilter = { ...filter, search: debouncedSearch ?? "" };
+
+      // Chama o serviço de busca com os parâmetros atuais
+      const response = await fetchServiceRef.current(currentFilter, state.page, state.itemsPerPage);
 
       if (!response.data) throw new Error("Dados não encontrados");
 
@@ -42,15 +58,25 @@ export const usePaginatedFetch = ({ fetchService }) => {
         error: error.message,
       }));
     }
-  }, [state.filter, state.page, state.itemsPerPage, showAlert]);
+  }, [debouncedSearch, filter, state.page, state.itemsPerPage, showAlert]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  // Setters simplificados
-  const setFilter = (value) => {
-    setState((prev) => ({ ...prev, filter: value, page: 1 }));
+  const setSearchText = (value) => {
+    if (value == undefined || value == null || value === search) return;
+
+    setSearch(value);
+    setState((prev) => ({ ...prev, page: 1 }));
+  };
+
+  const updateFilter = (newFilter) => {
+    setFilter((prev) => ({
+      ...prev,
+      ...newFilter,
+    }));
+    setState((prev) => ({ ...prev, page: 1 }));
   };
 
   const setItemsPerPage = (value) => {
@@ -63,7 +89,10 @@ export const usePaginatedFetch = ({ fetchService }) => {
 
   return {
     ...state,
-    setFilter,
+    filter,
+    search,
+    setSearch: setSearchText,
+    setFilter: updateFilter,
     setPage,
     setItemsPerPage,
     refetch: fetchData,

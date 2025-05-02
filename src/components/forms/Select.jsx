@@ -7,7 +7,8 @@ const Select = ({
   value,
   onChange,
   options = [],
-  defaultOptionLabel,
+  defaultOptionLabel = "Selecione...",
+  filterKey = null, // Chave do objeto para o filtro
   // Esses dois atributos abaixo serve para quando o options for um array de objetos
   valueKey = "id", // Chave do objeto para o value
   labelKey = "nome", // Chave do objeto para o label
@@ -24,22 +25,22 @@ const Select = ({
         id={id}
         required={required}
         value={value}
-        onChange={onChange}
+        onChange={(e) => (filterKey ? onChange(filterKey, e.target.value) : onChange(e))}
         className={`h-10 w-full border rounded-md py-2 px-3 outline-none appearance-none cursor-pointer ${
           Boolean(error) ? "border-red-500" : "border-zinc-300"
         }`}
       >
         <option value="">{defaultOptionLabel}</option>
-        {options.map((option, index) => {
-          // Se for um objeto, usa as chaves definidas, senão usa o próprio valor
-          const optionValue = typeof option === "object" ? option[valueKey] : option;
-          const optionLabel = typeof option === "object" ? option[labelKey] : option;
-          return (
-            <option key={index} value={optionValue}>
-              {optionLabel}
-            </option>
-          );
-        })}
+        {options?.length > 0 &&
+          options.map((option, index) => {
+            const optionValue = typeof option === "object" ? option[valueKey] : option;
+            const optionLabel = typeof option === "object" ? option[labelKey] : option;
+            return (
+              <option key={index} value={optionValue}>
+                {optionLabel}
+              </option>
+            );
+          })}
       </select>
       {error && <p className="mt text-xs text-red-600">{error}</p>}
     </div>

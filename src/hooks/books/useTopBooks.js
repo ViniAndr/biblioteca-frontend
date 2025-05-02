@@ -7,8 +7,7 @@ import { formatBookForHome } from "../../utils/formatters";
 
 export const useTopBooks = () => {
   const { data } = usePaginatedFetch({
-    initialFilter: "",
-    fetchService: () => getTopBooks(),
+    fetchService: getTopBooks,
   });
 
   // Formatação específica

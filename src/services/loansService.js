@@ -2,8 +2,7 @@ import api from "../utils/api";
 
 export const getAllLoans = async (filter, page, itemsPerPage) => {
   let urlBase = `emprestimos?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
-  if (filter && filter.book) urlBase += `&livro=${filter.book}`;
-
+  if (filter.search && filter.search) urlBase += `&livro=${filter.search}`;
   try {
     const response = await api.get(urlBase);
     return { error: false, data: response.data };

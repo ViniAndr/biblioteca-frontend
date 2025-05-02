@@ -14,7 +14,7 @@ import { useBookAttributeActions } from "../../hooks/books/attributes/useBookAtt
 import { LuPlus } from "react-icons/lu";
 
 const Categories = () => {
-  const { data, loading, filter, setFilter, page, setPage, itemsPerPage, setItemsPerPage, totalPages, refetch } =
+  const { data, loading, search, setSearch, page, setPage, itemsPerPage, setItemsPerPage, totalPages, refetch } =
     useBookAttributes("category");
 
   // Hooks para ações
@@ -50,7 +50,7 @@ const Categories = () => {
   return (
     <div>
       <div className="flex gap-4 mb-6">
-        <Search value={filter} handleSearch={setFilter} placeholder="Pesquisar categorias..." />
+        <Search value={search} onChange={setSearch} placeholder="Pesquisar categorias..." />
 
         <div>
           <Button className="flex gap-2 items-center h-full">
