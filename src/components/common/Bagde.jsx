@@ -2,6 +2,7 @@ const Badge = ({ variant = "primary", size = "sm", className = "", children }) =
   const sizes = {
     xs: "text-[10px] px-2 py-0.5",
     sm: "text-xs px-2",
+    md: "text-xs px-2 py-1",
   };
 
   const variants = {

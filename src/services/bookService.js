@@ -16,6 +16,19 @@ export const getAllBooks = async (filter, page, itemsPerPage) => {
   }
 };
 
+export const getBookById = async (id) => {
+  try {
+    const response = await api.get(`/livros/${id}`);
+    return { error: false, data: response.data };
+  } catch (error) {
+    if (error.response.status == 400 || error.response.status == 404) {
+      return { error: true, message: error.response };
+    } else {
+      return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    }
+  }
+};
+
 // Listar todos atributo(attribute) na dashboard
 export const getAttributeData = async (filter, page, itemsPerPage, entity) => {
   let urlBase = `/livros/atributos/${entity}?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;

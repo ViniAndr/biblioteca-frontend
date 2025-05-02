@@ -34,9 +34,7 @@ const Books = () => {
   } = useBooks();
 
   // Hooks para ações
-  const {
-    actions: { delete: deleteAction },
-  } = useBookActions();
+  const { deleteBook } = useBookActions();
 
   // Hook para modais
   const { openModal } = useModal();
@@ -70,15 +68,23 @@ const Books = () => {
         message: `Tem certeza que deseja desativar esse livro: "${book.title}"?`,
         warning: "Talvez essa ação não possa ser desfeita.",
         onConfirm: async () => {
-          const result = await deleteAction(book.id);
-          if (result.success) refetch();
+          await deleteBook(book.id);
+          refetch();
         },
       },
     });
   };
 
+  const handleViewDetails = (book) => {
+    openModal("detailsBook", {
+      title: book.title,
+      size: "xl",
+      props: { id: book.id },
+    });
+  };
+
   const tableActions = {
-    onView: true,
+    onView: handleViewDetails,
     onEdit: true,
     onDelete: handleDelete,
   };

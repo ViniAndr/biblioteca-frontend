@@ -1,7 +1,18 @@
 import ConfirmModal from "./ConfirmModal";
+import DetailsBookModal from "./DetailsBookModal";
+
+// Registro de tipos de modal e seus componentes correspondentes
+const MODAL_COMPONENTS = {
+  confirm: ConfirmModal,
+  detailsBook: DetailsBookModal,
+};
 
 const ModalRoot = ({ isOpen, type, onClose, title, props, size, overlayClose }) => {
   if (!isOpen || !type) return null;
+
+  const ModalComponent = MODAL_COMPONENTS[type];
+
+  if (!ModalComponent) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -17,9 +28,9 @@ const ModalRoot = ({ isOpen, type, onClose, title, props, size, overlayClose }) 
           </div>
         )}
 
-        {/* Corpo */}
+        {/* Corpo do modal renderizado dinamicamente */}
         <div className="pt-4 text-base">
-          <ConfirmModal {...props} onClose={onClose} />
+          <ModalComponent {...props} onClose={onClose} />
         </div>
       </div>
     </div>

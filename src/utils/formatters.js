@@ -32,3 +32,11 @@ export const formatBookForHome = (book) => ({
   totalLoans: book.totalEmprestimos,
   category: book.categoria.map((cat) => cat.nome).join(", "),
 });
+
+// formato longo
+export const formatDate = (dateString) =>
+  new Date(dateString).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
