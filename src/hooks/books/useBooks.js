@@ -14,7 +14,7 @@ export const useBooks = () => {
   const [categories, setCategories] = useState([]);
 
   // Hook padronizado com usePaginatedFetch
-  const { data, filter, setFilter, page, ...rest } = usePaginatedFetch({
+  const { data, setFilter, ...rest } = usePaginatedFetch({
     fetchService: getAllBooks,
   });
 
@@ -60,9 +60,7 @@ export const useBooks = () => {
     authors,
     publishers,
     categories,
-    filter,
     setFilterField: (key, value) => setFilter({ [key]: value }),
-    page,
     ...rest,
   };
 };

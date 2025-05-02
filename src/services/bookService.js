@@ -2,7 +2,6 @@ import api from "../utils/api";
 
 // Buscar todos os livros para Home e dashboard
 export const getAllBooks = async (filter, page, itemsPerPage) => {
-  console.log("filter", filter);
   let urlBase = `livros?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
   if (filter && filter.search) urlBase += `&titulo=${filter.search}`;
   if (filter && filter.author) urlBase += `&autor=${filter.author}`;
@@ -22,7 +21,7 @@ export const getAttributeData = async (filter, page, itemsPerPage, entity) => {
   let urlBase = `/livros/atributos/${entity}?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
 
   if (filter.search) urlBase += `&nome=${filter.search}`;
-  console.log("urlBase", urlBase);
+
   try {
     const response = await api.get(urlBase);
     return { error: false, data: response.data };

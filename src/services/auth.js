@@ -36,8 +36,7 @@ export const handleMigrateAccount = async (clientData) => {
     telefone: clientData.phone,
   };
   try {
-    const response = await api.post("/clientes/verificar-conta", data);
-    console.log(response);
+    await api.post("/clientes/verificar-conta", data);
     return { error: false, message: "Migração realizada com sucesso, agora pode fazer login." };
   } catch (error) {
     const status = error.response?.status;

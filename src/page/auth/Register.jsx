@@ -184,7 +184,6 @@ const Register = () => {
     setLoading(true);
 
     try {
-      console.log("try");
       const response = await createOnlineCustomerAccount(values, login);
       if (response?.error) {
         showAlert(response.message, "error");

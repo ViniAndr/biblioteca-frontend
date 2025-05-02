@@ -2,6 +2,7 @@
 import Table from "../table/Table";
 import Search from "../common/Search";
 import Button from "../common/Button";
+import Select from "../forms/Select";
 
 // Hooks
 import { useLoans } from "../../hooks/loans/useLoans";
@@ -12,11 +13,12 @@ import { LuPlus } from "react-icons/lu";
 const Loans = () => {
   const {
     data,
+    status,
     loading,
     search,
     setSearch,
     filter,
-    setFilter,
+    setFilterField,
     page,
     setPage,
     itemsPerPage,
@@ -36,6 +38,18 @@ const Loans = () => {
     <div>
       <div className="flex gap-4 mb-6">
         <Search value={search} onChange={setSearch} placeholder="Pesquisar emprestimos..." />
+
+        {/* Selects de Filtros */}
+        <div className="flex gap-4">
+          <Select
+            name="status"
+            options={status}
+            defaultOptionLabel="Todos os Status"
+            value={filter.status}
+            filterKey="status"
+            onChange={setFilterField}
+          />
+        </div>
 
         <div>
           <Button className="flex gap-2 items-center h-full">

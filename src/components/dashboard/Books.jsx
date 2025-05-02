@@ -31,8 +31,6 @@ const Books = () => {
   // Cabeçario da tabela
   const headerColumn = ["#", "Titulo", "ISBN", "Autor", "Editora", "Quantidade Disponível", ""];
 
-  console.log("Component Book: ", search);
-
   // Dados para criação dos selects de filtro
   const attributeFilterSelect = [
     {
