@@ -4,8 +4,12 @@ import Search from "../common/Search";
 import Select from "../forms/Select";
 import Button from "../common/Button";
 
+// Contexts
+import { useModal } from "../../contexts/ModalContext";
+
 // Hooks
 import { useBooks } from "../../hooks/books/useBooks";
+import { useBookActions } from "../../hooks/books/useBookActions";
 
 // Icones
 import { LuPlus } from "react-icons/lu";
@@ -28,6 +32,15 @@ const Books = () => {
     setItemsPerPage,
     totalItems,
   } = useBooks();
+
+  // Hooks para ações
+  const {
+    actions: { delete: deleteAction },
+  } = useBookActions();
+
+  // Hook para modais
+  const { openModal } = useModal();
+
   // Cabeçario da tabela
   const headerColumn = ["#", "Titulo", "ISBN", "Autor", "Editora", "Quantidade Disponível", ""];
 
@@ -49,6 +62,26 @@ const Books = () => {
       defaultOptionLabel: "Todas as Categorias",
     },
   ];
+
+  const handleDelete = (book) => {
+    openModal("confirm", {
+      title: "Confirmar Desativação",
+      props: {
+        message: `Tem certeza que deseja desativar esse livro: "${book.title}"?`,
+        warning: "Talvez essa ação não possa ser desfeita.",
+        onConfirm: async () => {
+          const result = await deleteAction(book.id);
+          if (result.success) refetch();
+        },
+      },
+    });
+  };
+
+  const tableActions = {
+    onView: true,
+    onEdit: true,
+    onDelete: handleDelete,
+  };
 
   return (
     <div>
@@ -89,7 +122,7 @@ const Books = () => {
           totalPages={totalPages}
           itemsPerPage={itemsPerPage}
           setItemsPerPage={setItemsPerPage}
-          actions={{ view: true, edit: true, delete: true }}
+          actions={tableActions}
         />
       )}
     </div>

@@ -18,7 +18,6 @@ const Clients = () => {
   const tableActions = {
     onView: true,
     onEdit: true,
-    onDelete: true,
   };
 
   return (

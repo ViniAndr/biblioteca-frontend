@@ -54,3 +54,19 @@ export const deleteAttribute = async (entity, id) => {
     }
   }
 };
+
+// Não apagar o livro, apenas desativar
+export const deleteBook = async (id) => {
+  const urlBase = `/livros/${id}/desativar`;
+
+  try {
+    const response = await api.patch(urlBase);
+    return { error: false, data: response.data };
+  } catch (error) {
+    if (error.response.status == 400 || error.response.status == 404) {
+      return { error: true, message: error.response };
+    } else {
+      return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    }
+  }
+};

@@ -32,7 +32,6 @@ const Loans = () => {
   const tableActions = {
     onView: true,
     onEdit: true,
-    onDelete: true,
   };
   return (
     <div>
