@@ -10,3 +10,12 @@ export const getAllLoans = async (filter, page, itemsPerPage) => {
     return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
   }
 };
+
+export const getLoanById = async (id) => {
+  try {
+    const response = await api.get(`emprestimos/${id}`);
+    return { error: false, data: response.data };
+  } catch (error) {
+    return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+  }
+};

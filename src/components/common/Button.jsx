@@ -21,12 +21,13 @@ const Button = ({
     delete: "bg-red-400 hover:bg-red-500 text-white font-bold",
     back: "bg-gray-500 hover:bg-gray-600 text-white font-bold",
     ghost: "font-medium hover:bg-gray-200",
-    outline: "border",
+    outline: "border border-zinc-300",
     disabled: "bg-gray-400 cursor-not-allowed flex justify-center text-white font-bold",
+    muted: "bg-transparent text-zinc-500 hover:text-zinc-600",
   };
 
   const baseClass = `
-    rounded cursor-pointer transition duration-300 ease-in-out
+    rounded cursor-pointer transition duration-300 ease-in-out outline-none
     ${sizes[size]}
     ${disabled ? variants.disabled : variants[variant]}
     ${rounded}

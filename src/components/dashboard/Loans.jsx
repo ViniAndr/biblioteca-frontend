@@ -4,6 +4,9 @@ import Search from "../common/Search";
 import Button from "../common/Button";
 import Select from "../forms/Select";
 
+// Contexts
+import { useModal } from "../../contexts/ModalContext";
+
 // Hooks
 import { useLoans } from "../../hooks/loans/useLoans";
 
@@ -26,11 +29,23 @@ const Loans = () => {
     totalPages,
     refetch,
   } = useLoans();
+
+  // Hook para modais
+  const { openModal } = useModal();
+
   const headerColumn = ["#", "Livro", "ISBN", "Solicitado em", "Cliente", "Status", ""];
+
+  const handleViewDetails = (loan) => {
+    console.log(loan.book);
+    openModal("detailsLoan", {
+      size: "xl",
+      props: { id: loan.id },
+    });
+  };
 
   // Configura ações para a tabela
   const tableActions = {
-    onView: true,
+    onView: handleViewDetails,
     onEdit: true,
   };
   return (

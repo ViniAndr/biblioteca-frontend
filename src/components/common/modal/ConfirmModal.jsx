@@ -2,7 +2,7 @@ import Button from "../Button";
 
 const ConfirmModal = ({ message, warning, confirmText = "Confirmar", cancelText = "Cancelar", onConfirm, onClose }) => {
   return (
-    <div>
+    <div className="pt-4">
       <div className="pb-6">
         <p>{message}</p>
         <p className="text-sm opacity-70 mt-1">{warning}</p>

@@ -21,10 +21,11 @@ const DetailsBookModal = ({ id, onClose }) => {
 
   return (
     <div>
-      <div className="flex gap-6">
+      <div className="flex gap-6 pt-6">
         {/* Coluna 01 */}
         <div className="min-w-48">
           <div className="overflow-hidden aspect-[2/3]">
+            {console.log(book.capaPequena)}
             <img src={book.capaPequena} alt={`Capa do livro ${book.titulo}`} className="w-full h-full object-cover" />
           </div>
 
