@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import Bagde from "../Bagde";
 import Button from "../Button";
 import { useBookActions } from "../../../hooks/books/useBookActions";
@@ -7,8 +8,8 @@ import { formatDate } from "../../../utils/formatters";
 import { LuUser, LuBuilding, LuCalendar, LuTag, LuBook } from "react-icons/lu";
 
 const DetailsBookModal = ({ id, onClose }) => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { viewDetails, book, loading, error } = useBookActions();
-
   useEffect(() => {
     if (id) viewDetails(id);
   }, [id]);
@@ -18,15 +19,17 @@ const DetailsBookModal = ({ id, onClose }) => {
   }
 
   if (!book) return null;
-
   return (
     <div>
       <div className="flex gap-6 pt-6">
         {/* Coluna 01 */}
         <div className="min-w-48">
           <div className="overflow-hidden aspect-[2/3]">
-            {console.log(book.capaPequena)}
-            <img src={book.capaPequena} alt={`Capa do livro ${book.titulo}`} className="w-full h-full object-cover" />
+            <img
+              src={`${API_URL}${book.capaPequena}`}
+              alt={`Capa do livro ${book.titulo}`}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="flex flex-col gap-2 mt-4">
