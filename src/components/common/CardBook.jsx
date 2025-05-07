@@ -6,6 +6,7 @@ import Button from "../common/Button";
 import { LuUsers } from "react-icons/lu";
 
 const CardBook = ({ title, cover, author, category, totalLoans, position }) => {
+  const API_URL = import.meta.env.VITE_API_URL;
   return (
     <div
       className="relative bg-white w-full max-w-54 shadow-md rounded-md overflow-hidden flex flex-col 
@@ -17,7 +18,7 @@ const CardBook = ({ title, cover, author, category, totalLoans, position }) => {
       {/* Container para manter tamanho fixo */}
       <div className="relative overflow-hidden aspect-[2/3]">
         <img
-          src={cover}
+          src={`${API_URL}${cover}`}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />

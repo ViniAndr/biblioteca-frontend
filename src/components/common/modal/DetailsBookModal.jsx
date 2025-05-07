@@ -9,7 +9,7 @@ import { LuUser, LuBuilding, LuCalendar, LuTag, LuBook } from "react-icons/lu";
 
 const DetailsBookModal = ({ id, onClose }) => {
   const API_URL = import.meta.env.VITE_API_URL;
-  const { viewDetails, book, loading, error } = useBookActions();
+  const { viewDetails, book, loading } = useBookActions();
   useEffect(() => {
     if (id) viewDetails(id);
   }, [id]);
