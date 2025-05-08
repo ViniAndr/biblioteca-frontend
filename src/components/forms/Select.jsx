@@ -16,7 +16,7 @@ const Select = ({
   return (
     <div className="flex flex-col">
       {label && (
-        <label htmlFor={id} className="font-medium leading-none mb-1">
+        <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
           {label}
         </label>
       )}
@@ -25,7 +25,7 @@ const Select = ({
         id={id}
         required={required}
         value={value}
-        onChange={(e) => (filterKey ? onChange(filterKey, e.target.value) : onChange(e))}
+        onChange={(e) => (filterKey ? onChange(filterKey, e.target.value) : onChange(e.target.value))}
         className={`h-10 w-full border rounded-md py-2 px-3 outline-none appearance-none cursor-pointer ${
           Boolean(error) ? "border-red-500" : "border-zinc-300"
         }`}

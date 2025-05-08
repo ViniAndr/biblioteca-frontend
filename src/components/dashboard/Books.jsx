@@ -32,7 +32,7 @@ const Books = () => {
     setItemsPerPage,
     totalItems,
   } = useBooks();
-
+  console.log(categories);
   // Hooks para ações
   const { deleteBook } = useBookActions();
 
@@ -83,6 +83,14 @@ const Books = () => {
     });
   };
 
+  const handleCreate = () => {
+    openModal("createOrEditBook", {
+      title: "Adicionar Novo Livro",
+      size: "xl",
+      props: { textButton: "Criar", authors, publishers, categories },
+    });
+  };
+
   const tableActions = {
     onView: handleViewDetails,
     onEdit: true,
@@ -109,7 +117,7 @@ const Books = () => {
           })}
         </div>
         <div>
-          <Button className="flex gap-2 items-center h-full">
+          <Button onClick={handleCreate} className="flex gap-2 items-center h-full">
             Adicionar <LuPlus />
           </Button>
         </div>

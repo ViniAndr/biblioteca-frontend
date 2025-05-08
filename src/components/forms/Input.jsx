@@ -1,13 +1,25 @@
-const Input = ({ id, name, type = "text", error, label, required = true, placeholder, value, onChange }) => {
+const Input = ({
+  id,
+  name,
+  type = "text",
+  error,
+  label,
+  required = true,
+  placeholder,
+  value,
+  onChange,
+  className,
+  ...rest
+}) => {
   return (
     <div>
-      <label htmlFor={id} className="font-medium leading-none mb-1">
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
         {label}
       </label>
       <input
         className={`h-10 w-full rounded-md outline-0 border px-3 py-2 text-sm ${
           Boolean(error) ? "border-red-500" : "border-zinc-300"
-        }`}
+        } ${className}`}
         id={id}
         name={name}
         type={type}
@@ -15,6 +27,7 @@ const Input = ({ id, name, type = "text", error, label, required = true, placeho
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        {...rest}
       />
       {error && <p className="mt text-xs text-red-600">{error}</p>}
     </div>
