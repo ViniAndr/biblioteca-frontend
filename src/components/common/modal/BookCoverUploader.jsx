@@ -31,21 +31,25 @@ const BookCoverUploader = ({ onFileChange, onUrlChange, initialUrl = "" }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Capa do Livro</h2>
 
-      <div className="flex gap-4 mb-4">
-        <button
-          type="button"
-          className={`px-4 py-2 rounded-md ${selectedOption === "file" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          onClick={() => setSelectedOption("file")}
-        >
-          Enviar Arquivo
-        </button>
-        <button
-          type="button"
-          className={`px-4 py-2 rounded-md ${selectedOption === "url" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          onClick={() => setSelectedOption("url")}
-        >
-          URL da Imagem
-        </button>
+      <div className="flex mb-4 bg-zinc-200 rounded">
+        <div className="flex-1">
+          <Button
+            size="full"
+            variant={selectedOption === "file" ? "back" : "muted"}
+            onClick={() => setSelectedOption("file")}
+          >
+            Enviar Arquivo
+          </Button>
+        </div>
+        <div className="flex-1">
+          <Button
+            size="full"
+            variant={selectedOption === "url" ? "back" : "muted"}
+            onClick={() => setSelectedOption("url")}
+          >
+            URL da Imagem
+          </Button>
+        </div>
       </div>
 
       {selectedOption === "file" ? (
@@ -57,11 +61,11 @@ const BookCoverUploader = ({ onFileChange, onUrlChange, initialUrl = "" }) => {
             className="hidden"
             accept="image/jpeg, image/png, image/gif"
           />
-          <button type="button" onClick={triggerFileInput} className="px-4 py-2 bg-blue-500 text-white rounded-md mb-2">
+          <Button variant="outline" onClick={triggerFileInput}>
             Clique para selecionar uma imagem
-          </button>
-          <p className="text-sm text-gray-500">{fileName}</p>
-          <p className="text-xs text-gray-400 mt-2">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB</p>
+          </Button>
+          <p className="text-sm text-gray-500 my-2">{fileName}</p>
+          <p className="text-xs text-gray-400">Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB</p>
         </div>
       ) : (
         <div className="space-y-2">

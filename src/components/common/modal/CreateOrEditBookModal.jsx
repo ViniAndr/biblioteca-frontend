@@ -17,14 +17,7 @@ const LANGUAGES = [
   { code: "ja", language: "Japonês" },
 ];
 
-const DEFAULT_CATEGORIES = [
-  { id: 1, nome: "Fantasia" },
-  { id: 2, nome: "Ficção Científica" },
-  { id: 3, nome: "Terror" },
-  { id: 4, nome: "Suspense" },
-];
-
-const CreateOrEditBookModal = ({ id, onClick, textButton, authors, publishers, categories }) => {
+const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publishers, categories }) => {
   const [data, setData] = useState({
     titulo: "",
     isbn: "",
@@ -185,7 +178,9 @@ const CreateOrEditBookModal = ({ id, onClick, textButton, authors, publishers, c
 
       {/* Botões */}
       <div className="flex justify-end gap-4 mt-6">
-        <Button variant="back">Canelar</Button>
+        <Button onClick={onClose} variant="back">
+          Canelar
+        </Button>
         <Button>{textButton}</Button>
       </div>
     </div>
