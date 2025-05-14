@@ -1,5 +1,14 @@
 import api from "../utils/api";
 
+export const findAPI = async (isbn) => {
+  try {
+    const response = await api.get(`/livros/google/${isbn}`);
+    return { error: false, data: response.data };
+  } catch (error) {
+    return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+  }
+};
+
 // Buscar todos os livros para Home e dashboard
 export const getAllBooks = async (filter, page, itemsPerPage) => {
   let urlBase = `livros?pagina=${page}&qtdItensPorPagina=${itemsPerPage}`;
@@ -37,6 +46,16 @@ export const getAttributeData = async (filter, page, itemsPerPage, entity) => {
 
   try {
     const response = await api.get(urlBase);
+    return { error: false, data: response.data };
+  } catch (error) {
+    return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+  }
+};
+
+export const getAllAttributs = async () => {
+  try {
+    const response = await api.get("/livros/atributos");
+    console.log("Resposta: ", response.data);
     return { error: false, data: response.data };
   } catch (error) {
     return { error: true, message: "Erro inesperado. Por favor, tente novamente." };

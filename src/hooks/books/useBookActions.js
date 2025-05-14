@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAlert } from "../../contexts/AlertContext";
-import { getBookById, deleteBook } from "../../services/bookService";
+import { findAPI, getBookById, deleteBook } from "../../services/bookService";
 
 export const useBookActions = () => {
   const { showAlert } = useAlert();
@@ -8,6 +8,24 @@ export const useBookActions = () => {
   const [loading, setLoading] = useState(false);
   const [currentAction, setCurrentAction] = useState(null);
   const [error, setError] = useState(null);
+
+  const findGoogleBooks = async (isbn) => {
+    try {
+      setLoading(true);
+      setCurrentAction("findAPI");
+      setError(null);
+
+      const response = await findAPI(isbn);
+      setData(response.data);
+      return response;
+    } catch (err) {
+      const message = err.message || "Erro ao buscar detalhes do livro.";
+      setError(message);
+      showAlert(message, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const viewDetails = async (id) => {
     try {
@@ -50,6 +68,7 @@ export const useBookActions = () => {
   return {
     viewDetails,
     deleteBook: deleteAction,
+    findGoogleBooks,
     book: data,
     error,
     loading,

@@ -32,7 +32,7 @@ const Books = () => {
     setItemsPerPage,
     totalItems,
   } = useBooks();
-  console.log(categories);
+
   // Hooks para ações
   const { deleteBook } = useBookActions();
 

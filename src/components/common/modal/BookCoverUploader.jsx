@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Button from "../Button";
 
 const BookCoverUploader = ({ onFileChange, onUrlChange, initialUrl = "" }) => {
@@ -6,6 +6,14 @@ const BookCoverUploader = ({ onFileChange, onUrlChange, initialUrl = "" }) => {
   const [imageUrl, setImageUrl] = useState(initialUrl);
   const [fileName, setFileName] = useState("Nenhuma imagem selecionada");
   const fileInputRef = useRef(null);
+
+  // Atualiza o imageUrl quando initialUrl muda
+  useEffect(() => {
+    if (initialUrl) {
+      setImageUrl(initialUrl);
+      setSelectedOption("url");
+    }
+  }, [initialUrl]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];

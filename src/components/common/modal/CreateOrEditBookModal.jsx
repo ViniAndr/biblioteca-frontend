@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "../../forms/Input";
 import Button from "../Button";
 import Select from "../../forms/Select";
 import MultiSelect from "./MultiSelect";
 import BookCoverUploader from "./BookCoverUploader";
+import { useBookActions } from "../../../hooks/books/useBookActions";
+import { useAllAttributes } from "../../../hooks/books/attributes/useAllAttributes";
 
 // Constantes fora do componente
 const LANGUAGES = [
@@ -17,8 +19,12 @@ const LANGUAGES = [
   { code: "ja", language: "Japonês" },
 ];
 
-const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publishers, categories }) => {
-  const [data, setData] = useState({
+const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
+  const { findGoogleBooks, loading } = useBookActions();
+  const { authors, publishers, categories, loading: loadingAttrs } = useAllAttributes();
+
+  const [findAPI, setFindAPI] = useState(false);
+  const [dataForm, setDataForm] = useState({
     titulo: "",
     isbn: "",
     qtdCopias: 1,
@@ -27,14 +33,15 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
     editoraId: 0,
     categoriaIds: [],
     numeroPagina: 100,
-    publicadoEm: null,
+    publicadoEm: new Date().toISOString().split("T")[0],
     idioma: "",
     descricao: "",
     capa: "",
   });
 
+  // Métodos Auxiliares
   const updateField = (field, value) => {
-    setData((prev) => ({ ...prev, [field]: value }));
+    setDataForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleInputChange = (e) => {
@@ -47,7 +54,32 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
     updateField(id, Number(value));
   };
 
-  const availableCategories = categories;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!dataForm.isbn) return;
+
+      const result = await findGoogleBooks(dataForm.isbn);
+      console.log("Resultado: ", result);
+      if (!result?.error && result?.data) {
+        setDataForm((prev) => ({
+          ...prev,
+          titulo: result.data?.titulo,
+          edicao: result.data?.edicao,
+          autorId: result.data?.autor?.id || 0,
+          editoraId: result.data?.editora?.id || 0,
+          numeroPagina: result.data?.numeroPagina,
+          publicadoEm: result.data?.publicadoEm,
+          idioma: result.data?.idioma,
+          descricao: result.data?.descricao,
+          capa: result.data?.capa,
+        }));
+      }
+    };
+
+    if (findAPI) fetchData();
+    // console.log("Data Form: ", dataForm);
+    // console.log("Botão: ", findAPI);
+  }, [findAPI]);
 
   return (
     <div className="pt-4 flex flex-col gap-4">
@@ -59,11 +91,11 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
               id="isbn"
               label="ISBN"
               placeholder="Digite o ISBN do livro"
-              value={data.isbn}
+              value={dataForm.isbn}
               onChange={handleInputChange}
             />
           </div>
-          <Button onClick={onClick} className="h-10">
+          <Button onClick={() => setFindAPI(!findAPI)} className="h-10">
             Buscar
           </Button>
         </div>
@@ -78,7 +110,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
         id="titulo"
         label="Título"
         placeholder="Título do livro"
-        value={data.titulo}
+        value={dataForm.titulo}
         onChange={handleInputChange}
         required
       />
@@ -86,9 +118,9 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
       {/* Quantidade, edição e páginas */}
       <div className="flex gap-4">
         {[
-          { id: "qtdCopias", label: "Quantidade de cópias", value: data.qtdCopias },
-          { id: "edicao", label: "Edição", value: data.edicao },
-          { id: "numeroPagina", label: "Número de Páginas", value: data.numeroPagina },
+          { id: "qtdCopias", label: "Quantidade de cópias", value: dataForm.qtdCopias },
+          { id: "edicao", label: "Edição", value: dataForm.edicao },
+          { id: "numeroPagina", label: "Número de Páginas", value: dataForm.numeroPagina },
         ].map(({ id, label, value }) => (
           <div className="flex-1" key={id}>
             <Input id={id} label={label} type="number" min="1" value={value} onChange={handleNumberChange} />
@@ -103,7 +135,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
             id="autorId"
             label="Autor"
             options={authors}
-            value={data.autorId}
+            value={dataForm.autorId}
             onChange={(value) => updateField("autorId", Number(value))}
             placeholder="Selecione um autor"
           />
@@ -113,7 +145,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
             id="editoraId"
             label="Editora"
             options={publishers}
-            value={data.editoraId}
+            value={dataForm.editoraId}
             onChange={(value) => updateField("editoraId", Number(value))}
             placeholder="Selecione uma editora"
           />
@@ -127,7 +159,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
             id="idioma"
             label="Idioma"
             options={LANGUAGES}
-            value={data.idioma}
+            value={dataForm.idioma}
             onChange={(value) => updateField("idioma", value)}
             valueKey="code"
             labelKey="language"
@@ -139,7 +171,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
             id="publicadoEm"
             label="Data da Publicação"
             type="date"
-            value={data.publicadoEm || ""}
+            value={dataForm.publicadoEm || ""}
             onChange={handleInputChange}
           />
         </div>
@@ -147,8 +179,8 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
 
       {/* Categorias */}
       <MultiSelect
-        options={availableCategories}
-        selectedValues={data.categoriaIds}
+        options={categories || []}
+        selectedValues={dataForm.categoriaIds}
         onChange={(selected) => updateField("categoriaIds", selected)}
         label="Categorias"
         placeholder="Selecione as categorias"
@@ -163,7 +195,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
           id="descricao"
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           rows={4}
-          value={data.descricao}
+          value={dataForm.descricao}
           onChange={handleInputChange}
           placeholder="Descrição do livro"
         />
@@ -173,7 +205,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton, authors, publ
       <BookCoverUploader
         onFileChange={(file) => updateField("capa", file)}
         onUrlChange={(url) => updateField("capa", url)}
-        initialUrl={typeof data.capa === "string" ? data.capa : ""}
+        initialUrl={typeof dataForm.capa === "string" ? dataForm.capa : ""}
       />
 
       {/* Botões */}

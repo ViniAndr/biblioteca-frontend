@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 // Hooks
 import { usePaginatedFetch } from "../../usePaginatedFetch";
 
@@ -14,7 +13,6 @@ export const useBookAttributes = (entity) => {
   };
 
   const { data, ...rest } = usePaginatedFetch({
-    // fetchService: getAttributeData,
     fetchService: (filter, page, itemsPerPage) => getAttributeData(filter, page, itemsPerPage, ENTITY_MAP[entity]),
   });
 

@@ -23,7 +23,7 @@ const MultiSelect = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredOptions = options.filter(
+  const filteredOptions = (options || []).filter(
     (opt) => opt.nome.toLowerCase().includes(query.toLowerCase()) && !selectedValues.includes(opt.id)
   );
 
