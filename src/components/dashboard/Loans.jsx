@@ -36,7 +36,6 @@ const Loans = () => {
   const headerColumn = ["#", "Livro", "ISBN", "Solicitado em", "Cliente", "Status", ""];
 
   const handleViewDetails = (loan) => {
-    console.log(loan.book);
     openModal("detailsLoan", {
       size: "xl",
       props: { id: loan.id },

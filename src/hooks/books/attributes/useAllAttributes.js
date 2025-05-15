@@ -15,14 +15,12 @@ export const useAllAttributes = () => {
       setLoading(true);
       try {
         const res = await getAllAttributs();
-        // console.log("TESTE: ", res);
         if (!res.error) {
           setAttributes({
             authors: res.data.autores,
             publishers: res.data.editoras,
             categories: res.data.categorias,
           });
-          // console.log("HOOK: ", attributes);
         } else {
           setError(res.message || "Erro ao carregar atributos.");
         }

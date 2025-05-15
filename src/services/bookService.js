@@ -55,7 +55,6 @@ export const getAttributeData = async (filter, page, itemsPerPage, entity) => {
 export const getAllAttributs = async () => {
   try {
     const response = await api.get("/livros/atributos");
-    console.log("Resposta: ", response.data);
     return { error: false, data: response.data };
   } catch (error) {
     return { error: true, message: "Erro inesperado. Por favor, tente novamente." };

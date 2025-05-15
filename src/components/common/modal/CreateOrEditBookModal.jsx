@@ -7,7 +7,7 @@ import BookCoverUploader from "./BookCoverUploader";
 import { useBookActions } from "../../../hooks/books/useBookActions";
 import { useAllAttributes } from "../../../hooks/books/attributes/useAllAttributes";
 
-// Constantes fora do componente
+//Lista de idiomas suportados pelo sistema com seus respectivos códigos e nomes
 const LANGUAGES = [
   { code: "pt-BR", language: "Português (Brasil)" },
   { code: "pt-PT", language: "Português (Portugal)" },
@@ -19,11 +19,16 @@ const LANGUAGES = [
   { code: "ja", language: "Japonês" },
 ];
 
+//Componente modal para criação ou edição de livros
 const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
+  // Hooks para ações e atributos de livros
   const { findGoogleBooks, loading } = useBookActions();
   const { authors, publishers, categories, loading: loadingAttrs } = useAllAttributes();
 
+  // Estado para controlar se deve buscar dados da API
   const [findAPI, setFindAPI] = useState(false);
+
+  // Estado que armazena todos os dados do formulário
   const [dataForm, setDataForm] = useState({
     titulo: "",
     isbn: "",
@@ -39,51 +44,58 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
     capa: "",
   });
 
-  // Métodos Auxiliares
+  //Atualiza um campo específico do formulário
   const updateField = (field, value) => {
     setDataForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  //Manipulador genérico para campos de input (texto)
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     updateField(id, value);
   };
 
+  // Manipulador genérico para campos numéricos
   const handleNumberChange = (e) => {
     const { id, value } = e.target;
     updateField(id, Number(value));
   };
 
+  // Adicione esta função utilitária no topo do arquivo
+  const safeValue = (value, fallback = "") => value ?? fallback;
+  // Efeito para buscar dados da API quando o ISBN é fornecido e findAPI é true
   useEffect(() => {
+    // Busca dados do livro na API do Google Books com base no ISBN
     const fetchData = async () => {
       if (!dataForm.isbn) return;
 
       const result = await findGoogleBooks(dataForm.isbn);
-      console.log("Resultado: ", result);
+
       if (!result?.error && result?.data) {
         setDataForm((prev) => ({
           ...prev,
-          titulo: result.data?.titulo,
-          edicao: result.data?.edicao,
-          autorId: result.data?.autor?.id || 0,
-          editoraId: result.data?.editora?.id || 0,
-          numeroPagina: result.data?.numeroPagina,
-          publicadoEm: result.data?.publicadoEm,
-          idioma: result.data?.idioma,
-          descricao: result.data?.descricao,
-          capa: result.data?.capa,
+          titulo: safeValue(result.data?.titulo),
+          edicao: Number(safeValue(result.data?.edicao, 1)),
+          autorId: Number(safeValue(result.data?.autor?.id, 0)),
+          editoraId: Number(safeValue(result.data?.editora?.id, 0)),
+          numeroPagina: Number(safeValue(result.data?.numeroPagina, 100)),
+          publicadoEm: safeValue(result.data?.publicadoEm, new Date().toISOString().split("T")[0]),
+          idioma: safeValue(result.data?.idioma),
+          descricao: safeValue(result.data?.descricao),
+          capa: safeValue(result.data?.capa),
         }));
       }
     };
 
-    if (findAPI) fetchData();
-    // console.log("Data Form: ", dataForm);
-    // console.log("Botão: ", findAPI);
+    if (findAPI) {
+      fetchData();
+      setFindAPI(false); // Resetar o estado após a busca
+    }
   }, [findAPI]);
 
   return (
     <div className="pt-4 flex flex-col gap-4">
-      {/* ISBN e botão buscar */}
+      {/* Seção de busca por ISBN */}
       <div>
         <div className="flex gap-2 items-end">
           <div className="flex-1">
@@ -105,7 +117,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         <hr className="opacity-10" />
       </div>
 
-      {/* Título */}
+      {/* Campo: Título do livro */}
       <Input
         id="titulo"
         label="Título"
@@ -115,7 +127,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         required
       />
 
-      {/* Quantidade, edição e páginas */}
+      {/* Grupo de campos numéricos: Quantidade, Edição e Páginas */}
       <div className="flex gap-4">
         {[
           { id: "qtdCopias", label: "Quantidade de cópias", value: dataForm.qtdCopias },
@@ -128,7 +140,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         ))}
       </div>
 
-      {/* Autor e Editora */}
+      {/* Grupo de seleção: Autor e Editora */}
       <div className="flex gap-4">
         <div className="flex-1">
           <Select
@@ -152,7 +164,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         </div>
       </div>
 
-      {/* Idioma e publicação */}
+      {/* Grupo de seleção: Idioma e Data de Publicação */}
       <div className="flex gap-4">
         <div className="flex-1">
           <Select
@@ -177,7 +189,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         </div>
       </div>
 
-      {/* Categorias */}
+      {/* Campo de seleção múltipla: Categorias */}
       <MultiSelect
         options={categories || []}
         selectedValues={dataForm.categoriaIds}
@@ -186,7 +198,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         placeholder="Selecione as categorias"
       />
 
-      {/* Descrição */}
+      {/* Campo de texto: Descrição */}
       <div>
         <label htmlFor="descricao" className="block text-sm font-medium text-gray-700 mb-1">
           Descrição
@@ -201,17 +213,17 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         />
       </div>
 
-      {/* Upload de capa */}
+      {/* Componente para upload da capa do livro */}
       <BookCoverUploader
         onFileChange={(file) => updateField("capa", file)}
         onUrlChange={(url) => updateField("capa", url)}
         initialUrl={typeof dataForm.capa === "string" ? dataForm.capa : ""}
       />
 
-      {/* Botões */}
+      {/* Botões de ação: Cancelar e Confirmar */}
       <div className="flex justify-end gap-4 mt-6">
         <Button onClick={onClose} variant="back">
-          Canelar
+          Cancelar
         </Button>
         <Button>{textButton}</Button>
       </div>
