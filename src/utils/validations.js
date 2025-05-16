@@ -45,3 +45,21 @@ export const validateString = (value) => {
   if (!regex.test(value)) return "Digte apenas letras.";
   return null;
 };
+
+export const validatePositiveInteger = (value) => {
+  if (!value || isNaN(value)) return "Campo obrigatório.";
+  if (value <= 0) return "Deve ser um número positivo.";
+  return null;
+};
+
+export const validateISBN = (value) => {
+  if (!value) return "ISBN é obrigatório.";
+  if (value.length > 13) return "ISBN deve ter no máximo 13 caracteres.";
+  if (!/^\d{10,13}$/.test(value)) return "ISBN inválido. Use apenas números (10 ou 13 dígitos)";
+  return null;
+};
+
+export const validateSelectField = (value) => {
+  if (!value || value === 0 || value === "") return "Seleção obrigatória.";
+  return null;
+};

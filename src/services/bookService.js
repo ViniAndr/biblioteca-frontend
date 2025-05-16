@@ -104,11 +104,36 @@ export const deleteBook = async (id) => {
 
 // Criar livro
 export const createBook = async (dataBook) => {
+  const formData = new FormData();
+
+  formData.append("titulo", dataBook.titulo);
+  formData.append("isbn", dataBook.isbn);
+  formData.append("qtdCopias", dataBook.qtdCopias);
+  formData.append("edicao", dataBook.edicao);
+  formData.append("autorId", dataBook.autorId);
+  formData.append("editoraId", dataBook.editoraId);
+  formData.append("numeroPagina", dataBook.numeroPagina);
+  formData.append("publicadoEm", dataBook.publicadoEm);
+  formData.append("idioma", dataBook.idioma);
+  formData.append("descricao", dataBook.descricao);
+
+  // Sempre envia capa: File ou URL
+  if (dataBook.capa instanceof File) {
+    formData.append("capa", dataBook.capa);
+  } else if (typeof dataBook.capa === "string") {
+    formData.append("capa", dataBook.capa);
+  }
+
+  // Enviar categorias como array (usando 'categoriaIds[]')
+  dataBook.categoriaIds.forEach((id) => {
+    formData.append("categoriaIds[]", id);
+  });
+
   try {
-    const response = await api.post("/livros", dataBook);
+    const response = await api.post("/livros", formData);
     return response;
   } catch (error) {
-    if (error.response.status == 400 || error.response.status == 404) {
+    if (error.response?.status === 400 || error.response?.status === 404) {
       return { error: true, message: error.response };
     } else {
       return { error: true, message: "Erro inesperado. Por favor, tente novamente." };

@@ -6,6 +6,8 @@ import MultiSelect from "./MultiSelect";
 import BookCoverUploader from "./BookCoverUploader";
 import { useBookActions } from "../../../hooks/books/useBookActions";
 import { useAllAttributes } from "../../../hooks/books/attributes/useAllAttributes";
+import useForm from "../../../hooks/useForm";
+import * as validate from "../../../utils/validations";
 
 //Lista de idiomas suportados pelo sistema com seus respectivos códigos e nomes
 const LANGUAGES = [
@@ -28,61 +30,57 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
   // Estado para controlar se deve buscar dados da API
   const [findAPI, setFindAPI] = useState(false);
 
-  // Estado que armazena todos os dados do formulário
-  const [dataForm, setDataForm] = useState({
-    titulo: "",
-    isbn: "",
-    qtdCopias: 1,
-    edicao: 1,
-    autorId: 0,
-    editoraId: 0,
-    categoriaIds: [],
-    numeroPagina: 100,
-    publicadoEm: new Date().toISOString().split("T")[0],
-    idioma: "",
-    descricao: "",
-    capa: "",
-  });
+  const { values, errors, handleChange, validateAll } = useForm(
+    {
+      titulo: "",
+      isbn: "",
+      qtdCopias: 1,
+      edicao: 1,
+      autorId: 0,
+      editoraId: 0,
+      categoriaIds: [],
+      numeroPagina: 100,
+      publicadoEm: new Date().toISOString().split("T")[0],
+      idioma: "",
+      descricao: "",
+      capa: "",
+    },
+    {
+      titulo: validate.validateRequiredField,
+      isbn: validate.validateISBN,
+      qtdCopias: validate.validatePositiveInteger,
+      edicao: validate.validatePositiveInteger,
+      numeroPagina: validate.validatePositiveInteger,
+      autorId: validate.validateSelectField,
+      editoraId: validate.validateSelectField,
+      idioma: validate.validateSelectField,
+      categoriaIds: validate.validateRequiredField,
+      capa: validate.validateRequiredField,
+    }
+  );
 
   // Função para criar ou editar os dados
   const handleSubmit = async () => {
+    if (!validateAll()) return;
     if (onConfirm) {
-      await onConfirm(dataForm);
+      await onConfirm(values);
       onClose();
     }
   };
 
-  //Atualiza um campo específico do formulário
-  const updateField = (field, value) => {
-    setDataForm((prev) => ({ ...prev, [field]: value }));
-  };
-
-  //Manipulador genérico para campos de input (texto)
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    updateField(id, value);
-  };
-
-  // Manipulador genérico para campos numéricos
-  const handleNumberChange = (e) => {
-    const { id, value } = e.target;
-    updateField(id, Number(value));
-  };
-
   // Adicione esta função utilitária no topo do arquivo
   const safeValue = (value, fallback = "") => value ?? fallback;
+
   // Efeito para buscar dados da API quando o ISBN é fornecido e findAPI é true
   useEffect(() => {
     // Busca dados do livro na API do Google Books com base no ISBN
     const fetchData = async () => {
-      if (!dataForm.isbn) return;
-
-      const result = await findGoogleBooks(dataForm.isbn);
+      if (!values.isbn) return;
+      const result = await findGoogleBooks(values.isbn);
 
       if (!result?.error && result?.data) {
-        setDataForm((prev) => ({
-          ...prev,
-          titulo: safeValue(result.data?.titulo),
+        const updates = {
+          titulo: result.data?.titulo,
           edicao: Number(safeValue(result.data?.edicao, 1)),
           autorId: Number(safeValue(result.data?.autor?.id, 0)),
           editoraId: Number(safeValue(result.data?.editora?.id, 0)),
@@ -91,7 +89,11 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
           idioma: safeValue(result.data?.idioma),
           descricao: safeValue(result.data?.descricao),
           capa: safeValue(result.data?.capa),
-        }));
+        };
+
+        Object.entries(updates).forEach(([key, val]) => {
+          handleChange({ target: { name: key, value: val } });
+        });
       }
     };
 
@@ -109,13 +111,15 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
           <div className="flex-1">
             <Input
               id="isbn"
+              name="isbn"
               label="ISBN"
               placeholder="Digite o ISBN do livro"
-              value={dataForm.isbn}
-              onChange={handleInputChange}
+              value={values.isbn}
+              onChange={handleChange}
+              error={errors.isbn}
             />
           </div>
-          <Button className="h-10 " disabled={loading ? true : false} onClick={() => setFindAPI(!findAPI)}>
+          <Button className="h-10" disabled={loading} onClick={() => setFindAPI(true)}>
             Buscar
           </Button>
         </div>
@@ -128,29 +132,32 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
       {/* Campo: Título do livro */}
       <Input
         id="titulo"
+        name="titulo"
         label="Título"
         placeholder="Título do livro"
-        value={dataForm.titulo}
-        onChange={handleInputChange}
-        required
+        value={values.titulo}
+        onChange={handleChange}
+        error={errors.titulo}
         disabled={loading}
       />
 
       {/* Grupo de campos numéricos: Quantidade, Edição e Páginas */}
       <div className="flex gap-4">
         {[
-          { id: "qtdCopias", label: "Quantidade de cópias", value: dataForm.qtdCopias },
-          { id: "edicao", label: "Edição", value: dataForm.edicao },
-          { id: "numeroPagina", label: "Número de Páginas", value: dataForm.numeroPagina },
-        ].map(({ id, label, value }) => (
+          { id: "qtdCopias", label: "Quantidade de cópias" },
+          { id: "edicao", label: "Edição" },
+          { id: "numeroPagina", label: "Número de Páginas" },
+        ].map(({ id, label }) => (
           <div className="flex-1" key={id}>
             <Input
               id={id}
+              name={id}
               label={label}
               type="number"
               min="1"
-              value={value}
-              onChange={handleNumberChange}
+              value={values[id]}
+              onChange={handleChange}
+              error={errors[id]}
               disabled={loading}
             />
           </div>
@@ -164,9 +171,10 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             id="autorId"
             label="Autor"
             options={authors}
-            value={dataForm.autorId}
-            onChange={(value) => updateField("autorId", Number(value))}
+            value={values.autorId}
+            onChange={(value) => handleChange({ target: { name: "autorId", value } })}
             placeholder="Selecione um autor"
+            error={errors.autorId}
             disabled={loading}
           />
         </div>
@@ -175,9 +183,10 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             id="editoraId"
             label="Editora"
             options={publishers}
-            value={dataForm.editoraId}
-            onChange={(value) => updateField("editoraId", Number(value))}
+            value={values.editoraId}
+            onChange={(value) => handleChange({ target: { name: "editoraId", value } })}
             placeholder="Selecione uma editora"
+            error={errors.editoraId}
             disabled={loading}
           />
         </div>
@@ -190,21 +199,23 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             id="idioma"
             label="Idioma"
             options={LANGUAGES}
-            value={dataForm.idioma}
-            onChange={(value) => updateField("idioma", value)}
+            value={values.idioma}
             valueKey="code"
             labelKey="language"
+            onChange={(value) => handleChange({ target: { name: "idioma", value } })}
             placeholder="Selecione o idioma"
+            error={errors.idioma}
             disabled={loading}
           />
         </div>
         <div className="flex-1">
           <Input
             id="publicadoEm"
+            name="publicadoEm"
             label="Data da Publicação"
             type="date"
-            value={dataForm.publicadoEm || ""}
-            onChange={handleInputChange}
+            value={values.publicadoEm || ""}
+            onChange={handleChange}
             disabled={loading}
           />
         </div>
@@ -213,45 +224,51 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
       {/* Campo de seleção múltipla: Categorias */}
       <MultiSelect
         options={categories || []}
-        selectedValues={dataForm.categoriaIds}
-        onChange={(selected) => updateField("categoriaIds", selected)}
+        selectedValues={values.categoriaIds}
+        onChange={(selected) => handleChange({ target: { name: "categoriaIds", value: selected } })}
         label="Categorias"
         placeholder="Selecione as categorias"
         disabled={loading}
       />
+      {errors.categoriaIds && <p className="text-red-500 text-sm">{errors.categoriaIds}</p>}
 
-      {/* Campo de texto: Descrição */}
+      {/* Descrição */}
       <div>
-        <label htmlFor="descricao" className="block text-sm font-medium text-gray-700 mb-1">
-          Descrição
-        </label>
-        <textarea
-          id="descricao"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-          rows={4}
-          value={dataForm.descricao}
-          onChange={handleInputChange}
-          placeholder="Descrição do livro"
+        {/* Campo de texto: Descrição */}
+        <div>
+          <label htmlFor="descricao" className="block text-sm font-medium text-gray-700 mb-1">
+            Descrição
+          </label>
+          <textarea
+            id="descricao"
+            name="descricao"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            rows={4}
+            value={values.descricao}
+            onChange={handleChange}
+            placeholder="Descrição do livro"
+            disabled={loading}
+          />
+        </div>
+
+        {/* Componente para upload da capa do livro */}
+        <BookCoverUploader
+          onFileChange={(file) => handleChange({ target: { name: "capa", value: file } })}
+          onUrlChange={(url) => handleChange({ target: { name: "capa", value: url } })}
+          initialUrl={typeof values.capa === "string" ? values.capa : ""}
           disabled={loading}
         />
-      </div>
+        {errors.capa && <p className="text-red-500 text-sm">{errors.capa}</p>}
 
-      {/* Componente para upload da capa do livro */}
-      <BookCoverUploader
-        onFileChange={(file) => updateField("capa", file)}
-        onUrlChange={(url) => updateField("capa", url)}
-        initialUrl={typeof dataForm.capa === "string" ? dataForm.capa : ""}
-        disabled={loading}
-      />
-
-      {/* Botões de ação: Cancelar e Confirmar */}
-      <div className="flex justify-end gap-4 mt-6">
-        <Button onClick={onClose} variant="back">
-          Cancelar
-        </Button>
-        <Button onClick={handleSubmit} disabled={loading ? true : false}>
-          {textButton}
-        </Button>
+        {/* Botões de ação: Cancelar e Confirmar */}
+        <div className="flex justify-end gap-4 mt-6">
+          <Button onClick={onClose} variant="back">
+            Cancelar
+          </Button>
+          <Button onClick={handleSubmit} disabled={loading ? true : false}>
+            {textButton}
+          </Button>
+        </div>
       </div>
     </div>
   );
