@@ -12,6 +12,7 @@ const Select = ({
   // Esses dois atributos abaixo serve para quando o options for um array de objetos
   valueKey = "id", // Chave do objeto para o value
   labelKey = "nome", // Chave do objeto para o label
+  ...rest
 }) => {
   return (
     <div className="flex flex-col">
@@ -29,6 +30,7 @@ const Select = ({
         className={`h-10 w-full border rounded-md py-2 px-3 outline-none appearance-none cursor-pointer ${
           Boolean(error) ? "border-red-500" : "border-zinc-300"
         }`}
+        {...rest}
       >
         <option value="">{defaultOptionLabel}</option>
         {options?.length > 0 &&

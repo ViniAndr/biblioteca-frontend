@@ -1,20 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
-/**
- * Componente MultiSelect para seleção múltipla de itens com funcionalidade de busca
- *
- * @param {Array} options - Lista de opções disponíveis para seleção (deve conter objetos com 'id' e 'nome')
- * @param {Array} [selectedValues=[]] - Array de valores atualmente selecionados
- * @param {Function} onChange - Função chamada quando a seleção é alterada
- * @param {String} [label="Categorias"] - Rótulo exibido acima do campo de seleção
- * @param {String} [placeholder="Buscar categoria..."] - Texto placeholder do campo de busca
- */
+// Componente MultiSelect para seleção múltipla de itens com funcionalidade de busca
 const MultiSelect = ({
   options,
   selectedValues = [],
   onChange,
   label = "Categorias",
   placeholder = "Buscar categoria...",
+  disabled,
 }) => {
   // Estado para controlar o texto de busca
   const [query, setQuery] = useState("");
@@ -47,9 +40,7 @@ const MultiSelect = ({
     (opt) => opt.nome.toLowerCase().includes(query.toLowerCase()) && !selectedValues.includes(opt.id)
   );
 
-  /**
-   * Obtém os itens completos (com nome) dos valores selecionados
-   */
+  //Obtém os itens completos (com nome) dos valores selecionados
   const selectedItems = options.filter((opt) => selectedValues.includes(opt.id));
 
   /**
@@ -117,6 +108,7 @@ const MultiSelect = ({
           placeholder={selectedItems.length > 0 ? "" : placeholder}
           className="search-input flex-1 outline-none px-1 py-1 min-w-[100px] text-sm bg-transparent"
           aria-label="Buscar categorias"
+          disabled={disabled}
         />
       </div>
 

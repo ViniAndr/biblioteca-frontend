@@ -17,17 +17,17 @@ const Button = ({
   };
 
   const variants = {
-    primary: "bg-emerald-500 hover:bg-emerald-600 text-white font-bold",
-    delete: "bg-red-400 hover:bg-red-500 text-white font-bold",
-    back: "bg-gray-500 hover:bg-gray-600 text-white font-bold",
-    ghost: "font-medium hover:bg-gray-200",
-    outline: "border border-zinc-300",
-    disabled: "bg-gray-400 cursor-not-allowed flex justify-center text-white font-bold",
-    muted: "bg-transparent text-zinc-500 hover:text-zinc-600",
+    primary: "bg-emerald-500 hover:bg-emerald-600 text-white font-bold cursor-pointer",
+    delete: "bg-red-400 hover:bg-red-500 text-white font-bold cursor-pointer",
+    back: "bg-gray-500 hover:bg-gray-600 text-white font-bold cursor-pointer",
+    ghost: "font-medium hover:bg-gray-200 cursor-pointer",
+    outline: "border border-zinc-300 cursor-pointer",
+    disabled: "bg-gray-400 cursor-not-allowed text-white font-bold",
+    muted: "bg-transparent text-zinc-500 hover:text-zinc-600 cursor-pointer",
   };
 
   const baseClass = `
-    rounded cursor-pointer transition duration-300 ease-in-out outline-none
+    rounded transition duration-300 ease-in-out outline-none
     ${sizes[size]}
     ${disabled ? variants.disabled : variants[variant]}
     ${rounded}

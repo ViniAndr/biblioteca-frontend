@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Button from "../Button";
 
 //Componente para upload da capa do livro via arquivo ou URL
-const BookCoverUploader = ({ onFileChange, onUrlChange, initialUrl = "" }) => {
+const BookCoverUploader = ({ onFileChange, onUrlChange, initialUrl = "", disabled }) => {
   // Estados do componente - garantimos que imageUrl nunca será undefined
   const [selectedOption, setSelectedOption] = useState(initialUrl ? "url" : "file");
   const [imageUrl, setImageUrl] = useState(initialUrl || "");
@@ -100,6 +100,7 @@ const BookCoverUploader = ({ onFileChange, onUrlChange, initialUrl = "" }) => {
             onChange={handleUrlChange}
             placeholder="Cole a URL completa da imagem (deve começar com http:// ou https://)"
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            disabled={disabled}
           />
           {imageUrl && !imageUrl.startsWith("http://") && !imageUrl.startsWith("https://") && (
             <p className="text-sm text-red-500">A URL deve começar com http:// ou https://</p>

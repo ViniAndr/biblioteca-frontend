@@ -21,12 +21,6 @@ const LANGUAGES = [
 
 //Componente modal para criação ou edição de livros
 const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
-  const handleSubmit = async () => {
-    if (onConfirm) {
-      await onConfirm(dataForm);
-      onClose(); // Fecha o modal após criação bem-sucedida
-    }
-  };
   // Hooks para ações e atributos de livros
   const { findGoogleBooks, loading } = useBookActions();
   const { authors, publishers, categories, loading: loadingAttrs } = useAllAttributes();
@@ -49,6 +43,14 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
     descricao: "",
     capa: "",
   });
+
+  // Função para criar ou editar os dados
+  const handleSubmit = async () => {
+    if (onConfirm) {
+      await onConfirm(dataForm);
+      onClose();
+    }
+  };
 
   //Atualiza um campo específico do formulário
   const updateField = (field, value) => {
@@ -113,7 +115,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
               onChange={handleInputChange}
             />
           </div>
-          <Button onClick={() => setFindAPI(!findAPI)} className="h-10">
+          <Button className="h-10 " disabled={loading ? true : false} onClick={() => setFindAPI(!findAPI)}>
             Buscar
           </Button>
         </div>
@@ -131,6 +133,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
         value={dataForm.titulo}
         onChange={handleInputChange}
         required
+        disabled={loading}
       />
 
       {/* Grupo de campos numéricos: Quantidade, Edição e Páginas */}
@@ -141,7 +144,15 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
           { id: "numeroPagina", label: "Número de Páginas", value: dataForm.numeroPagina },
         ].map(({ id, label, value }) => (
           <div className="flex-1" key={id}>
-            <Input id={id} label={label} type="number" min="1" value={value} onChange={handleNumberChange} />
+            <Input
+              id={id}
+              label={label}
+              type="number"
+              min="1"
+              value={value}
+              onChange={handleNumberChange}
+              disabled={loading}
+            />
           </div>
         ))}
       </div>
@@ -156,6 +167,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             value={dataForm.autorId}
             onChange={(value) => updateField("autorId", Number(value))}
             placeholder="Selecione um autor"
+            disabled={loading}
           />
         </div>
         <div className="flex-1">
@@ -166,6 +178,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             value={dataForm.editoraId}
             onChange={(value) => updateField("editoraId", Number(value))}
             placeholder="Selecione uma editora"
+            disabled={loading}
           />
         </div>
       </div>
@@ -182,6 +195,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             valueKey="code"
             labelKey="language"
             placeholder="Selecione o idioma"
+            disabled={loading}
           />
         </div>
         <div className="flex-1">
@@ -191,6 +205,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             type="date"
             value={dataForm.publicadoEm || ""}
             onChange={handleInputChange}
+            disabled={loading}
           />
         </div>
       </div>
@@ -202,6 +217,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
         onChange={(selected) => updateField("categoriaIds", selected)}
         label="Categorias"
         placeholder="Selecione as categorias"
+        disabled={loading}
       />
 
       {/* Campo de texto: Descrição */}
@@ -216,6 +232,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
           value={dataForm.descricao}
           onChange={handleInputChange}
           placeholder="Descrição do livro"
+          disabled={loading}
         />
       </div>
 
@@ -224,6 +241,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
         onFileChange={(file) => updateField("capa", file)}
         onUrlChange={(url) => updateField("capa", url)}
         initialUrl={typeof dataForm.capa === "string" ? dataForm.capa : ""}
+        disabled={loading}
       />
 
       {/* Botões de ação: Cancelar e Confirmar */}
@@ -231,7 +249,9 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
         <Button onClick={onClose} variant="back">
           Cancelar
         </Button>
-        <Button onClick={handleSubmit}>{textButton}</Button>
+        <Button onClick={handleSubmit} disabled={loading ? true : false}>
+          {textButton}
+        </Button>
       </div>
     </div>
   );
