@@ -101,3 +101,17 @@ export const deleteBook = async (id) => {
     }
   }
 };
+
+// Criar livro
+export const createBook = async (dataBook) => {
+  try {
+    const response = await api.post("/livros", dataBook);
+    return response;
+  } catch (error) {
+    if (error.response.status == 400 || error.response.status == 404) {
+      return { error: true, message: error.response };
+    } else {
+      return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    }
+  }
+};

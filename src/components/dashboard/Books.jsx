@@ -31,10 +31,11 @@ const Books = () => {
     itemsPerPage,
     setItemsPerPage,
     totalItems,
+    refetch,
   } = useBooks();
 
   // Hooks para ações
-  const { deleteBook } = useBookActions();
+  const { create, deleteBook } = useBookActions();
 
   // Hook para modais
   const { openModal } = useModal();
@@ -61,14 +62,17 @@ const Books = () => {
     },
   ];
 
-  const handleDelete = (book) => {
-    openModal("confirm", {
-      title: "Confirmar Desativação",
+  const handleCreate = () => {
+    openModal("createOrEditBook", {
+      title: "Adicionar Novo Livro",
+      size: "xl",
       props: {
-        message: `Tem certeza que deseja desativar esse livro: "${book.title}"?`,
-        warning: "Talvez essa ação não possa ser desfeita.",
-        onConfirm: async () => {
-          await deleteBook(book.id);
+        textButton: "Criar",
+        authors,
+        publishers,
+        categories,
+        onConfirm: async (formData) => {
+          await create(formData);
           refetch();
         },
       },
@@ -83,11 +87,17 @@ const Books = () => {
     });
   };
 
-  const handleCreate = () => {
-    openModal("createOrEditBook", {
-      title: "Adicionar Novo Livro",
-      size: "xl",
-      props: { textButton: "Criar", authors, publishers, categories },
+  const handleDelete = (book) => {
+    openModal("confirm", {
+      title: "Confirmar Desativação",
+      props: {
+        message: `Tem certeza que deseja desativar esse livro: "${book.title}"?`,
+        warning: "Talvez essa ação não possa ser desfeita.",
+        onConfirm: async () => {
+          await deleteBook(book.id);
+          refetch();
+        },
+      },
     });
   };
 

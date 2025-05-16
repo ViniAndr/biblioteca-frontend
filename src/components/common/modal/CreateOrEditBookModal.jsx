@@ -20,7 +20,13 @@ const LANGUAGES = [
 ];
 
 //Componente modal para criação ou edição de livros
-const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
+const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
+  const handleSubmit = async () => {
+    if (onConfirm) {
+      await onConfirm(dataForm);
+      onClose(); // Fecha o modal após criação bem-sucedida
+    }
+  };
   // Hooks para ações e atributos de livros
   const { findGoogleBooks, loading } = useBookActions();
   const { authors, publishers, categories, loading: loadingAttrs } = useAllAttributes();
@@ -225,7 +231,7 @@ const CreateOrEditBookModal = ({ onClose, id, onClick, textButton }) => {
         <Button onClick={onClose} variant="back">
           Cancelar
         </Button>
-        <Button>{textButton}</Button>
+        <Button onClick={handleSubmit}>{textButton}</Button>
       </div>
     </div>
   );
