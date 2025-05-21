@@ -19,7 +19,7 @@ const Categories = () => {
 
   // Hooks para ações
   const {
-    actions: { delete: deleteAction },
+    actions: { create, delete: deleteAction },
   } = useBookAttributeActions("category");
 
   // Hook para modais
@@ -41,6 +41,18 @@ const Categories = () => {
     });
   };
 
+  const handleCreate = async () => {
+    openModal("createOrEditAttribute", {
+      title: "Adicionar Autor",
+      props: {
+        onConfirm: async (values) => {
+          const result = await create(values);
+          if (result.success) refetch();
+        },
+      },
+    });
+  };
+
   // Configura ações para a tabela
   const tableActions = {
     onEdit: true,
@@ -53,7 +65,7 @@ const Categories = () => {
         <Search value={search} onChange={setSearch} placeholder="Pesquisar categorias..." />
 
         <div>
-          <Button className="flex gap-2 items-center h-full">
+          <Button onClick={handleCreate} className="flex gap-2 items-center h-full">
             Adicionar <LuPlus />
           </Button>
         </div>

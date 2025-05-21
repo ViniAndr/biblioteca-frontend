@@ -2,6 +2,7 @@ import ConfirmModal from "./ConfirmModal";
 import DetailsBookModal from "./DetailsBookModal";
 import DetailsLoanModal from "./DetailsLoanModal";
 import CreateOrEditBookModal from "./CreateOrEditBookModal";
+import CreateOrEditAttribute from "./CrerateOrEditAttribute";
 
 // Registro de tipos de modal e seus componentes correspondentes
 const MODAL_COMPONENTS = {
@@ -9,6 +10,7 @@ const MODAL_COMPONENTS = {
   detailsBook: DetailsBookModal,
   detailsLoan: DetailsLoanModal,
   createOrEditBook: CreateOrEditBookModal,
+  createOrEditAttribute: CreateOrEditAttribute,
 };
 
 const ModalRoot = ({ isOpen, type, onClose, title, props, size, overlayClose = true }) => {

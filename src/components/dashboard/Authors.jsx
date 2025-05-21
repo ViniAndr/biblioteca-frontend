@@ -20,7 +20,7 @@ const Authors = () => {
 
   // Hooks para ações
   const {
-    actions: { delete: deleteAction },
+    actions: { create, delete: deleteAction },
   } = useBookAttributeActions("author");
 
   // Hook para modais
@@ -43,6 +43,18 @@ const Authors = () => {
     });
   };
 
+  const handleCreate = async () => {
+    openModal("createOrEditAttribute", {
+      title: "Adicionar Autor",
+      props: {
+        onConfirm: async (values) => {
+          const result = await create(values);
+          if (result.success) refetch();
+        },
+      },
+    });
+  };
+
   // Configura ações para a tabela
   const tableActions = {
     onEdit: true,
@@ -55,7 +67,7 @@ const Authors = () => {
         <Search value={search} onChange={setSearch} placeholder="Pesquisar autores..." />
 
         <div>
-          <Button className="flex gap-2 items-center h-full">
+          <Button onClick={handleCreate} className="flex gap-2 items-center h-full">
             Adicionar <LuPlus />
           </Button>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAlert } from "../../../contexts/AlertContext";
-import { deleteAttribute } from "../../../services/bookService";
+import { createAttribute, deleteAttribute } from "../../../services/bookService";
 
 const ENTITY_MAP = {
   publisher: "editora",
@@ -15,6 +15,25 @@ export const useBookAttributeActions = (entity) => {
     currentAction: null, // 'create' | 'update' | 'delete'
     error: null,
   });
+
+  const create = async (data) => {
+    try {
+      setActionState({ loading: true, currentAction: "create", error: null });
+
+      const result = await createAttribute(ENTITY_MAP[entity], data);
+
+      if (result.error) throw new Error(result.message?.data?.error || result.message);
+
+      showAlert(`${ENTITY_MAP[entity]} criado com sucesso!`, "success");
+      return { success: true };
+    } catch (error) {
+      showAlert(error.message || `Erro ao deletar ${ENTITY_MAP[entity]}`, "error");
+      setActionState((prev) => ({ ...prev, error: error.message }));
+      return { success: false, error: error.message };
+    } finally {
+      setActionState((prev) => ({ ...prev, loading: false }));
+    }
+  };
 
   const deleteAction = async (id) => {
     try {
@@ -37,6 +56,7 @@ export const useBookAttributeActions = (entity) => {
 
   return {
     actions: {
+      create,
       delete: deleteAction,
     },
     actionState, // Expõe todo o estado para feedback granular

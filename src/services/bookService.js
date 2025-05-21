@@ -140,3 +140,16 @@ export const createBook = async (dataBook) => {
     }
   }
 };
+
+export const createAttribute = async (entity, data) => {
+  try {
+    const response = await api.post(`/livros/atributos/${entity}`, data);
+    return response;
+  } catch (error) {
+    if (error.response?.status === 400) {
+      return { error: true, message: error.response };
+    } else {
+      return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    }
+  }
+};
