@@ -5,24 +5,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAlert } from "../../contexts/AlertContext";
 
-// Hooks
-import useForm from "../../hooks/useForm"; // Hook personalizado
-
-// Components
+// Hooks e Components
+import useForm from "../../hooks/useForm";
 import Form from "../../components/forms/Form";
 
-// utils e Service
+// Utils e Services
 import { validateEmail, validatePassword } from "../../utils/validations";
 import { UserLogin } from "../../services/auth";
 
 const ClientLogin = () => {
   const { showAlert } = useAlert();
-  const navegate = useNavigate();
-
+  const navigate = useNavigate();
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // Hook de gerenciamento de formulário
   const { values, errors, handleChange, validateAll } = useForm(
     { email: "", password: "" },
     { email: validateEmail, password: validatePassword }
@@ -30,15 +26,14 @@ const ClientLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateAll()) return;
 
-    if (!validateAll()) return; // Se houver erro, não envia
     setLoading(true);
-
     try {
       const response = await UserLogin(values.email, values.password, login);
       if (!response.error) {
         showAlert(response.message, "success");
-        navegate("/");
+        navigate("/");
       } else {
         showAlert(response.message, "attention");
       }
@@ -49,33 +44,41 @@ const ClientLogin = () => {
     }
   };
 
-  const inputData = [
+  const formGroups = [
     {
-      label: "Email",
-      name: "email",
-      type: "email",
-      placeholder: "Digite seu email",
-      value: values.email,
-      onChange: handleChange,
-      error: errors.email,
-    },
-    {
-      label: "Senha",
-      name: "password",
-      type: "password",
-      placeholder: "Digite sua senha",
-      value: values.password,
-      onChange: handleChange,
-      error: errors.password,
+      layout: "vertical",
+      fields: [
+        {
+          component: "input",
+          name: "email",
+          label: "Email",
+          placeholder: "Digite seu email",
+          inputType: "email",
+          value: values.email,
+          onChange: handleChange,
+          error: errors.email,
+        },
+        {
+          component: "input",
+          name: "password",
+          label: "Senha",
+          placeholder: "Digite sua senha",
+          inputType: "password",
+          value: values.password,
+          onChange: handleChange,
+          error: errors.password,
+        },
+      ],
     },
   ];
+
   return (
     <Form
       formStructure={{
         title: "Entrar",
         description: "Preencha os campos abaixo para poder entrar na sua conta",
       }}
-      inputData={inputData}
+      formGroups={formGroups}
       handleForm={handleSubmit}
       loading={loading}
       buttonText="Entrar"

@@ -1,44 +1,49 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Context
+// Contextos
 import { useAuth } from "../../contexts/AuthContext";
 import { useAlert } from "../../contexts/AlertContext";
 
-// Hooks
-import useForm from "../../hooks/useForm"; // Hook personalizado
-
-// Components
+// Hooks e componentes
+import useForm from "../../hooks/useForm";
 import Form from "../../components/forms/Form";
 
-// utils e Service
+// Validações e serviços
 import { validateEmail, validatePassword } from "../../utils/validations";
 import { UserLogin } from "../../services/auth";
 
 const LoginEmployeeAndAdmin = () => {
   const { showAlert } = useAlert();
-  const navegate = useNavigate();
-
+  const navigate = useNavigate();
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // Hook de gerenciamento de formulário
+  // Hook personalizado de formulário (com validação)
   const { values, errors, handleChange, validateAll } = useForm(
-    { email: "", password: "", loginType: "employee" },
-    { email: validateEmail, password: validatePassword }
+    {
+      email: "",
+      password: "",
+      loginType: "employee", // padrão: funcionário
+    },
+    {
+      email: validateEmail,
+      password: validatePassword,
+    }
   );
 
+  // Função de envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateAll()) return; // Se houver erro, não envia
-    setLoading(true);
+    if (!validateAll()) return;
 
+    setLoading(true);
     try {
       const response = await UserLogin(values.email, values.password, login, values.loginType);
       if (!response.error) {
         showAlert(response.message, "success");
-        navegate("/");
+        navigate("/");
       } else {
         showAlert(response.message, "attention");
       }
@@ -49,34 +54,48 @@ const LoginEmployeeAndAdmin = () => {
     }
   };
 
-  const inputData = [
+  // Grupos de campos para o novo sistema de Form
+  const formGroups = [
     {
-      label: "Email",
-      name: "email",
-      type: "email",
-      placeholder: "Digite seu email",
-      value: values.email,
-      onChange: handleChange,
-      error: errors.email,
-    },
-    {
-      label: "Senha",
-      name: "password",
-      type: "password",
-      placeholder: "Digite sua senha",
-      value: values.password,
-      onChange: handleChange,
-      error: errors.password,
-    },
-    {
-      title: "Tipo de Login",
-      name: "loginType", // Nome para o grupo de rádio
-      options: [
-        { label: "Funcionário", value: "employee" },
-        { label: "Administrador", value: "admin" },
+      layout: "vertical",
+      fields: [
+        {
+          component: "input",
+          name: "email",
+          label: "Email",
+          placeholder: "Digite seu email",
+          inputType: "email",
+          value: values.email,
+          onChange: handleChange,
+          error: errors.email,
+        },
+        {
+          component: "input",
+          name: "password",
+          label: "Senha",
+          placeholder: "Digite sua senha",
+          inputType: "password",
+          value: values.password,
+          onChange: handleChange,
+          error: errors.password,
+        },
       ],
-      selectedValue: values.loginType, // Use values.loginType
-      onChange: handleChange, // Use handleChange do hook
+    },
+    {
+      layout: "vertical",
+      fields: [
+        {
+          component: "radio", // componente do tipo rádio
+          name: "loginType",
+          title: "Tipo de Login",
+          options: [
+            { label: "Funcionário", value: "employee" },
+            { label: "Administrador", value: "admin" },
+          ],
+          selectedValue: values.loginType,
+          onChange: handleChange,
+        },
+      ],
     },
   ];
 
@@ -86,7 +105,7 @@ const LoginEmployeeAndAdmin = () => {
         title: "Área Restrita",
         description: "Login para Funcionário e Administradores",
       }}
-      inputData={inputData}
+      formGroups={formGroups}
       handleForm={handleSubmit}
       loading={loading}
       buttonText="Entrar"

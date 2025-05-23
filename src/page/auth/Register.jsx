@@ -17,20 +17,6 @@ const Register = () => {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  const validateForm = {
-    name: validate.validateString,
-    lastname: validate.validateString,
-    email: validate.validateEmail,
-    password: validate.validatePassword,
-    phone: validate.validatePhone,
-    address: validate.validateRequiredField,
-    number: validate.validateHouseNumber,
-    neighborhood: validate.validateRequiredField,
-    city: validate.validateString,
-    state: validate.validateRequiredField,
-    cep: validate.validateRequiredField,
-  };
-
   const { values, errors, handleChange, handleCepSearch, loadingCep, validateAll } = useForm(
     {
       name: "",
@@ -45,7 +31,19 @@ const Register = () => {
       state: "",
       cep: "",
     },
-    { ...validateForm }
+    {
+      name: validate.validateString,
+      lastname: validate.validateString,
+      email: validate.validateEmail,
+      password: validate.validatePassword,
+      phone: validate.validatePhone,
+      street: validate.validateRequiredField,
+      number: validate.validateHouseNumber,
+      neighborhood: validate.validateRequiredField,
+      city: validate.validateString,
+      state: validate.validateRequiredField,
+      cep: validate.validateRequiredField,
+    }
   );
 
   const ufs = [
@@ -78,101 +76,141 @@ const Register = () => {
     "TO",
   ];
 
-  const inputData = [
+  const formGroups = [
     {
-      label: "Nome",
-      name: "name",
-      placeholder: "Digite seu nome",
-      value: values.name,
-      onChange: handleChange,
-      error: errors.name,
+      layout: "grid-2",
+      fields: [
+        {
+          component: "input",
+          name: "name",
+          label: "Nome",
+          placeholder: "Digite seu nome",
+          value: values.name,
+          onChange: handleChange,
+          error: errors.name,
+        },
+        {
+          component: "input",
+          name: "lastname",
+          label: "Sobrenome",
+          placeholder: "Digite seu sobrenome",
+          value: values.lastname,
+          onChange: handleChange,
+          error: errors.lastname,
+        },
+      ],
     },
     {
-      label: "Sobrenome",
-      name: "lastname",
-      placeholder: "Digite sua sobrenome",
-      value: values.lastname,
-      onChange: handleChange,
-      error: errors.lastname,
+      layout: "grid-2",
+      fields: [
+        {
+          component: "input",
+          name: "email",
+          label: "Email",
+          placeholder: "Digite seu email",
+          inputType: "email",
+          value: values.email,
+          onChange: handleChange,
+          error: errors.email,
+        },
+        {
+          component: "input",
+          name: "phone",
+          label: "Telefone",
+          placeholder: "Digite seu telefone",
+          inputType: "text",
+          value: values.phone,
+          onChange: handleChange,
+          error: errors.phone,
+        },
+      ],
     },
     {
-      label: "Email",
-      name: "email",
-      type: "email",
-      placeholder: "Digite seu email",
-      value: values.email,
-      onChange: handleChange,
-      error: errors.email,
+      layout: "vertical",
+      fields: [
+        {
+          component: "input",
+          name: "password",
+          label: "Senha",
+          placeholder: "Digite sua senha",
+          inputType: "password",
+          value: values.password,
+          onChange: handleChange,
+          error: errors.password,
+        },
+      ],
     },
     {
-      label: "Telefone",
-      name: "phone",
-      type: "text",
-      placeholder: "Digite sua telefone",
-      value: values.phone,
-      onChange: handleChange,
-      error: errors.phone,
+      layout: "grid-2",
+      fields: [
+        {
+          component: "input",
+          name: "cep",
+          label: "CEP",
+          placeholder: "Digite seu CEP",
+          value: values.cep,
+          onChange: handleChange,
+          error: errors.cep,
+          handleCepSearch,
+          loadingCep,
+        },
+        {
+          component: "input",
+          name: "street",
+          label: "Endereço",
+          placeholder: "Rua, avenida, etc",
+          value: values.street,
+          onChange: handleChange,
+          error: errors.street,
+        },
+      ],
     },
     {
-      label: "Senha",
-      name: "password",
-      type: "password",
-      placeholder: "Digite sua senha",
-      value: values.password,
-      onChange: handleChange,
-      error: errors.password,
+      layout: "grid-2",
+      fields: [
+        {
+          component: "input",
+          name: "number",
+          label: "Número",
+          placeholder: "123",
+          value: values.number,
+          onChange: handleChange,
+          error: errors.number,
+        },
+        {
+          component: "input",
+          name: "neighborhood",
+          label: "Bairro",
+          placeholder: "Centro, Bairro Alto...",
+          value: values.neighborhood,
+          onChange: handleChange,
+          error: errors.neighborhood,
+        },
+      ],
     },
     {
-      label: "Endereço",
-      name: "street",
-      placeholder: "Digite seu endereço",
-      value: values.street,
-      onChange: handleChange,
-      error: errors.street,
-    },
-    {
-      label: "Número da Casa",
-      name: "number",
-      placeholder: "Digite o numero da casa",
-      maxlength: "10",
-      value: values.number,
-      onChange: handleChange,
-      error: errors.number,
-    },
-    {
-      label: "Bairro",
-      name: "neighborhood",
-      placeholder: "Digite seu bairro",
-      value: values.neighborhood,
-      onChange: handleChange,
-      error: errors.neighborhood,
-    },
-    {
-      label: "Cidade",
-      name: "city",
-      placeholder: "Digite sua cidade",
-      value: values.city,
-      onChange: handleChange,
-      error: errors.city,
-    },
-    {
-      label: "Estado",
-      name: "state",
-      options: ufs,
-      value: values.state,
-      defaultOptionLabel: "Selecione um Estado",
-      onChange: handleChange,
-      error: errors.state,
-    },
-    {
-      label: "CEP",
-      name: "cep",
-      placeholder: "Digite seu CEP",
-      value: values.cep,
-      onChange: handleChange,
-      error: errors.cep,
-      handleCepSearch,
-      loadingCep,
+      layout: "grid-2",
+      fields: [
+        {
+          component: "input",
+          name: "city",
+          label: "Cidade",
+          placeholder: "São Paulo, Salvador...",
+          value: values.city,
+          onChange: handleChange,
+          error: errors.city,
+        },
+        {
+          component: "select",
+          name: "state",
+          label: "Estado",
+          options: ufs,
+          value: values.state,
+          onChange: handleChange,
+          error: errors.state,
+          placeholder: "Selecione um Estado",
+        },
+      ],
     },
   ];
 
@@ -197,18 +235,17 @@ const Register = () => {
     }
   };
   return (
-    <>
-      <Form
-        formStructure={{
-          title: "Cadastrar",
-          description: "Realize seu cadastro como cliente abaxio:",
-        }}
-        inputData={inputData}
-        handleForm={handleSubmit}
-        loading={loading}
-        buttonText="Criar Conta"
-      />
-    </>
+    <Form
+      formStructure={{
+        title: "Cadastrar",
+        description: "Realize seu cadastro como cliente abaixo:",
+      }}
+      formGroups={formGroups}
+      handleForm={handleSubmit}
+      loading={loading}
+      buttonText="Criar Conta"
+      size="xl"
+    />
   );
 };
 
