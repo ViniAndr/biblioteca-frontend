@@ -2,13 +2,23 @@ import { useState } from "react";
 import FormGroupRenderer from "./FormGroupRenderer";
 import Button from "../common/Button";
 
-const Form = ({ formStructure = null, formGroups, handleForm, loading, buttonText, size = "sm", children }) => {
+const Form = ({
+  formStructure = null,
+  formGroups,
+  handleForm,
+  loading,
+  buttonText = null,
+  size = "sm",
+  variant = "default",
+  children,
+}) => {
   // Tamanhos permitidos para o formulário
   const sizes = {
     sm: "max-w-sm",
     md: "max-w-md",
     lg: "max-w-lg",
     xl: "max-w-xl",
+    full: "w-full",
   };
 
   // Estado que controla o tipo do campo de senha (password/text)
@@ -20,7 +30,11 @@ const Form = ({ formStructure = null, formGroups, handleForm, loading, buttonTex
   };
 
   return (
-    <div className={`${sizes[size]} m-auto my-8 md:my-16 rounded-lg border border-zinc-50 shadow p-8`}>
+    <div
+      className={`${sizes[size]} ${
+        variant !== "default" ? "" : "m-auto my-8 md:my-16 rounded-lg border border-zinc-50 shadow p-8"
+      }`}
+    >
       {/* Cabeçalho opcional do formulário */}
       {formStructure && (
         <div className="flex flex-col space-y-1.5 mb-4">
@@ -42,9 +56,11 @@ const Form = ({ formStructure = null, formGroups, handleForm, loading, buttonTex
         ))}
 
         {/* Botão de envio */}
-        <Button size="full" disabled={loading} type="submit">
-          {loading ? "Processando..." : buttonText}
-        </Button>
+        {buttonText && (
+          <Button size="full" disabled={loading} type="submit">
+            {loading ? "Processando..." : buttonText}
+          </Button>
+        )}
 
         {/* Conteúdo adicional abaixo do botão */}
         {children && children}

@@ -1,6 +1,6 @@
 import useForm from "../../../hooks/useForm";
 import { validateRequiredField } from "../../../utils/validations";
-import Input from "../../forms/Input";
+import Form from "../../forms/Form";
 import Button from "../Button";
 
 const CreateOrEditAttributeModal = ({ onClose, onConfirm }) => {
@@ -14,18 +14,27 @@ const CreateOrEditAttributeModal = ({ onClose, onConfirm }) => {
     }
   };
 
+  const formGroups = [
+    {
+      layout: "vertical",
+      fields: [
+        {
+          component: "input",
+          name: "nome",
+          label: "Nome",
+          placeholder: "Digite o nome",
+          inputType: "text",
+          value: values.nome,
+          onChange: handleChange,
+          error: errors.nome,
+        },
+      ],
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-4 mt-3">
-      <Input
-        id="nome"
-        name="nome"
-        label="Nome"
-        placeholder="Digite o nome"
-        value={values.nome}
-        onChange={handleChange}
-        error={errors.nome}
-        autoFocus
-      />
+      <Form formGroups={formGroups} handleForm={handleSubmit} size="full" variant="modal" />
 
       <div className="flex justify-end gap-4">
         <Button variant="back" onClick={onClose}>
