@@ -28,7 +28,7 @@ export const useAllAttributes = () => {
     } finally {
       setLoading(false);
     }
-  });
+  }, []);
   useEffect(() => {
     fetchAttributes();
   }, [fetchAttributes]);
