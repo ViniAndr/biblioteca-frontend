@@ -37,8 +37,9 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
 
   // Estado para controlar se deve buscar dados da API
   const [findAPI, setFindAPI] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 2. Sincronizamos os dados do hook com as nossas listas locais
+  // Sincronizamos os dados do hook com as nossas listas locais
   useEffect(() => {
     if (fetchedAuthors) setAuthorsList(fetchedAuthors);
   }, [fetchedAuthors]);
@@ -79,9 +80,16 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
   // Função para criar ou editar os dados
   const handleSubmit = async () => {
     if (!validateAll()) return;
+
     if (onConfirm) {
-      await onConfirm(values);
-      onClose();
+      setIsSubmitting(true); // Trava o botão e os inputs
+      try {
+        await onConfirm(values); // Espera o backend responder
+        onClose(); // Só fecha se a requisição deu certo
+      } catch (error) {
+        console.error("Erro ao salvar:", error);
+        setIsSubmitting(false); // Destrava o botão se a API der erro
+      }
     }
   };
 
@@ -201,9 +209,9 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             options={authorsList}
             value={values.autorId}
             onChange={(value) => handleChange({ target: { name: "autorId", value } })}
-            placeholder="Selecione um autor"
+            placeholder={loadingAttrs ? "Carregando autores..." : "Selecione um autor"} // <--- Feedback visual!
             error={errors.autorId}
-            disabled={loading}
+            disabled={loading || isSubmitting || loadingAttrs}
           />
         </div>
         <div className="flex-1">
@@ -213,9 +221,9 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             options={publishersList}
             value={values.editoraId}
             onChange={(value) => handleChange({ target: { name: "editoraId", value } })}
-            placeholder="Selecione uma editora"
+            placeholder={loadingAttrs ? "Carregando editoras..." : "Selecione uma editora"}
             error={errors.editoraId}
-            disabled={loading}
+            disabled={loading || isSubmitting || loadingAttrs}
           />
         </div>
       </div>
@@ -293,8 +301,8 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
           <Button onClick={onClose} variant="back">
             Cancelar
           </Button>
-          <Button onClick={handleSubmit} disabled={loading ? true : false}>
-            {textButton}
+          <Button onClick={handleSubmit} disabled={loading || isSubmitting}>
+            {isSubmitting ? "Aguarde" : textButton}
           </Button>
         </div>
       </div>
