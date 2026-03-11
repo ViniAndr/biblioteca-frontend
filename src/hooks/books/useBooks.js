@@ -1,6 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
-
-// Hooks
+import { useAllAttributes } from "./attributes/useAllAttributes";
 import { usePaginatedFetch } from "../usePaginatedFetch";
 
 // Serviços e utilitários
@@ -8,59 +6,33 @@ import { getAllBooks } from "../../services/bookService";
 import { formatBookForDashboard } from "../../utils/formatters";
 
 export const useBooks = () => {
-  const [isAttributesLoaded, setIsAttributesLoaded] = useState(false);
-  const [authors, setAuthors] = useState([]);
-  const [publishers, setPublishers] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // 1. Pega as listas completas (sem depender dos livros na tela)
+  const { authors, publishers, categories, refetch: refetchAttributes } = useAllAttributes();
 
-  // Hook padronizado com usePaginatedFetch
-  const { data, setFilter, ...rest } = usePaginatedFetch({
+  // 2. Pega a lista de livros paginada
+  const {
+    data,
+    setFilter,
+    refetch: refetchBooks,
+    ...rest
+  } = usePaginatedFetch({
     fetchService: getAllBooks,
   });
 
-  const collectAttributes = useCallback((books) => {
-    const uniqueAuthors = new Map();
-    const uniquePublishers = new Map();
-    const uniqueCategories = new Map();
+  // 3. O nosso "Super Refetch" que atualiza as duas coisas ao mesmo tempo
+  const handleRefetchAll = () => {
+    if (refetchBooks) refetchBooks();
+    if (refetchAttributes) refetchAttributes();
+  };
 
-    books?.forEach(({ autor, editora, categoria }) => {
-      if (autor && !uniqueAuthors.has(autor.id)) {
-        uniqueAuthors.set(autor.id, { id: autor.id, nome: autor.nome });
-      }
-
-      if (editora && !uniquePublishers.has(editora.id)) {
-        uniquePublishers.set(editora.id, { id: editora.id, nome: editora.nome });
-      }
-
-      categoria?.forEach((cat) => {
-        if (cat && !uniqueCategories.has(cat.id)) {
-          uniqueCategories.set(cat.id, { id: cat.id, nome: cat.nome });
-        }
-      });
-    });
-
-    setAuthors([...uniqueAuthors.values()]);
-    setPublishers([...uniquePublishers.values()]);
-    setCategories([...uniqueCategories.values()]);
-  }, []);
-
-  useEffect(() => {
-    if (data?.livros) {
-      const formattedData = data.livros.map(formatBookForDashboard);
-
-      if (!isAttributesLoaded && formattedData.length > 0) {
-        collectAttributes(data.livros);
-        setIsAttributesLoaded(true);
-      }
-    }
-  }, [data, isAttributesLoaded, collectAttributes]);
-
+  // 4. Retorna os dados diretos, limpos e prontos para o Books.jsx usar
   return {
     books: data?.livros?.map(formatBookForDashboard) || [],
-    authors,
-    publishers,
-    categories,
+    authors: authors || [],
+    publishers: publishers || [],
+    categories: categories || [],
     setFilterField: (key, value) => setFilter({ [key]: value }),
+    refetch: handleRefetchAll,
     ...rest,
   };
 };
