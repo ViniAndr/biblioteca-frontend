@@ -25,10 +25,27 @@ const LANGUAGES = [
 const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
   // Hooks para ações e atributos de livros
   const { findGoogleBooks, loading } = useBookActions();
-  const { authors, publishers, categories, loading: loadingAttrs } = useAllAttributes();
+  const {
+    authors: fetchedAuthors,
+    publishers: fetchedPublishers,
+    categories,
+    loading: loadingAttrs,
+  } = useAllAttributes();
+
+  const [authorsList, setAuthorsList] = useState([]);
+  const [publishersList, setPublishersList] = useState([]);
 
   // Estado para controlar se deve buscar dados da API
   const [findAPI, setFindAPI] = useState(false);
+
+  // 2. Sincronizamos os dados do hook com as nossas listas locais
+  useEffect(() => {
+    if (fetchedAuthors) setAuthorsList(fetchedAuthors);
+  }, [fetchedAuthors]);
+
+  useEffect(() => {
+    if (fetchedPublishers) setPublishersList(fetchedPublishers);
+  }, [fetchedPublishers]);
 
   const { values, errors, handleChange, validateAll } = useForm(
     {
@@ -56,7 +73,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
       idioma: validate.validateSelectField,
       categoriaIds: validate.validateRequiredField,
       capa: validate.validateRequiredField,
-    }
+    },
   );
 
   // Função para criar ou editar os dados
@@ -79,6 +96,17 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
       const result = await findGoogleBooks(values.isbn);
 
       if (!result?.error && result?.data) {
+        // 3. O SEGREDO ESTÁ AQUI: Injetar o novo autor/editora na lista se eles não existirem
+        const novoAutor = result.data?.autor;
+        if (novoAutor && !authorsList.find((a) => a.id === novoAutor.id)) {
+          setAuthorsList((prev) => [...prev, novoAutor]);
+        }
+
+        const novaEditora = result.data?.editora;
+        if (novaEditora && !publishersList.find((p) => p.id === novaEditora.id)) {
+          setPublishersList((prev) => [...prev, novaEditora]);
+        }
+
         const updates = {
           titulo: result.data?.titulo,
           edicao: Number(safeValue(result.data?.edicao, 1)),
@@ -101,7 +129,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
       fetchData();
       setFindAPI(false); // Resetar o estado após a busca
     }
-  }, [findAPI]);
+  }, [findAPI, values.isbn]);
 
   return (
     <div className="pt-4 flex flex-col gap-4">
@@ -170,7 +198,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
           <Select
             id="autorId"
             label="Autor"
-            options={authors}
+            options={authorsList}
             value={values.autorId}
             onChange={(value) => handleChange({ target: { name: "autorId", value } })}
             placeholder="Selecione um autor"
@@ -182,7 +210,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
           <Select
             id="editoraId"
             label="Editora"
-            options={publishers}
+            options={publishersList}
             value={values.editoraId}
             onChange={(value) => handleChange({ target: { name: "editoraId", value } })}
             placeholder="Selecione uma editora"
