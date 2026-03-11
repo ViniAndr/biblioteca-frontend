@@ -72,7 +72,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
       autorId: validate.validateSelectField,
       editoraId: validate.validateSelectField,
       idioma: validate.validateSelectField,
-      categoriaIds: validate.validateRequiredField,
+      categoriaIds: validate.validateArrayRequired,
       capa: validate.validateRequiredField,
     },
   );
@@ -104,7 +104,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
       const result = await findGoogleBooks(values.isbn);
 
       if (!result?.error && result?.data) {
-        // 3. O SEGREDO ESTÁ AQUI: Injetar o novo autor/editora na lista se eles não existirem
+        //Injetar o novo autor/editora na lista se eles não existirem
         const novoAutor = result.data?.autor;
         if (novoAutor && !authorsList.find((a) => a.id === novoAutor.id)) {
           setAuthorsList((prev) => [...prev, novoAutor]);

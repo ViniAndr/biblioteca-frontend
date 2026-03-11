@@ -63,3 +63,10 @@ export const validateSelectField = (value) => {
   if (!value || value === 0 || value === "") return "Seleção obrigatória.";
   return null;
 };
+
+export const validateArrayRequired = (value) => {
+  if (!value || value.length === 0) {
+    return "Selecione pelo menos uma opção";
+  }
+  return null;
+};
