@@ -59,7 +59,7 @@ export const createOnlineCustomerAccount = async (clientData, login) => {
     email: clientData.email,
     senha: clientData.password,
     telefone: clientData.phone,
-    logradouro: clientData.address,
+    logradouro: clientData.street,
     numero: clientData.number,
     bairro: clientData.neighborhood,
     cidade: clientData.city,
