@@ -25,7 +25,7 @@ export const useBookAttributeActions = (entity) => {
       if (result.error) throw new Error(result.message?.data?.error || result.message);
 
       showAlert(`${ENTITY_MAP[entity]} criado com sucesso!`, "success");
-      return { success: true };
+      return { success: true, data: result.data || result };
     } catch (error) {
       showAlert(error.message || `Erro ao deletar ${ENTITY_MAP[entity]}`, "error");
       setActionState((prev) => ({ ...prev, error: error.message }));

@@ -1,15 +1,22 @@
 import { useState, useEffect } from "react";
+
+// Componentes
 import Input from "../../forms/Input";
 import Button from "../Button";
 import Select from "../../forms/Select";
 import MultiSelect from "./MultiSelect";
 import BookCoverUploader from "./BookCoverUploader";
+import CreatableSelectInput from "../../forms/CreatableSelectInput";
+
+// Hooks e Validações
 import { useBookActions } from "../../../hooks/books/useBookActions";
 import { useAllAttributes } from "../../../hooks/books/attributes/useAllAttributes";
+import { useBookAttributeActions } from "../../../hooks/books/attributes/useBookAttributesActions";
 import useForm from "../../../hooks/useForm";
 import * as validate from "../../../utils/validations";
 
-//Lista de idiomas suportados pelo sistema com seus respectivos códigos e nomes
+// --- CONSTANTES E FUNÇÕES UTILITÁRIAS ---
+// Movidos para fora do componente para não serem recriados a cada renderização
 const LANGUAGES = [
   { code: "pt-BR", language: "Português (Brasil)" },
   { code: "pt-PT", language: "Português (Portugal)" },
@@ -21,33 +28,27 @@ const LANGUAGES = [
   { code: "ja", language: "Japonês" },
 ];
 
-//Componente modal para criação ou edição de livros
-const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
-  // Hooks para ações e atributos de livros
-  const { findGoogleBooks, loading } = useBookActions();
-  const {
-    authors: fetchedAuthors,
-    publishers: fetchedPublishers,
-    categories,
-    loading: loadingAttrs,
-  } = useAllAttributes();
+const formatOptions = (list) => list?.map((item) => ({ value: item.id, label: item.nome })) || [];
+const safeValue = (value, fallback = "") => value ?? fallback;
 
+// --- COMPONENTE PRINCIPAL ---
+const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
+  // HOOKS DE DADOS (APIs e Banco)
+  const { findGoogleBooks, loading: loadingGoogleApi } = useBookActions();
+  const { authors: fetchedAuthors, publishers: fetchedPublishers, categories: fetchedCategories } = useAllAttributes();
+
+  // HOOKS DE AÇÕES (Criação de atributos)
+  const { actions: authorActions, isLoading: isAuthorLoading } = useBookAttributeActions("author");
+  const { actions: publisherActions, isLoading: isPublisherLoading } = useBookAttributeActions("publisher");
+  const { actions: categoryActions, isLoading: isCategoryLoading } = useBookAttributeActions("category");
+
+  // ESTADOS LOCAIS
   const [authorsList, setAuthorsList] = useState([]);
   const [publishersList, setPublishersList] = useState([]);
-
-  // Estado para controlar se deve buscar dados da API
-  const [findAPI, setFindAPI] = useState(false);
+  const [categoriesList, setCategoriesList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Sincronizamos os dados do hook com as nossas listas locais
-  useEffect(() => {
-    if (fetchedAuthors) setAuthorsList(fetchedAuthors);
-  }, [fetchedAuthors]);
-
-  useEffect(() => {
-    if (fetchedPublishers) setPublishersList(fetchedPublishers);
-  }, [fetchedPublishers]);
-
+  // INICIALIZAÇÃO DO FORMULÁRIO
   const { values, errors, handleChange, validateAll } = useForm(
     {
       titulo: "",
@@ -77,71 +78,112 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
     },
   );
 
-  // Função para criar ou editar os dados
-  const handleSubmit = async () => {
-    if (!validateAll()) return;
+  // EFEITOS (Sincronização de dados do backend com listas locais)
+  useEffect(() => {
+    if (fetchedAuthors) setAuthorsList(fetchedAuthors);
+  }, [fetchedAuthors]);
 
-    if (onConfirm) {
-      setIsSubmitting(true); // Trava o botão e os inputs
-      try {
-        await onConfirm(values); // Espera o backend responder
-        onClose(); // Só fecha se a requisição deu certo
-      } catch (error) {
-        console.error("Erro ao salvar:", error);
-        setIsSubmitting(false); // Destrava o botão se a API der erro
+  useEffect(() => {
+    if (fetchedPublishers) setPublishersList(fetchedPublishers);
+  }, [fetchedPublishers]);
+
+  useEffect(() => {
+    if (fetchedCategories) setCategoriesList(fetchedCategories);
+  }, [fetchedCategories]);
+
+  // --- HANDLERS E FUNÇÕES DE AÇÃO ---
+
+  // Função disparada ao clicar no botão "Buscar" ISBN
+  const handleSearchISBN = async () => {
+    if (!values.isbn) return;
+
+    const result = await findGoogleBooks(values.isbn);
+
+    if (!result?.error && result?.data) {
+      // Injetar o novo autor/editora na lista local se eles vierem da API e não existirem
+      const novoAutor = result.data?.autor;
+      if (novoAutor && !authorsList.find((a) => a.id === novoAutor.id)) {
+        setAuthorsList((prev) => [...prev, novoAutor]);
+      }
+
+      const novaEditora = result.data?.editora;
+      if (novaEditora && !publishersList.find((p) => p.id === novaEditora.id)) {
+        setPublishersList((prev) => [...prev, novaEditora]);
+      }
+
+      // Monta o objeto com os dados encontrados e atualiza o formulário
+      const updates = {
+        titulo: result.data?.titulo,
+        edicao: Number(safeValue(result.data?.edicao, 1)),
+        autorId: Number(safeValue(result.data?.autor?.id, 0)),
+        editoraId: Number(safeValue(result.data?.editora?.id, 0)),
+        numeroPagina: Number(safeValue(result.data?.numeroPagina, 100)),
+        publicadoEm: safeValue(result.data?.publicadoEm, new Date().toISOString().split("T")[0]),
+        idioma: safeValue(result.data?.idioma),
+        descricao: safeValue(result.data?.descricao),
+        capa: safeValue(result.data?.capa),
+      };
+
+      Object.entries(updates).forEach(([key, val]) => {
+        handleChange({ target: { name: key, value: val } });
+      });
+    }
+  };
+
+  const handleCreateAuthor = async (inputValue) => {
+    const response = await authorActions.create({ nome: inputValue });
+    if (response.success) {
+      const novoAutor = response.data?.data || response.data;
+      if (novoAutor && novoAutor.id) {
+        setAuthorsList((prev) => [...prev, novoAutor]);
+        handleChange({ target: { name: "autorId", value: novoAutor.id } });
       }
     }
   };
 
-  // Adicione esta função utilitária no topo do arquivo
-  const safeValue = (value, fallback = "") => value ?? fallback;
+  const handleCreatePublisher = async (inputValue) => {
+    const response = await publisherActions.create({ nome: inputValue });
+    if (response.success) {
+      const novaEditora = response.data?.data || response.data;
+      if (novaEditora && novaEditora.id) {
+        setPublishersList((prev) => [...prev, novaEditora]);
+        handleChange({ target: { name: "editoraId", value: novaEditora.id } });
+      }
+    }
+  };
 
-  // Efeito para buscar dados da API quando o ISBN é fornecido e findAPI é true
-  useEffect(() => {
-    // Busca dados do livro na API do Google Books com base no ISBN
-    const fetchData = async () => {
-      if (!values.isbn) return;
-      const result = await findGoogleBooks(values.isbn);
-
-      if (!result?.error && result?.data) {
-        //Injetar o novo autor/editora na lista se eles não existirem
-        const novoAutor = result.data?.autor;
-        if (novoAutor && !authorsList.find((a) => a.id === novoAutor.id)) {
-          setAuthorsList((prev) => [...prev, novoAutor]);
-        }
-
-        const novaEditora = result.data?.editora;
-        if (novaEditora && !publishersList.find((p) => p.id === novaEditora.id)) {
-          setPublishersList((prev) => [...prev, novaEditora]);
-        }
-
-        const updates = {
-          titulo: result.data?.titulo,
-          edicao: Number(safeValue(result.data?.edicao, 1)),
-          autorId: Number(safeValue(result.data?.autor?.id, 0)),
-          editoraId: Number(safeValue(result.data?.editora?.id, 0)),
-          numeroPagina: Number(safeValue(result.data?.numeroPagina, 100)),
-          publicadoEm: safeValue(result.data?.publicadoEm, new Date().toISOString().split("T")[0]),
-          idioma: safeValue(result.data?.idioma),
-          descricao: safeValue(result.data?.descricao),
-          capa: safeValue(result.data?.capa),
-        };
-
-        Object.entries(updates).forEach(([key, val]) => {
-          handleChange({ target: { name: key, value: val } });
+  const handleCreateCategory = async (inputValue) => {
+    const response = await categoryActions.create({ nome: inputValue });
+    if (response.success) {
+      const novaCategoria = response.data?.data || response.data;
+      if (novaCategoria && novaCategoria.id) {
+        setCategoriesList((prev) => [...prev, novaCategoria]);
+        handleChange({
+          target: { name: "categoriaIds", value: [...values.categoriaIds, novaCategoria.id] },
         });
       }
-    };
-
-    if (findAPI) {
-      fetchData();
-      setFindAPI(false); // Resetar o estado após a busca
     }
-  }, [findAPI, values.isbn]);
+  };
 
+  const handleSubmit = async () => {
+    if (!validateAll()) return;
+
+    if (onConfirm) {
+      setIsSubmitting(true);
+      try {
+        await onConfirm(values);
+        onClose();
+      } catch (error) {
+        console.error("Erro ao salvar:", error);
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  // RENDERIZAÇÃO
   return (
     <div className="pt-4 flex flex-col gap-4">
-      {/* Seção de busca por ISBN */}
+      {/* Seção: Busca por ISBN */}
       <div>
         <div className="flex gap-2 items-end">
           <div className="flex-1">
@@ -155,7 +197,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
               error={errors.isbn}
             />
           </div>
-          <Button className="h-10" disabled={loading} onClick={() => setFindAPI(true)}>
+          <Button className="h-10" disabled={loadingGoogleApi || isSubmitting} onClick={handleSearchISBN}>
             Buscar
           </Button>
         </div>
@@ -165,7 +207,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
         <hr className="opacity-10" />
       </div>
 
-      {/* Campo: Título do livro */}
+      {/* Seção: Título */}
       <Input
         id="titulo"
         name="titulo"
@@ -174,10 +216,10 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
         value={values.titulo}
         onChange={handleChange}
         error={errors.titulo}
-        disabled={loading}
+        disabled={loadingGoogleApi || isSubmitting}
       />
 
-      {/* Grupo de campos numéricos: Quantidade, Edição e Páginas */}
+      {/* Seção: Números (Cópias, Edição, Páginas) */}
       <div className="flex gap-4">
         {[
           { id: "qtdCopias", label: "Quantidade de cópias" },
@@ -194,41 +236,43 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
               value={values[id]}
               onChange={handleChange}
               error={errors[id]}
-              disabled={loading}
+              disabled={loadingGoogleApi || isSubmitting}
             />
           </div>
         ))}
       </div>
 
-      {/* Grupo de seleção: Autor e Editora */}
+      {/* Seção: Autor e Editora */}
       <div className="flex gap-4">
         <div className="flex-1">
-          <Select
-            id="autorId"
+          <CreatableSelectInput
             label="Autor"
-            options={authorsList}
+            options={formatOptions(authorsList)}
             value={values.autorId}
             onChange={(value) => handleChange({ target: { name: "autorId", value } })}
-            placeholder={loadingAttrs ? "Carregando autores..." : "Selecione um autor"} // <--- Feedback visual!
+            onCreateOption={handleCreateAuthor}
+            isLoading={isAuthorLoading("create")}
+            placeholder="Selecione ou crie um autor"
             error={errors.autorId}
-            disabled={loading || isSubmitting || loadingAttrs}
+            disabled={loadingGoogleApi || isSubmitting}
           />
         </div>
         <div className="flex-1">
-          <Select
-            id="editoraId"
+          <CreatableSelectInput
             label="Editora"
-            options={publishersList}
+            options={formatOptions(publishersList)}
             value={values.editoraId}
             onChange={(value) => handleChange({ target: { name: "editoraId", value } })}
-            placeholder={loadingAttrs ? "Carregando editoras..." : "Selecione uma editora"}
+            onCreateOption={handleCreatePublisher}
+            isLoading={isPublisherLoading("create")}
+            placeholder="Selecione ou crie uma editora"
             error={errors.editoraId}
-            disabled={loading || isSubmitting || loadingAttrs}
+            disabled={loadingGoogleApi || isSubmitting}
           />
         </div>
       </div>
 
-      {/* Grupo de seleção: Idioma e Data de Publicação */}
+      {/* Seção: Idioma e Data */}
       <div className="flex gap-4">
         <div className="flex-1">
           <Select
@@ -241,7 +285,7 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             onChange={(value) => handleChange({ target: { name: "idioma", value } })}
             placeholder="Selecione o idioma"
             error={errors.idioma}
-            disabled={loading}
+            disabled={loadingGoogleApi || isSubmitting}
           />
         </div>
         <div className="flex-1">
@@ -252,26 +296,27 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             type="date"
             value={values.publicadoEm || ""}
             onChange={handleChange}
-            disabled={loading}
+            disabled={loadingGoogleApi || isSubmitting}
           />
         </div>
       </div>
 
-      {/* Campo de seleção múltipla: Categorias */}
+      {/* Seção: Categorias */}
       <MultiSelect
-        options={categories || []}
+        options={categoriesList}
         selectedValues={values.categoriaIds}
-        onChange={(selected) => handleChange({ target: { name: "categoriaIds", value: selected } })}
+        onChange={(selectedIds) => handleChange({ target: { name: "categoriaIds", value: selectedIds } })}
+        onCreateOption={handleCreateCategory}
+        isLoading={isCategoryLoading("create")}
         label="Categorias"
-        placeholder="Selecione as categorias"
-        disabled={loading}
+        placeholder="Selecione ou crie as categorias"
+        disabled={loadingGoogleApi || isSubmitting}
+        error={errors.categoriaIds}
       />
-      {errors.categoriaIds && <p className="text-red-500 text-sm">{errors.categoriaIds}</p>}
 
-      {/* Descrição */}
+      {/* Seção: Descrição e Capa */}
       <div>
-        {/* Campo de texto: Descrição */}
-        <div>
+        <div className="mb-4">
           <label htmlFor="descricao" className="block text-sm font-medium text-gray-700 mb-1">
             Descrição
           </label>
@@ -283,26 +328,25 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
             value={values.descricao}
             onChange={handleChange}
             placeholder="Descrição do livro"
-            disabled={loading}
+            disabled={loadingGoogleApi || isSubmitting}
           />
         </div>
 
-        {/* Componente para upload da capa do livro */}
         <BookCoverUploader
           onFileChange={(file) => handleChange({ target: { name: "capa", value: file } })}
           onUrlChange={(url) => handleChange({ target: { name: "capa", value: url } })}
           initialUrl={typeof values.capa === "string" ? values.capa : ""}
-          disabled={loading}
+          disabled={loadingGoogleApi || isSubmitting}
         />
         {errors.capa && <p className="text-red-500 text-sm">{errors.capa}</p>}
 
-        {/* Botões de ação: Cancelar e Confirmar */}
+        {/* Botões do Rodapé */}
         <div className="flex justify-end gap-4 mt-6">
-          <Button onClick={onClose} variant="back">
+          <Button onClick={onClose} variant="back" disabled={isSubmitting}>
             Cancelar
           </Button>
-          <Button onClick={handleSubmit} disabled={loading || isSubmitting}>
-            {isSubmitting ? "Aguarde" : textButton}
+          <Button onClick={handleSubmit} disabled={loadingGoogleApi || isSubmitting}>
+            {isSubmitting ? "Aguarde..." : textButton}
           </Button>
         </div>
       </div>
