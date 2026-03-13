@@ -3,6 +3,7 @@ import Table from "../table/Table";
 import Search from "../common/Search";
 import Select from "../forms/Select";
 import Button from "../common/Button";
+import SelectReact from "react-select";
 
 // Contexts
 import { useModal } from "../../contexts/ModalContext";
@@ -43,22 +44,32 @@ const Books = () => {
   // Cabeçario da tabela
   const headerColumn = ["#", "Titulo", "ISBN", "Autor", "Editora", "Quantidade Disponível", ""];
 
+  // Função auxiliar para mapear os arrays do banco para o padrão do react-select
+  const formatFilterOptions = (items) => {
+    return (
+      items?.map((item) => ({
+        value: item.id,
+        label: item.nome,
+      })) || []
+    );
+  };
+
   // Dados para criação dos selects de filtro
   const attributeFilterSelect = [
     {
       name: "author",
-      options: authors,
-      defaultOptionLabel: "Todos os Autores",
+      options: formatFilterOptions(authors),
+      placeholder: "Autores",
     },
     {
       name: "publisher",
-      options: publishers,
-      defaultOptionLabel: "Todas as Editoras",
+      options: formatFilterOptions(publishers),
+      placeholder: "Editoras",
     },
     {
       name: "category",
-      options: categories,
-      defaultOptionLabel: "Todas as Categorias",
+      options: formatFilterOptions(categories),
+      placeholder: "Categorias",
     },
   ];
 
@@ -131,16 +142,33 @@ const Books = () => {
         <Search value={search} onChange={setSearch} placeholder="Pesquisar livros..." />
 
         {/* Selects de Filtros */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 w-full md:w-auto z-10">
           {attributeFilterSelect.map((select) => {
+            // Encontra qual é o objeto selecionado atualmente para exibir na tela
+            const currentValue = select.options.find((opt) => opt.value === filter[select.name]) || null;
+
             return (
-              <Select
-                key={select.name}
-                {...select}
-                value={filter[select.name] ?? ""}
-                onChange={setFilterField}
-                filterKey={select.name}
-              />
+              <div key={select.name} className="min-w-[200px]">
+                <SelectReact
+                  options={select.options}
+                  value={currentValue}
+                  onChange={(selectedOption) => {
+                    // Se o usuário clicar no "X" para limpar, o selectedOption vem como null
+                    const valueToSet = selectedOption ? selectedOption.value : "";
+                    setFilterField(select.name, valueToSet);
+                  }}
+                  placeholder={select.placeholder}
+                  isClearable={true} // <-- A MÁGICA AQUI! Coloca um "X" para remover o filtro
+                  isSearchable={true} // Permite digitar para buscar
+                  noOptionsMessage={() => "Nenhum resultado encontrado"}
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      minHeight: "42px", // Para alinhar com a altura do seu botão/input
+                    }),
+                  }}
+                />
+              </div>
             );
           })}
         </div>
