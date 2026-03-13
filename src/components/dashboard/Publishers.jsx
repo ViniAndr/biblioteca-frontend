@@ -19,7 +19,7 @@ const Publishers = () => {
 
   // Hooks para ações
   const {
-    actions: { create, delete: deleteAction },
+    actions: { create, update, delete: deleteAction },
   } = useBookAttributeActions("publisher");
 
   // Hook para modais
@@ -53,9 +53,25 @@ const Publishers = () => {
     });
   };
 
+  const handleEdit = (publisher) => {
+    openModal("createOrEditAttribute", {
+      title: "Editar Autor",
+      props: {
+        // Envia o nome atual para o modal abrir com o input preenchido
+        initialData: { nome: publisher.nome },
+
+        onConfirm: async (values) => {
+          // Aqui chamamos o UPDATE passando o ID do autor e os novos valores
+          const result = await update(publisher.id, values);
+          if (result.success) refetch();
+        },
+      },
+    });
+  };
+
   // Configura ações para a tabela
   const tableActions = {
-    onEdit: true,
+    onEdit: handleEdit,
     onDelete: handleDelete,
   };
 

@@ -19,7 +19,7 @@ const Categories = () => {
 
   // Hooks para ações
   const {
-    actions: { create, delete: deleteAction },
+    actions: { create, update, delete: deleteAction },
   } = useBookAttributeActions("category");
 
   // Hook para modais
@@ -53,9 +53,25 @@ const Categories = () => {
     });
   };
 
+  const handleEdit = (category) => {
+    openModal("createOrEditAttribute", {
+      title: "Editar Autor",
+      props: {
+        // Envia o nome atual para o modal abrir com o input preenchido
+        initialData: { nome: category.nome },
+
+        onConfirm: async (values) => {
+          // Aqui chamamos o UPDATE passando o ID do autor e os novos valores
+          const result = await update(category.id, values);
+          if (result.success) refetch();
+        },
+      },
+    });
+  };
+
   // Configura ações para a tabela
   const tableActions = {
-    onEdit: true,
+    onEdit: handleEdit,
     onDelete: handleDelete,
   };
 

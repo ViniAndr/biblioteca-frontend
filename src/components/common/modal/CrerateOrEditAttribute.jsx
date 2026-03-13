@@ -3,8 +3,11 @@ import { validateRequiredField } from "../../../utils/validations";
 import Form from "../../forms/Form";
 import Button from "../Button";
 
-const CreateOrEditAttributeModal = ({ onClose, onConfirm }) => {
-  const { values, errors, handleChange, validateAll } = useForm({ nome: "" }, { nome: validateRequiredField });
+const CreateOrEditAttributeModal = ({ onClose, onConfirm, initialData }) => {
+  const { values, errors, handleChange, validateAll } = useForm(
+    { nome: initialData?.nome || "" },
+    { nome: validateRequiredField },
+  );
 
   const handleSubmit = async () => {
     if (!validateAll()) return;
@@ -23,7 +26,7 @@ const CreateOrEditAttributeModal = ({ onClose, onConfirm }) => {
           name: "nome",
           label: "Nome",
           placeholder: "Digite o nome",
-          inputType: "text",
+          type: "text",
           value: values.nome,
           onChange: handleChange,
           error: errors.nome,

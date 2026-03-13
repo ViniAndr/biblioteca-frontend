@@ -102,6 +102,16 @@ export const deleteBook = async (id) => {
   }
 };
 
+// No seu bookService.js
+export const updateAttribute = async (entidade, id, data) => {
+  try {
+    const response = await api.put(`/livros/atributos/${entidade}/${id}`, data);
+    return response.data;
+  } catch (error) {
+    return { error: true, message: error.response?.data || error.message };
+  }
+};
+
 // Criar livro
 export const createBook = async (dataBook) => {
   const formData = new FormData();

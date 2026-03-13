@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAlert } from "../../../contexts/AlertContext";
-import { createAttribute, deleteAttribute } from "../../../services/bookService";
+import { createAttribute, deleteAttribute, updateAttribute } from "../../../services/bookService";
 
 const ENTITY_MAP = {
   publisher: "editora",
@@ -35,6 +35,23 @@ export const useBookAttributeActions = (entity) => {
     }
   };
 
+  const update = async (id, data) => {
+    try {
+      setActionState({ loading: true, currentAction: "update", error: null });
+      const result = await updateAttribute(ENTITY_MAP[entity], id, data);
+      if (result.error) throw new Error(result.message?.data?.error || result.message);
+
+      showAlert(`${ENTITY_MAP[entity]} atualizado com sucesso!`, "success");
+      return { success: true, data: result.data || result };
+    } catch (error) {
+      showAlert(error.message || `Erro ao atualizar ${ENTITY_MAP[entity]}`, "error");
+      setActionState((prev) => ({ ...prev, error: error.message }));
+      return { success: false, error: error.message };
+    } finally {
+      setActionState((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
   const deleteAction = async (id) => {
     try {
       setActionState({ loading: true, currentAction: "delete", error: null });
@@ -57,6 +74,7 @@ export const useBookAttributeActions = (entity) => {
   return {
     actions: {
       create,
+      update,
       delete: deleteAction,
     },
     actionState, // Expõe todo o estado para feedback granular
