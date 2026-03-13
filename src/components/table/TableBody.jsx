@@ -28,7 +28,7 @@ const TableBody = ({ data, actions = {} }) => {
                 </Button>
               )}
               {actions.onEdit && (
-                <Button size="square" variant="back" onClick={() => handleonEdit(item)}>
+                <Button size="square" variant="back" onClick={() => actions.onEdit(item)}>
                   <LuClipboardPen />
                 </Button>
               )}

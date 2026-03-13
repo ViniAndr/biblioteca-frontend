@@ -153,3 +153,25 @@ export const createAttribute = async (entity, data) => {
     }
   }
 };
+
+export const updateBook = async (id, bookData) => {
+  try {
+    const formData = new FormData();
+
+    // Transforma o objeto em FormData para suportar envio de fotos
+    Object.entries(bookData).forEach(([key, value]) => {
+      // Se for o array de categorias, manda cada ID separado
+      if (Array.isArray(value)) {
+        value.forEach((val) => formData.append(`${key}[]`, val));
+      } else {
+        formData.append(key, value);
+      }
+    });
+
+    const response = await api.put(`/livros/${id}`, formData);
+
+    return response.data;
+  } catch (error) {
+    return { error: true, message: error.response?.data || error.message };
+  }
+};

@@ -34,7 +34,7 @@ const safeValue = (value, fallback = "") => value ?? fallback;
 // --- COMPONENTE PRINCIPAL ---
 const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
   // HOOKS DE DADOS (APIs e Banco)
-  const { findGoogleBooks, loading: loadingGoogleApi } = useBookActions();
+  const { findGoogleBooks, viewDetails, loading: loadingGoogleApi } = useBookActions();
   const { authors: fetchedAuthors, publishers: fetchedPublishers, categories: fetchedCategories } = useAllAttributes();
 
   // HOOKS DE AÇÕES (Criação de atributos)
@@ -90,6 +90,57 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
   useEffect(() => {
     if (fetchedCategories) setCategoriesList(fetchedCategories);
   }, [fetchedCategories]);
+
+  // EFEITO: Carregar dados para o MODO EDIÇÃO
+  useEffect(() => {
+    const carregarLivroParaEdicao = async () => {
+      if (id) {
+        try {
+          const result = await viewDetails(id);
+
+          if (result?.data) {
+            const livroSalvo = result.data;
+
+            // 1. Limpa a edição
+            const edicaoLimpa = String(livroSalvo.edicao).replace(/\D/g, "");
+
+            // 2. Limpa o ISBN (tira os traços e deixa só números)
+            const isbnLimpo = safeValue(livroSalvo.isbn).replace(/\D/g, "");
+
+            // 3. Monta o link completo da capa (ajuste a porta 3000 se o seu backend rodar em outra)
+            const URL_BACKEND = "http://localhost:3000";
+            const capaCompleta = livroSalvo.capa?.startsWith("/")
+              ? `${URL_BACKEND}${livroSalvo.capa}`
+              : safeValue(livroSalvo.capa);
+
+            const updates = {
+              titulo: safeValue(livroSalvo.titulo),
+              isbn: isbnLimpo, // <--- Agora vai limpinho pro input!
+              qtdCopias: Number(safeValue(livroSalvo.qtdCopias, 1)),
+              edicao: Number(safeValue(edicaoLimpa, 1)),
+              autorId: Number(safeValue(livroSalvo.autor?.id, 0)),
+              editoraId: Number(safeValue(livroSalvo.editora?.id, 0)),
+              categoriaIds: livroSalvo.categoria?.map((cat) => cat.id) || [],
+              numeroPagina: Number(safeValue(livroSalvo.numeroPagina, 100)),
+              publicadoEm: safeValue(livroSalvo.publicadoEm, "").split("T")[0],
+              idioma: safeValue(livroSalvo.idioma),
+              descricao: safeValue(livroSalvo.descricao),
+              capa: capaCompleta, // <--- Agora é um link HTTP válido!
+            };
+
+            // Simula o evento de digitação
+            Object.entries(updates).forEach(([key, val]) => {
+              handleChange({ target: { name: key, value: val } });
+            });
+          }
+        } catch (error) {
+          console.error("Falha ao puxar dados do livro para edição", error);
+        }
+      }
+    };
+
+    carregarLivroParaEdicao();
+  }, [id]);
 
   // --- HANDLERS E FUNÇÕES DE AÇÃO ---
 
@@ -171,7 +222,19 @@ const CreateOrEditBookModal = ({ onClose, id, onConfirm, textButton }) => {
     if (onConfirm) {
       setIsSubmitting(true);
       try {
-        await onConfirm(values);
+        // CÓPIA dos valores do formulário.
+        const dadosTratados = { ...values };
+
+        // Se a capa for um texto (string) e começar com o nosso localhost...
+        const URL_BACKEND = "http://localhost:3000";
+
+        if (typeof dadosTratados.capa === "string" && dadosTratados.capa.startsWith(URL_BACKEND)) {
+          // vou remover o "http://localhost:3000" e deixamos só o "/api/uploads/..."
+          dadosTratados.capa = dadosTratados.capa.replace(URL_BACKEND, "");
+        }
+
+        // envio dos dados limpos para a função que vai chamar a API
+        await onConfirm(dadosTratados);
         onClose();
       } catch (error) {
         console.error("Erro ao salvar:", error);

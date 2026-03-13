@@ -35,7 +35,7 @@ const Books = () => {
   } = useBooks();
 
   // Hooks para ações
-  const { create, deleteBook } = useBookActions();
+  const { create, deleteBook, update } = useBookActions();
 
   // Hook para modais
   const { openModal } = useModal();
@@ -87,6 +87,24 @@ const Books = () => {
     });
   };
 
+  const handleEdit = (book) => {
+    openModal("createOrEditBook", {
+      title: "Editar Livro",
+      size: "xl",
+      props: {
+        id: book.id, // <--- A CHAVE DE TUDO! Isso avisa o modal que é uma edição.
+        textButton: "Salvar Alterações",
+        authors,
+        publishers,
+        categories,
+        onConfirm: async (formData) => {
+          await update(book.id, formData);
+          refetch();
+        },
+      },
+    });
+  };
+
   const handleDelete = (book) => {
     openModal("confirm", {
       title: "Confirmar Desativação",
@@ -103,7 +121,7 @@ const Books = () => {
 
   const tableActions = {
     onView: handleViewDetails,
-    onEdit: true,
+    onEdit: handleEdit,
     onDelete: handleDelete,
   };
 

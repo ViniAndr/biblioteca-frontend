@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAlert } from "../../contexts/AlertContext";
-import { createBook, findAPI, getBookById, deleteBook } from "../../services/bookService";
+import { createBook, findAPI, getBookById, deleteBook, updateBook } from "../../services/bookService";
 
 export const useBookActions = () => {
   const { showAlert } = useAlert();
@@ -21,6 +21,27 @@ export const useBookActions = () => {
       const message = err.message || "Erro ao buscar detalhes do livro.";
       setError(message);
       showAlert(message, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const update = async (id, dataBook) => {
+    try {
+      setLoading(true);
+      setCurrentAction("update");
+      setError(null);
+
+      const result = await updateBook(id, dataBook);
+      if (result.error) throw new Error(result.message?.error || "Erro ao atualizar");
+
+      showAlert("Livro atualizado com sucesso!", "success");
+      return true; // Retorna true para o modal saber que deu certo e pode fechar
+    } catch (err) {
+      const message = err.message || "Erro ao atualizar os detalhes do livro.";
+      setError(message);
+      showAlert(message, "error");
+      throw err; // Lança o erro para o Modal não fechar se der ruim
     } finally {
       setLoading(false);
     }
@@ -54,6 +75,7 @@ export const useBookActions = () => {
       if (result.error) throw new Error(result.message?.data?.error || result.message);
 
       setData(result.data);
+      return result;
     } catch (err) {
       const message = err.message || "Erro ao buscar detalhes do livro.";
       setError(message);
@@ -87,6 +109,7 @@ export const useBookActions = () => {
     deleteBook: deleteAction,
     findGoogleBooks,
     create,
+    update,
     book: data,
     error,
     loading,
