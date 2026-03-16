@@ -18,3 +18,16 @@ export const getAllClients = async (filter, page, itemsPerPage) => {
     return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
   }
 };
+
+// Criar um novo cliente
+export const createClient = async (clientData) => {
+  try {
+    const response = await api.post("/clientes/presencial", clientData);
+    return { error: false, data: response.data };
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.mensagem || error.response?.data?.erro || "Erro ao criar cliente",
+    };
+  }
+};
