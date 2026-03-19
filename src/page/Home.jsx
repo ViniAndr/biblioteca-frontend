@@ -1,8 +1,8 @@
 // Components
-import HeroSection from "../components/landing/HeroSection";
-import TopBooksSection from "../components/landing/TopBooksSection";
-import BenefitsSection from "../components/landing/BenefitsSection";
-import CategoriesSection from "../components/landing/CategoriesSection";
+import SecaoBeneficios from "../components/landing/SecaoBeneficios";
+import SecaoCategorias from "../components/landing/SecaoCategorias";
+import SecaoHero from "../components/landing/SecaoHero";
+import SecaoTopLivros from "../components/landing/SecaoTopLivros";
 
 const Home = () => {
   return (
@@ -12,10 +12,10 @@ const Home = () => {
         backgroundSize: "20px 20px",
       }}
     >
-      <HeroSection />
-      <TopBooksSection />
-      <BenefitsSection />
-      <CategoriesSection />
+      <SecaoHero />
+      <SecaoTopLivros />
+      <SecaoBeneficios />
+      <SecaoCategorias />
     </div>
   );
 };

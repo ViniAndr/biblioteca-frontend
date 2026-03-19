@@ -1,38 +1,37 @@
 import { createContext, useContext, useState } from "react";
-
-import ModalRoot from "../components/common/modal/ModalRoot";
+import ModalRaiz from "../components/common/modal/ModalRaiz";
 
 const ModalContext = createContext();
 
 export const ModalProvider = ({ children }) => {
   const [modal, setModal] = useState({
-    isOpen: false,
-    type: null, // 'confirm' | 'form' | 'details'
-    title: "",
-    props: {},
+    estaAberto: false,
+    tipo: null, // 'confirm' | 'form' | 'details' (Podemos manter os tipos em inglês por serem 'chaves' internas, ou mudar para 'confirmacao' | 'formulario' | 'detalhes')
+    titulo: "",
+    props: {}, // 'props' mantido por ser jargão do React
     // Configurações comuns a todos os modais
-    overlayClose: true,
-    size: "md", // 'sm' | 'md' | 'lg' | 'xl'
+    fecharNoOverlay: true,
+    tamanho: "md", // 'sm' | 'md' | 'lg' | 'xl'
   });
 
-  const openModal = (type, { title = "", props = {}, ...config }) => {
+  const abrirModal = (tipo, { titulo = "", props = {}, ...configuracoes }) => {
     setModal({
-      isOpen: true,
-      type,
-      title,
+      estaAberto: true,
+      tipo,
+      titulo,
       props,
-      ...config,
+      ...configuracoes,
     });
   };
 
-  const closeModal = () => {
-    setModal((prev) => ({ ...prev, isOpen: false }));
+  const fecharModal = () => {
+    setModal((prev) => ({ ...prev, estaAberto: false }));
   };
 
   return (
-    <ModalContext.Provider value={{ openModal, closeModal }}>
+    <ModalContext.Provider value={{ abrirModal, fecharModal }}>
       {children}
-      <ModalRoot {...modal} onClose={closeModal} />
+      <ModalRaiz {...modal} onClose={fecharModal} />
     </ModalContext.Provider>
   );
 };

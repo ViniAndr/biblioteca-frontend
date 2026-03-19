@@ -1,19 +1,19 @@
 import { RouterProvider } from "react-router-dom";
 import router from "./RouterProvider";
 
-import { AuthProvider } from "./contexts/AuthContext";
-import { AlertProvider } from "./contexts/AlertContext";
+import { AutenticacaoProvider } from "./contexts/AutenticacaoContext";
+import { AlertaProvider } from "./contexts/AlertaContext";
 import { ModalProvider } from "./contexts/ModalContext";
 
 function App() {
   return (
-    <AlertProvider>
-      <AuthProvider>
+    <AlertaProvider>
+      <AutenticacaoProvider>
         <ModalProvider>
           <RouterProvider router={router} />
         </ModalProvider>
-      </AuthProvider>
-    </AlertProvider>
+      </AutenticacaoProvider>
+    </AlertaProvider>
   );
 }
 

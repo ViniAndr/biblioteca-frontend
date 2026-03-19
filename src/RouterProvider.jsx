@@ -1,25 +1,25 @@
 import { createBrowserRouter } from "react-router-dom";
 
 // Layout
-import DefaultLayout from "./components/layout/DefaultLayout";
-import NoLayout from "./components/layout/NoLayout";
+import LayoutPadrao from "./components/layout/LayoutPadrao";
+import SemLayout from "./components/layout/SemLayout";
 
 // Protetor de rotas
-import PrivateRoute from "./components/routes/PrivateRoute";
-import PublicRoute from "./components/routes/PublicRoute";
+import RotaPrivada from "./components/routes/RotaPrivada";
+import RotaPublica from "./components/routes/RotaPublica";
 
 // Page
 import Home from "./page/Home";
-import ClientLogin from "./page/auth/ClientLogin";
-import MigrateAccount from "./page/auth/MigrateAccount";
-import Register from "./page/auth/Register";
+import LoginCliente from "./page/auth/LoginCliente";
+import MigrarConta from "./page/auth/MigrarConta";
+import Cadastro from "./page/auth/Cadastro";
+import LoginFuncionarioEAdmin from "./page/auth/LoginFuncionarioEAdmin";
 import Dashboard from "./page/Dashboard";
-import EmployeeAdminLogin from "./page/auth/LoginEmployeeAndAdmin";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <DefaultLayout />,
+    element: <LayoutPadrao />,
     // Define as rotas filhas dentro dessa rota principal
     children: [
       {
@@ -29,48 +29,48 @@ const router = createBrowserRouter([
       {
         path: "/login/cliente",
         element: (
-          <PublicRoute>
-            <ClientLogin />
-          </PublicRoute>
+          <RotaPublica>
+            <LoginCliente />
+          </RotaPublica>
         ),
       },
       {
         path: "/migrar-conta",
 
         element: (
-          <PublicRoute>
-            <MigrateAccount />
-          </PublicRoute>
+          <RotaPublica>
+            <MigrarConta />
+          </RotaPublica>
         ),
       },
       {
         path: "/cliente/cadastrar-conta",
         element: (
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
+          <RotaPublica>
+            <Cadastro />
+          </RotaPublica>
         ),
       },
       {
         path: "/login/area-restrita",
         element: (
-          <PublicRoute>
-            <EmployeeAdminLogin />
-          </PublicRoute>
+          <RotaPublica>
+            <LoginFuncionarioEAdmin />
+          </RotaPublica>
         ),
       },
     ],
   },
   {
     path: "/",
-    element: <NoLayout />,
+    element: <SemLayout />,
     children: [
       {
         path: "/dashboard/funcionario",
         element: (
-          <PrivateRoute allowedRoles={["funcionario", "admin"]} redirectPath="/login/area-restrita">
+          <RotaPrivada allowedRoles={["funcionario", "admin"]} redirectPath="/login/area-restrita">
             <Dashboard />
-          </PrivateRoute>
+          </RotaPrivada>
         ),
       },
     ],

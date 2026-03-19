@@ -7,11 +7,11 @@ const Select = ({
   value,
   onChange,
   options = [],
-  defaultOptionLabel = "Selecione...",
-  filterKey = null, // Chave do objeto para o filtro
+  textoPadraoOpcao = "Selecione...",
+  chaveFiltro = null, // Chave do objeto para o filtro
   // Esses dois atributos abaixo serve para quando o options for um array de objetos
-  valueKey = "id", // Chave do objeto para o value
-  labelKey = "nome", // Chave do objeto para o label
+  chaveValor = "id", // Chave do objeto para o value
+  chaveRotulo = "nome", // Chave do objeto para o label
   ...rest
 }) => {
   return (
@@ -26,20 +26,20 @@ const Select = ({
         id={id}
         required={required}
         value={value}
-        onChange={(e) => (filterKey ? onChange(filterKey, e.target.value) : onChange(e.target.value))}
+        onChange={(e) => (chaveFiltro ? onChange(chaveFiltro, e.target.value) : onChange(e.target.value))}
         className={`h-10 w-full border rounded-md py-2 px-3 outline-none appearance-none cursor-pointer ${
           Boolean(error) ? "border-red-500" : "border-zinc-300"
         }`}
         {...rest}
       >
-        <option value="">{defaultOptionLabel}</option>
+        <option value="">{textoPadraoOpcao}</option>
         {options?.length > 0 &&
-          options.map((option, index) => {
-            const optionValue = typeof option === "object" ? option[valueKey] : option;
-            const optionLabel = typeof option === "object" ? option[labelKey] : option;
+          options.map((opcao, index) => {
+            const valorOpcao = typeof opcao === "object" ? opcao[chaveValor] : opcao;
+            const rotuloOpcao = typeof opcao === "object" ? opcao[chaveRotulo] : opcao;
             return (
-              <option key={index} value={optionValue}>
-                {optionLabel}
+              <option key={index} value={valorOpcao}>
+                {rotuloOpcao}
               </option>
             );
           })}

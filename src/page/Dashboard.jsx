@@ -1,45 +1,50 @@
 import { useState } from "react";
 
-// Components
-import Sidebar from "../components/dashboard/Sidebar";
-import Clients from "../components/dashboard/Clients";
-import Publishers from "../components/dashboard/Publishers";
-import Authors from "../components/dashboard/Authors";
-import Categories from "../components/dashboard/Categories";
-import Books from "../components/dashboard/Books";
-import Loans from "../components/dashboard/Loans";
+import BarraLateral from "../components/dashboard/BarraLateral";
+import Autores from "../components/dashboard/Autores";
+import Categorias from "../components/dashboard/Categorias";
+import Clientes from "../components/dashboard/Clientes";
+import Editoras from "../components/dashboard/Editoras";
+import Emprestimos from "../components/dashboard/Emprestimos";
+import Livros from "../components/dashboard/Livros";
+import Relatorios from "../components/dashboard/Relatorios";
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("Emprestimos");
+  const [abaAtiva, setAbaAtiva] = useState("Empréstimos");
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "Emprestimos":
-        return <Loans />;
+  const renderizarConteudo = () => {
+    switch (abaAtiva) {
+      case "Empréstimos":
+        return <Emprestimos />;
       case "Livros":
-        return <Books />;
+        return <Livros />;
       case "Autores":
-        return <Authors />;
+        return <Autores />;
       case "Editoras":
-        return <Publishers />;
+        return <Editoras />;
       case "Categorias":
-        return <Categories />;
+        return <Categorias />;
       case "Clientes":
-        return <Clients />;
+        return <Clientes />;
+      case "Relatorios":
+        return <Relatorios />;
       default:
-        return <Clients />;
+        return <Clientes />;
     }
   };
 
   return (
-    <div className="h-screen grid grid-cols-[256px_1fr]">
-      <div>
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="flex h-screen w-full overflow-hidden bg-zinc-50">
+      <div className="w-56 flex-shrink-0">
+        <BarraLateral abaAtiva={abaAtiva} setAbaAtiva={setAbaAtiva} />
       </div>
-      <div className="container mx-auto pt-8 px-10">
-        <h1 className="font-bold text-4xl mb-2">{activeTab}</h1>
-        <div className="my-5">{renderContent()}</div>
-      </div>
+      <main className="flex-1 overflow-y-auto p-8">
+        {/* Usamos max-w-7xl para a tabela não esticar infinitamente em monitores gigantes */}
+        <div className="max-w-7xl mx-auto">
+          <h1 className="font-bold text-4xl mb-6 text-zinc-800">{abaAtiva}</h1>
+          <div className="my-5">{renderizarConteudo()}</div>
+        </div>
+      </main>
     </div>
   );
 };

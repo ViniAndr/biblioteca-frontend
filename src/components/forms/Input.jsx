@@ -9,6 +9,11 @@ const Input = ({
   value,
   onChange,
   className,
+  inputType,
+  component,
+  buscarCep,
+  carregandoCep,
+  layout,
   ...rest
 }) => {
   return (
