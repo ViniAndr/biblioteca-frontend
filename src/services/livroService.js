@@ -125,6 +125,8 @@ export const criarLivro = async (dadosLivro) => {
   formData.append("publicadoEm", dadosLivro.publicadoEm);
   formData.append("idioma", dadosLivro.idioma);
   formData.append("descricao", dadosLivro.descricao);
+  formData.append("estante", dadosLivro.estante || "");
+  formData.append("prateleira", dadosLivro.prateleira || "");
 
   // Sempre envia capa: File ou URL
   if (dadosLivro.capa instanceof File) {
@@ -186,17 +188,15 @@ export const atualizarLivro = async (id, dadosLivro) => {
 export const pesquisarLivrosParaSelect = async (valorDigitado) => {
   try {
     const response = await api.get(`/livros?titulo=${valorDigitado}&qtdItensPorPagina=10`);
-    const livros = response.data.livros || response.data; 
+    const livros = response.data.livros || response.data;
 
     return livros.map((livro) => {
-      const estoqueTexto = livro.qtdDisponivel > 0 
-        ? `Disp: ${livro.qtdDisponivel}` 
-        : `ESGOTADO`;
+      const estoqueTexto = livro.qtdDisponivel > 0 ? `Disp: ${livro.qtdDisponivel}` : `ESGOTADO`;
 
       return {
         value: livro.id,
         label: `${livro.titulo} (ISBN: ${livro.isbn}) - [${estoqueTexto}]`,
-        isDisabled: livro.qtdDisponivel <= 0 
+        isDisabled: livro.qtdDisponivel <= 0,
       };
     });
   } catch (error) {

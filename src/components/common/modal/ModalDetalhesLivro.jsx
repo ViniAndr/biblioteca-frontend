@@ -5,7 +5,7 @@ import Botao from "../Botao";
 import { useAcoesLivro } from "../../../hooks/livro/useAcoesLivro";
 import { formatarData } from "../../../utils/formatadores";
 
-import { LuUser, LuBuilding, LuCalendar, LuTag, LuBook } from "react-icons/lu";
+import { LuUser, LuBuilding, LuCalendar, LuTag, LuBook, LuMapPin } from "react-icons/lu";
 
 const ModalDetalhesLivro = ({ id, aoFechar }) => {
   const URL_API = import.meta.env.VITE_API_URL;
@@ -112,6 +112,19 @@ const ModalDetalhesLivro = ({ id, aoFechar }) => {
               <p>
                 <span className="font-medium">Disponibilidade:</span> {livro.qtdDisponivel} de {livro.qtdCopias}{" "}
                 disponíveis
+              </p>
+            </div>
+
+            {/* Localização Física */}
+            <div className="flex items-center gap-2">
+              <LuMapPin />
+              <p>
+                <span className="font-medium">Localização:</span>{" "}
+                {livro.estante || livro.prateleira ? (
+                  `Estante ${livro.estante || "-"} / Prateleira ${livro.prateleira || "-"}`
+                ) : (
+                  <span className="text-zinc-500">Não informada</span>
+                )}
               </p>
             </div>
           </div>

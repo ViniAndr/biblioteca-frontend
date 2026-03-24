@@ -62,6 +62,8 @@ const ModalCriarOuEditarLivro = ({ aoFechar, id, aoConfirmar, textoBotao }) => {
       idioma: "",
       descricao: "",
       capa: "",
+      estante: "",
+      prateleira: "",
     },
     {
       titulo: validacoes.validarCampoObrigatorio,
@@ -120,6 +122,8 @@ const ModalCriarOuEditarLivro = ({ aoFechar, id, aoConfirmar, textoBotao }) => {
               idioma: valorSeguro(livroSalvo.idioma),
               descricao: valorSeguro(livroSalvo.descricao),
               capa: capaCompleta,
+              estante: valorSeguro(livroSalvo.estante),
+              prateleira: valorSeguro(livroSalvo.prateleira),
             };
 
             Object.entries(atualizacoes).forEach(([chave, valor]) => {
@@ -343,6 +347,32 @@ const ModalCriarOuEditarLivro = ({ aoFechar, id, aoConfirmar, textoBotao }) => {
             label="Data da Publicação"
             type="date"
             value={valores.publicadoEm || ""}
+            onChange={lidarComMudanca}
+            disabled={carregandoApiGoogle || estaEnviando}
+          />
+        </div>
+      </div>
+
+      {/* Seção: Localização (Estante e Prateleira) */}
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <Input
+            id="estante"
+            name="estante"
+            label="Estante"
+            placeholder="Ex: A, B, Principal..."
+            value={valores.estante}
+            onChange={lidarComMudanca}
+            disabled={carregandoApiGoogle || estaEnviando}
+          />
+        </div>
+        <div className="flex-1">
+          <Input
+            id="prateleira"
+            name="prateleira"
+            label="Prateleira"
+            placeholder="Ex: 1, 2, Superior..."
+            value={valores.prateleira}
             onChange={lidarComMudanca}
             disabled={carregandoApiGoogle || estaEnviando}
           />

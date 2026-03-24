@@ -15,7 +15,7 @@ const Rodape = () => {
             {/* logo */}
             <div className="flex items-center gap-2">
               <PiBookOpenLight className="h-6 w-6" />
-              <p className="text-xl font-bold tracking-tight">Biblioteca</p>
+              <p className="text-xl font-bold tracking-tight">Biblioteca - Telecentro Municipal de Campestre</p>
             </div>
             {/* Breve Descrição */}
             <p className="text-sm text-zinc-600 my-3 md:max-w-96">
@@ -41,22 +41,25 @@ const Rodape = () => {
             <ul className="space-y-3">
               <li className="flex items-start gap-1 text-sm text-zinc-600">
                 <LuMapPin className="h-4 w-4" />
-                <span>Av. Paulista, 1000, São Paulo - SP</span>
+                <span>Rua minstro Lindoufu Collor, S/N, Campestre - AL</span>
               </li>
               <li className="flex items-center gap-1 text-sm text-zinc-600">
                 <LuPhone className="h-4 w-4" />
-                <span>(11) 3000-1000</span>
+                <span>(--) ---------</span>
               </li>
               <li className="flex items-center gap-1 text-sm text-zinc-600">
                 <LuMail className="h-4 w-4" />
-                <span>contato@bibliotech.com.br</span>
+                <span>telecentrocampestre22@gmail.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-zinc-200 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Biblioteca. Todos os direitos reservados.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Biblioteca - Telecentro Municipal de Campestre. Todos os direitos
+            reservados.
+          </p>
         </div>
       </div>
     </footer>

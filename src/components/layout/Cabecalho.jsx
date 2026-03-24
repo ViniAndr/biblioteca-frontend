@@ -27,7 +27,7 @@ const Cabecalho = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className=" flex gap-2 items-center font-bold text-2xl ">
           <PiBookOpenLight className="h-6 w-6" />
-          Biblioteca
+          Telecentro Municipal
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">

@@ -145,8 +145,8 @@ const Livros = () => {
           <p className="text-lg font-bold text-blue-600">{totalTitulos}</p>
         </div>
         <div className="bg-white p-3 rounded-lg border border-zinc-200 shadow-sm">
-          <p className="text-xs text-zinc-500">Total de Títulos</p>
-          <p className="text-lg font-bold text-blue-600">{totalTitulos}</p>
+          <p className="text-xs text-zinc-500">Total de Exemplares</p>
+          <p className="text-lg font-bold text-blue-600">{totalExemplares}</p>
         </div>
         {/* O outro card de exemplares... */}
       </div>
@@ -185,16 +185,6 @@ const Livros = () => {
             );
           })}
         </div>
-
-        <div className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm border border-blue-100 shadow-sm flex flex-col items-center leading-tight">
-          <span className="font-bold">
-            {totalTitulos} {totalTitulos === 1 ? "Título" : "Títulos"}
-          </span>
-          <span className="text-xs text-blue-500 font-medium">
-            ({totalExemplares} {totalExemplares === 1 ? "Exemplar Físico" : "Exemplares Físicos"})
-          </span>
-        </div>
-
         <div>
           <Botao onClick={lidarComCriacao} className="flex gap-2 items-center h-full">
             Adicionar <LuPlus />
