@@ -1,3 +1,5 @@
+import Carregamento from "../components/common/Carregamento";
+
 import { useAutenticacao } from "../contexts/AutenticacaoContext";
 
 // Páginas de cada tipo de usuário
@@ -6,7 +8,7 @@ import PerfilFuncionario from "./perfil/PerfilFuncionario";
 const Perfil = () => {
   const { usuario } = useAutenticacao();
 
-  if (!usuario) return <div className="p-8 text-center">Carregando...</div>;
+  if (!usuario) return <Carregamento texto="Carregando..." />;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">

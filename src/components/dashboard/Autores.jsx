@@ -2,7 +2,7 @@
 import Tabela from "../tabela/Tabela";
 import Pesquisa from "../common/Pesquisa";
 import Botao from "../common/Botao";
-import RelatorioAcervo from "../RelatorioAcervo";
+import Carregamento from "../common/Carregamento";
 
 // Contexts
 import { useModal } from "../../contexts/ModalContext";
@@ -106,7 +106,7 @@ const Autores = () => {
       </div>
 
       {carregando ? (
-        <div className="p-5 text-center">Carregando...</div>
+        <Carregamento texto="Buscando autores..." alturaMinima="min-h-[300px]" />
       ) : dados.length === 0 ? (
         <div className="p-5 text-center">Nenhum autor encontrado</div>
       ) : (
