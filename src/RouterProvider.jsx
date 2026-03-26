@@ -15,6 +15,7 @@ import MigrarConta from "./page/auth/MigrarConta";
 import Cadastro from "./page/auth/Cadastro";
 import LoginFuncionarioEAdmin from "./page/auth/LoginFuncionarioEAdmin";
 import Dashboard from "./page/Dashboard";
+import Perfil from "./page/Perfil";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
           <RotaPublica>
             <LoginFuncionarioEAdmin />
           </RotaPublica>
+        ),
+      },
+      {
+        path: "/perfil",
+        element: (
+          <RotaPrivada papeisPermitidos={["cliente", "funcionario", "admin"]} caminhoRedirecionamento="/">
+            <Perfil />
+          </RotaPrivada>
         ),
       },
     ],

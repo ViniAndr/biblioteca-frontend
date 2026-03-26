@@ -8,6 +8,7 @@ import Botao from "../common/Botao";
 
 // Icons
 import { PiBookOpenLight } from "react-icons/pi";
+import { LuUser } from "react-icons/lu";
 
 const Cabecalho = () => {
   const { usuario, logout } = useAutenticacao();
@@ -47,22 +48,19 @@ const Cabecalho = () => {
 
         <div>
           {usuario ? (
-            <div className="flex gap-2">
-              {/* Mostrar diferentes opções com base no usuario.role */}
-              {usuario.role === "cliente" && (
-                <>
-                  <Botao variante="ghost" onClick={() => navegarPara("/profile/cliente")}>
-                    Meu Perfil
-                  </Botao>
-                </>
-              )}
+            <div className="flex gap-2 items-center">
+              {/* Botão Único de Perfil para TODOS os usuários logados */}
+              <Botao variante="ghost" onClick={() => navegarPara("/perfil")} className="flex gap-2 items-center">
+                <LuUser className="text-lg" />
+                Meu Perfil
+              </Botao>
 
+              {/* Botões de Dashboard específicos */}
               {usuario.role === "funcionario" && (
                 <Botao variante="ghost" onClick={() => navegarPara("/dashboard/funcionario")}>
                   Dashboard
                 </Botao>
               )}
-
               {usuario.role === "admin" && <Botao onClick={() => navegarPara("/dashboard/admin")}>Dashboard</Botao>}
 
               {/* Botão de logout comum para todos */}
