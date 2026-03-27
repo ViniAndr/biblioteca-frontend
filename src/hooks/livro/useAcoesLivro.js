@@ -54,18 +54,47 @@ export const useAcoesLivro = () => {
   };
 
   const buscarNaApiGoogle = async (isbn) => {
+    // Validação rápida: Evita requisição se o campo estiver vazio
+    if (!isbn || isbn.trim() === "") {
+      mostrarAlerta("Por favor, digite um ISBN para buscar.", "warning");
+      return null;
+    }
+
     try {
       setCarregando(true);
       setAcaoAtual("buscarApi");
       setErro(null);
 
       const response = await buscarLivroPorIsbnNaApi(isbn);
+
+      // Se o serviço capturou um erro HTTP ou de rede
+      if (response.error) {
+        throw new Error(response.message?.error || response.message || "Erro ao conectar com a API.");
+      }
+
+      // Cobre casos de retornar null, undefined, array vazio ou objeto sem chaves
+      const dadosVazios =
+        !response.data ||
+        (Array.isArray(response.data) && response.data.length === 0) ||
+        (typeof response.data === "object" && Object.keys(response.data).length === 0);
+
+      if (dadosVazios) {
+        // Disparamos um erro para cair no catch ali embaixo
+        throw new Error("Nenhum livro encontrado com este ISBN.");
+      }
+
+      // Se passou por tudo, é Sucesso!
+      mostrarAlerta("Livro encontrado! Campos preenchidos.", "success");
       setDados(response.data);
       return response;
     } catch (err) {
-      const mensagem = err.message || "Erro ao buscar detalhes do livro.";
+      // O Catch pega tanto erros de rede quanto o nosso erro de "dadosVazios"
+      const mensagem = err.message || "Erro inesperado ao buscar detalhes do livro.";
       setErro(mensagem);
-      mostrarAlerta(mensagem, "error");
+
+      // Se for a mensagem de "Nenhum livro", mostramos um warning (amarelo) em vez de erro (vermelho)
+      const tipoAlerta = mensagem.toLowerCase().includes("não encontrado") ? "attention" : "error";
+      mostrarAlerta(mensagem, tipoAlerta);
     } finally {
       setCarregando(false);
     }

@@ -5,7 +5,25 @@ export const buscarLivroPorIsbnNaApi = async (isbn) => {
     const response = await api.get(`/livros/google/${isbn}`);
     return { error: false, data: response.data };
   } catch (error) {
-    return { error: true, message: "Erro inesperado. Por favor, tente novamente." };
+    // Se o servidor devolveu 404, o livro não existe!
+    if (error.response?.status === 404) {
+      return {
+        error: true,
+        message: "Livro não encontrado na API do Google", // frase para o alerta
+      };
+    }
+
+    // Se for outro erro (ex: 500 API fora do ar), tentar ler do Back-end ou usar o padrão.
+    const mensagemDoBackend =
+      error.response?.data?.mensagem ||
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      "Erro inesperado de conexão.";
+
+    return {
+      error: true,
+      message: mensagemDoBackend,
+    };
   }
 };
 
