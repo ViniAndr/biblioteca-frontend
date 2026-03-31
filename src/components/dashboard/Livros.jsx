@@ -198,16 +198,18 @@ const Livros = () => {
       ) : livros.length === 0 ? (
         <div className="p-5 text-center">Nenhum livro encontrado</div>
       ) : (
-        <Tabela
-          dados={livros}
-          colunasCabecalho={colunasCabecalho}
-          pagina={pagina}
-          setPagina={setPagina}
-          totalPaginas={totalPaginas}
-          itensPorPagina={itensPorPagina}
-          setItensPorPagina={setItensPorPagina}
-          acoes={acoesTabela}
-        />
+        <div className="w-full overflow-x-auto shadow-sm border border-zinc-200 rounded-lg">
+          <Tabela
+            dados={livros}
+            colunasCabecalho={colunasCabecalho}
+            pagina={pagina}
+            setPagina={setPagina}
+            totalPaginas={totalPaginas}
+            itensPorPagina={itensPorPagina}
+            setItensPorPagina={setItensPorPagina}
+            acoes={acoesTabela}
+          />
+        </div>
       )}
     </div>
   );
