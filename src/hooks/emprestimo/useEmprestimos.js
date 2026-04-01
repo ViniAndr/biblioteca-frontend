@@ -21,7 +21,7 @@ export const useEmprestimos = () => {
       livro: emprestimo.livro.titulo,
       cliente: emprestimo.cliente.nome,
       data: emprestimo.dataSolicitacao,
-      pazo: emprestimo.dataDevolucao == "Data inválida" ? "-" : emprestimo.dataDevolucao,
+      pazo: emprestimo.prazoDevolucao == "Data inválida" ? "-" : emprestimo.prazoDevolucao,
       status: emprestimo.status,
     })) || [];
 
