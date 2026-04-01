@@ -35,10 +35,24 @@ export const validarCampoObrigatorio = (valor) => {
 };
 
 export const validarNumeroCasa = (valor) => {
+  // Se o campo estiver vazio, retorna null (tudo certo, não tem erro)
+  if (!valor || valor.trim() === "") {
+    return null;
+  }
+
+  // Libera o uso explícito de "Sem Número" no padrão brasileiro
+  const valorLimpo = valor.trim().toUpperCase();
+  if (valorLimpo === "SN" || valorLimpo === "S/N" || valorLimpo === "SEM NÚMERO") {
+    return null;
+  }
+
+  // Se o usuário digitou algo diferente de SN, validamos com a sua Regex original
   const regex = /^[0-9]{1,6}[a-zA-Z]{0,4}(\s?\/?\s?[a-zA-Z0-9]{1,4})?$/;
 
-  if (!valor) return "O número da casa é obrigatório.";
-  if (!regex.test(valor)) return "Número da casa inválido.";
+  if (!regex.test(valor)) {
+    return "Número inválido. Digite um número, 'SN' ou deixe em branco.";
+  }
+
   return null;
 };
 
