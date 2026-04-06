@@ -5,15 +5,19 @@ import Botao from "./Botao";
 // Icones
 import { LuUsers } from "react-icons/lu";
 
-const CardLivro = ({ titulo, capa, autor, categoria, totalEmprestimos, posicao }) => {
+const CardLivro = ({ titulo, capa, autor, categoria = [], totalEmprestimos, posicao }) => {
   const URL_API = import.meta.env.VITE_API_URL;
+
+  // Prevenção de erro: garante que sempre será um array, mesmo se vier uma string
+  const listaCategorias = Array.isArray(categoria) ? categoria : [categoria];
+
   return (
     <div
       className="relative bg-white w-full max-w-54 shadow-md rounded-md overflow-hidden flex flex-col 
       group transition-all duration-300 hover:shadow-lg"
     >
-      {/* Badge para mostrar a posição no ranking */}
-      <Badge className="absolute top-2 right-2 z-10">{`#${posicao}`}</Badge>
+      {/* Badge para mostrar a posição no ranking (só renderiza se existir posição) */}
+      {posicao && <Badge className="absolute top-2 right-2 z-10">{`#${posicao}`}</Badge>}
 
       {/* Container para manter tamanho fixo */}
       <div className="relative overflow-hidden aspect-[2/3]">
@@ -31,15 +35,34 @@ const CardLivro = ({ titulo, capa, autor, categoria, totalEmprestimos, posicao }
       </div>
 
       {/* Área de texto */}
-      <div className="p-3">
-        <h1 className="font-bold text-xl line-clamp-1 leading-tight">{titulo}</h1>
-        <p className="text-sm text-zinc-500 line-clamp-1 leading-tight py-1">{autor}</p>
-        <Badge variante={"outline"} tamanho="xs">
-          {categoria}
-        </Badge>
-        <div className="flex justify-between pt-1">
+      <div className="p-3 flex flex-col gap-1 flex-grow">
+        <h1 className="font-bold text-xl line-clamp-1 leading-tight" title={titulo}>
+          {titulo}
+        </h1>
+        <p className="text-sm text-zinc-500 line-clamp-1 leading-tight" title={autor}>
+          {autor}
+        </p>
+
+        {/* LISTA DE CATEGORIAS: flex-wrap permite que os badges quebrem linha se forem muitos */}
+        <div className="flex flex-wrap gap-1 py-1">
+          {listaCategorias.map((cat, index) => {
+            if (!cat) return null; // Ignora se vier vazio
+
+            const nomeCategoria = typeof cat === "object" ? cat.nome : cat;
+            const key = typeof cat === "object" && cat.id ? cat.id : index;
+
+            return (
+              <Badge key={key} variante={"outline"} tamanho="xs">
+                {nomeCategoria}
+              </Badge>
+            );
+          })}
+        </div>
+
+        {/* Área inferior fixada na base do card */}
+        <div className="flex justify-between items-center pt-2 mt-auto border-t border-zinc-100">
           <div className="text-xs flex items-center gap-1 text-zinc-500">
-            <LuUsers />
+            <LuUsers size={14} />
             <span>{totalEmprestimos} empréstimos</span>
           </div>
           <Botao tamanho="xs">Reservar</Botao>

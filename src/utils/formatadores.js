@@ -30,7 +30,7 @@ export const formatarLivroParaHome = (livro) => ({
   capa: livro.capa,
   autor: livro.autor.nome,
   totalEmprestimos: livro.totalEmprestimos,
-  categoria: livro.categoria.map((cat) => cat.nome).join(", "),
+  categoria: livro.categoria,
 });
 
 // Formato longo
