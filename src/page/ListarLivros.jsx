@@ -141,7 +141,7 @@ const ListarLivros = () => {
                 <CardLivro
                   titulo={livro.titulo}
                   autor={typeof livro.autor === "object" ? livro.autor?.nome : livro.autor}
-                  capa={livro.capaPequena || livro.capa}
+                  capa={livro.capa}
                   categoria={livro.categoria}
                   totalEmprestimos={livro.totalEmprestimos || 0}
                 />
