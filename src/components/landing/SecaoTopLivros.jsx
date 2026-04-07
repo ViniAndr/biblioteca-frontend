@@ -80,7 +80,6 @@ const SecaoTopLivros = () => {
             {/* Carrossel de livros */}
             <div
               ref={carrosselRef}
-              // A MÁGICA ESTÁ AQUI: overflow-x-auto, snap-x e classes arbitrárias do Tailwind para esconder a scrollbar!
               className="flex gap-6 pb-6 pt-2 overflow-x-auto snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {livros.map((livro, index) => (
