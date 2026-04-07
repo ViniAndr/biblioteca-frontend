@@ -27,7 +27,7 @@ export const formatarLivroParaDashboard = (livro) => ({
 export const formatarLivroParaHome = (livro) => ({
   id: livro.id,
   titulo: livro.titulo,
-  capa: livro.capa,
+  capa: livro.capaPequena,
   autor: livro.autor.nome,
   totalEmprestimos: livro.totalEmprestimos,
   categoria: livro.categoria,

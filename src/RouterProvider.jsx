@@ -16,6 +16,7 @@ import Cadastro from "./page/auth/Cadastro";
 import LoginFuncionarioEAdmin from "./page/auth/LoginFuncionarioEAdmin";
 import Dashboard from "./page/Dashboard";
 import Perfil from "./page/Perfil";
+import ListarLivros from "./page/ListarLivros";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         index: true, // Rota padrão para a página inicial ("/")
         element: <Home />, // Componente a ser renderizado na rota "/"
+      },
+      {
+        path: "/livros",
+        element: <ListarLivros />,
       },
       {
         path: "/login/cliente",
@@ -77,7 +82,7 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/funcionario",
         element: (
-          <RotaPrivada allowedRoles={["funcionario", "admin"]} redirectPath="/login/area-restrita">
+          <RotaPrivada papeisPermitidos={["funcionario", "admin"]} caminhoRedirecionamento="/login/area-restrita">
             <Dashboard />
           </RotaPrivada>
         ),

@@ -5,7 +5,7 @@ import { useBuscaPaginada } from "../useBuscaPaginada";
 import { listarTodosLivros } from "../../services/livroService";
 import { formatarLivroParaDashboard } from "../../utils/formatadores";
 
-export const useLivros = () => {
+export const useLivros = (formatador = formatarLivroParaDashboard) => {
   // 1. Pega as listas completas (sem depender dos livros na tela)
   const { autores, editoras, categorias, recarregar: recarregarAtributos } = useTodosAtributos();
 
@@ -27,7 +27,7 @@ export const useLivros = () => {
 
   // 4. Retorna os dados diretos, limpos e prontos para o Livros.jsx usar
   return {
-    livros: dados?.livros?.map(formatarLivroParaDashboard) || [],
+    livros: dados?.livros?.map(formatador) || [],
     autores: autores || [],
     editoras: editoras || [],
     categorias: categorias || [],

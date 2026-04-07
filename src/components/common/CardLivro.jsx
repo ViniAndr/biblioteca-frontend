@@ -8,6 +8,16 @@ import { LuUsers } from "react-icons/lu";
 const CardLivro = ({ titulo, capa, autor, categoria = [], totalEmprestimos, posicao }) => {
   const URL_API = import.meta.env.VITE_API_URL;
 
+  let linkImagem = "https://placehold.co/300x450/e4e4e7/52525b?text=Sem+Capa"; // Imagem padrão
+
+  if (capa) {
+    if (capa.startsWith("http://") || capa.startsWith("https://")) {
+      linkImagem = capa; // Se for da Amazon ou Google, usa direto!
+    } else {
+      linkImagem = `${URL_API}${capa}`; // Se for do nosso servidor (/uploads/...), junta com a API
+    }
+  }
+
   // Prevenção de erro: garante que sempre será um array, mesmo se vier uma string
   const listaCategorias = Array.isArray(categoria) ? categoria : [categoria];
 
@@ -22,8 +32,8 @@ const CardLivro = ({ titulo, capa, autor, categoria = [], totalEmprestimos, posi
       {/* Container para manter tamanho fixo */}
       <div className="relative overflow-hidden aspect-[2/3]">
         <img
-          src={`${URL_API}${capa}`}
-          alt={titulo}
+          src={linkImagem}
+          alt={titulo || "Capa do Livro"}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
