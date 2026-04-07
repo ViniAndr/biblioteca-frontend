@@ -7,6 +7,8 @@ import CardLivro from "../components/common/CardLivro";
 import Botao from "../components/common/Botao";
 import Carregamento from "../components/common/Carregamento";
 import Pesquisa from "../components/common/Pesquisa";
+import Paginacao from "../components/common/Paginacao";
+import SeletorItensPorPagina from "../components/common/SeletorItensPorPagina";
 
 // Hook
 import { useLivros } from "../hooks/livro/useLivros";
@@ -27,6 +29,8 @@ const ListarLivros = () => {
     setPagina,
     totalPaginas,
     definirCampoFiltro,
+    itensPorPagina,
+    setItensPorPagina,
   } = useLivros(formatarLivroParaHome);
 
   // Estado local apenas para o input não travar
@@ -150,28 +154,14 @@ const ListarLivros = () => {
       {/*PAGINAÇÃO */}
       {!carregando && totalPaginas > 0 && (
         <div className="bg-white p-4 rounded-lg shadow-sm border border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-4 mt-auto">
-          <p className="text-sm text-zinc-600 text-center sm:text-left">
-            Página <span className="font-semibold text-zinc-900">{pagina}</span> de{" "}
-            <span className="font-semibold text-zinc-900">{totalPaginas}</span>
-          </p>
+          {/* Seletor de Itens por Página */}
+          <div className="flex items-center justify-center w-full sm:w-auto">
+            <SeletorItensPorPagina itensPorPagina={itensPorPagina} setItensPorPagina={setItensPorPagina} />
+          </div>
 
-          <div className="flex gap-2">
-            <Botao
-              variante="outline"
-              tamanho="sm"
-              onClick={() => setPagina((p) => Math.max(1, p - 1))}
-              disabled={pagina === 1}
-            >
-              Anterior
-            </Botao>
-            <Botao
-              variante="outline"
-              tamanho="sm"
-              onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))}
-              disabled={pagina === totalPaginas}
-            >
-              Próxima
-            </Botao>
+          {/* Botões de Navegação */}
+          <div className="flex items-center justify-center w-full sm:w-auto">
+            <Paginacao pagina={pagina} setPagina={setPagina} total={totalPaginas} />
           </div>
         </div>
       )}
