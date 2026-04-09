@@ -1,6 +1,6 @@
 // Components
 import SecaoBeneficios from "../components/landing/SecaoBeneficios";
-import SecaoCategorias from "../components/landing/SecaoCategorias";
+import SecaoComoFunciona from "../components/landing/SecaoComoFunciona";
 import SecaoHero from "../components/landing/SecaoHero";
 import SecaoTopLivros from "../components/landing/SecaoTopLivros";
 
@@ -15,7 +15,7 @@ const Home = () => {
       <SecaoHero />
       <SecaoTopLivros />
       <SecaoBeneficios />
-      <SecaoCategorias />
+      <SecaoComoFunciona />
     </div>
   );
 };

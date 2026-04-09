@@ -7,59 +7,112 @@ import { PiBookOpenLight } from "react-icons/pi";
 
 const Rodape = () => {
   return (
-    <footer className=" py-12 border-t border-zinc-200">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap md:justify-center gap-8 md:gap-16 pb-8">
-          {/* Coluna Esquerda */}
-          <div>
-            {/* logo */}
-            <div className="flex items-center gap-2">
-              <PiBookOpenLight className="h-6 w-6" />
-              <p className="text-xl font-bold tracking-tight">Biblioteca - Telecentro Municipal de Campestre</p>
+    <footer className="bg-white pt-16 pb-8 border-t border-zinc-200 mt-auto">
+      <div className="container mx-auto px-4 max-w-7xl">
+        {/* Usando Grid para dividir o rodapé perfeitamente */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-12">
+          {/* Coluna 1: Logo e Sobre (Ocupa mais espaço) */}
+          <div className="md:col-span-5 lg:col-span-4">
+            <div className="flex items-center gap-2 text-zinc-900 mb-4">
+              <div className="bg-blue-600 p-2 rounded-lg text-white">
+                <PiBookOpenLight className="h-6 w-6" />
+              </div>
+              <p className="text-xl font-bold tracking-tight">Biblioteca Municipal</p>
             </div>
-            {/* Breve Descrição */}
-            <p className="text-sm text-zinc-600 my-3 md:max-w-96">
-              Sua biblioteca digital com milhares de títulos para explorar, aprender e se inspirar.
+
+            <p className="text-sm text-zinc-600 leading-relaxed mb-6 md:max-w-sm">
+              Telecentro Municipal de Campestre. Sua biblioteca digital com milhares de títulos para explorar, aprender
+              e se inspirar todos os dias.
             </p>
-            {/* Rede Social */}
-            <div className="flex gap-2">
-              <Link to="#">
-                <FaWhatsapp className="h-5 w-5 text-zinc-600" />
-              </Link>
-              <Link to="#">
-                <LuInstagram className="h-5 w-5 text-zinc-600" />
-              </Link>
-              <Link to="#">
-                <LuFacebook className="h-5 w-5 text-zinc-600" />
-              </Link>
+
+            {/* Redes Sociais com links reais e hover nas cores das marcas */}
+            <div className="flex gap-4">
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-zinc-100 rounded-full text-zinc-500 hover:text-green-500 hover:bg-green-50 transition-all duration-300"
+                aria-label="WhatsApp"
+              >
+                <FaWhatsapp className="h-5 w-5" />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-zinc-100 rounded-full text-zinc-500 hover:text-pink-600 hover:bg-pink-50 transition-all duration-300"
+                aria-label="Instagram"
+              >
+                <LuInstagram className="h-5 w-5" />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-zinc-100 rounded-full text-zinc-500 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300"
+                aria-label="Facebook"
+              >
+                <LuFacebook className="h-5 w-5" />
+              </a>
             </div>
           </div>
 
-          {/* Coluna Direita */}
-          <div>
-            <h3 className="font-medium pb-3">Contato</h3>
+          {/* Coluna 2: Links Úteis (Adicionado para balancear o design) */}
+          <div className="md:col-span-3 lg:col-span-4 md:pl-8 lg:pl-16">
+            <h3 className="font-semibold text-zinc-900 mb-5">Navegação Rápida</h3>
             <ul className="space-y-3">
-              <li className="flex items-start gap-1 text-sm text-zinc-600">
-                <LuMapPin className="h-4 w-4" />
-                <span>Rua minstro Lindoufu Collor, S/N, Campestre - AL</span>
+              <li>
+                <Link to="/" className="text-sm text-zinc-600 hover:text-blue-600 transition-colors">
+                  Página Inicial
+                </Link>
               </li>
-              <li className="flex items-center gap-1 text-sm text-zinc-600">
-                <LuPhone className="h-4 w-4" />
+              <li>
+                <Link to="/livros" className="text-sm text-zinc-600 hover:text-blue-600 transition-colors">
+                  Catálogo de Livros
+                </Link>
+              </li>
+              <li>
+                <Link to="/login" className="text-sm text-zinc-600 hover:text-blue-600 transition-colors">
+                  Acessar Minha Conta
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Coluna 3: Contato */}
+          <div className="md:col-span-4 lg:col-span-4">
+            <h3 className="font-semibold text-zinc-900 mb-5">Fale Conosco</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-sm text-zinc-600 group">
+                <div className="mt-0.5 p-1.5 bg-zinc-100 rounded-md text-zinc-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                  <LuMapPin className="h-4 w-4" />
+                </div>
+                <span className="leading-relaxed">
+                  Rua Ministro Lindolfo Collor, S/N
+                  <br />
+                  Campestre - AL
+                </span>
+              </li>
+              <li className="flex items-center gap-3 text-sm text-zinc-600 group">
+                <div className="p-1.5 bg-zinc-100 rounded-md text-zinc-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                  <LuPhone className="h-4 w-4" />
+                </div>
                 <span>(--) ---------</span>
               </li>
-              <li className="flex items-center gap-1 text-sm text-zinc-600">
-                <LuMail className="h-4 w-4" />
+              <li className="flex items-center gap-3 text-sm text-zinc-600 group">
+                <div className="p-1.5 bg-zinc-100 rounded-md text-zinc-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                  <LuMail className="h-4 w-4" />
+                </div>
                 <span>telecentrocampestre22@gmail.com</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-zinc-200 pt-8 text-center text-sm text-muted-foreground">
-          <p>
-            &copy; {new Date().getFullYear()} Biblioteca - Telecentro Municipal de Campestre. Todos os direitos
-            reservados.
-          </p>
+        {/* Linha de Copyright */}
+        <div className="border-t border-zinc-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-sm text-zinc-500">
+          <p>&copy; {new Date().getFullYear()} Biblioteca Telecentro Campestre. Todos os direitos reservados.</p>
+          <p className="text-xs">Desenvolvido com dedicação para a comunidade.</p>
         </div>
       </div>
     </footer>
