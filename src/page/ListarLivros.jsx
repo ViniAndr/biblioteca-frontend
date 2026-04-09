@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { LuBookX } from "react-icons/lu";
 import SelectReact from "react-select";
+import { useSearchParams } from "react-router-dom";
 
 // Components
 import CardLivro from "../components/common/CardLivro";
@@ -12,10 +13,11 @@ import SeletorItensPorPagina from "../components/common/SeletorItensPorPagina";
 
 // Hook
 import { useLivros } from "../hooks/livro/useLivros";
-
 import { formatarLivroParaHome } from "../utils/formatadores";
 
 const ListarLivros = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const {
     livros,
     categorias,
@@ -33,8 +35,16 @@ const ListarLivros = () => {
     setItensPorPagina,
   } = useLivros(formatarLivroParaHome);
 
-  // Estado local apenas para o input não travar
-  const [textoBusca, setTextoBusca] = useState("");
+  useEffect(() => {
+    // Agora o sistema escuta apenas o termo de busca!
+    const buscaUrl = searchParams.get("busca");
+
+    if (buscaUrl) {
+      setPesquisa(buscaUrl);
+      // Limpa a URL depois de ler, para não travar a navegação do usuário
+      setSearchParams({});
+    }
+  }, [searchParams, setSearchParams, setPesquisa]);
 
   // Função auxiliar para mapear os arrays do banco para o padrão do react-select
   const formatarOpcoesFiltro = (itens) => {
@@ -67,7 +77,7 @@ const ListarLivros = () => {
 
   return (
     <div className="flex flex-col h-full gap-6 p-4 md:p-6 lg:p-8 bg-zinc-50 min-h-screen">
-      {/*CABEÇALHO E BARRA DE FERRAMENTAS */}
+      {/* CABEÇALHO E BARRA DE FERRAMENTAS */}
       <div className="bg-white p-4 rounded-lg shadow-sm border border-zinc-200 flex flex-col gap-4">
         <div>
           <h1 className="text-2xl font-bold text-zinc-800">Catálogo de Livros</h1>
@@ -92,20 +102,19 @@ const ListarLivros = () => {
                     options={select.opcoes}
                     value={valorAtual}
                     onChange={(opcaoSelecionada) => {
-                      // Se o usuário clicar no "X" para limpar, o opcaoSelecionada vem como null
                       const valorParaDefinir = opcaoSelecionada ? opcaoSelecionada.value : "";
                       definirCampoFiltro(select.nome, valorParaDefinir);
                       setPagina(1); // Volta para a primeira página ao filtrar
                     }}
                     placeholder={select.placeholder}
                     isClearable={true}
-                    isSearchable={true} // Aqui ativamos a digitação dentro do select!
+                    isSearchable={true}
                     noOptionsMessage={() => "Nenhum resultado encontrado"}
                     styles={{
                       control: (base) => ({
                         ...base,
                         minHeight: "42px",
-                        borderColor: "#d1d5db", // Corrigindo a cor da borda para bater com o input
+                        borderColor: "#d1d5db",
                         boxShadow: "none",
                         "&:hover": {
                           borderColor: "#9ca3af",
@@ -128,8 +137,9 @@ const ListarLivros = () => {
           <div className="flex-grow flex flex-col items-center justify-center text-zinc-500 gap-3 min-h-[400px]">
             <LuBookX size={60} className="text-zinc-300" />
             <p className="text-lg font-medium text-zinc-600">Nenhum livro encontrado.</p>
-            {textoBusca && (
-              <Botao variante="outline" onClick={() => setTextoBusca("")}>
+            {/* O Botão agora limpa a 'pesquisa' real do sistema */}
+            {pesquisa && (
+              <Botao variante="outline" onClick={() => setPesquisa("")}>
                 Limpar Busca
               </Botao>
             )}
@@ -141,7 +151,7 @@ const ListarLivros = () => {
                 <CardLivro
                   titulo={livro.titulo}
                   autor={typeof livro.autor === "object" ? livro.autor?.nome : livro.autor}
-                  capa={livro.capa}
+                  capa={livro.capaPequena || livro.capa}
                   categoria={livro.categoria}
                   totalEmprestimos={livro.totalEmprestimos || 0}
                 />
@@ -151,15 +161,13 @@ const ListarLivros = () => {
         )}
       </div>
 
-      {/*PAGINAÇÃO */}
+      {/* PAGINAÇÃO */}
       {!carregando && totalPaginas > 0 && (
         <div className="bg-white p-4 rounded-lg shadow-sm border border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-4 mt-auto">
-          {/* Seletor de Itens por Página */}
           <div className="flex items-center justify-center w-full sm:w-auto">
             <SeletorItensPorPagina itensPorPagina={itensPorPagina} setItensPorPagina={setItensPorPagina} />
           </div>
 
-          {/* Botões de Navegação */}
           <div className="flex items-center justify-center w-full sm:w-auto">
             <Paginacao pagina={pagina} setPagina={setPagina} total={totalPaginas} />
           </div>
