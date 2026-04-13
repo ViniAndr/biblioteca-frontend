@@ -15,6 +15,8 @@ import {
   LuBook,
 } from "react-icons/lu";
 
+import { FaWhatsapp } from "react-icons/fa";
+
 // Mapeamento de status -> ícones e estilos
 const mapaStatusCabecalho = {
   Solicitado: {
@@ -101,7 +103,27 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
     if (resposta.success && aoAtualizar) aoAtualizar();
   };
 
+  const lidarComWhatsApp = () => {
+    if (!dados?.cliente?.telefone) {
+      alert("O cliente não possui um telefone cadastrado.");
+      return;
+    }
+
+    // Remove tudo que não for número (ex: parênteses, traços, espaços)
+    const numeroLimpo = dados.cliente.telefone.replace(/\D/g, "");
+
+    // Monta a mensagem amigável (o encodeURIComponent garante que espaços e acentos funcionem no link)
+    const mensagem = encodeURIComponent(
+      `Olá ${dados.cliente.nome}, tudo bem? Notamos que o livro "${dados.livro.titulo}" venceu. Gostaria de solicitar a renovação do prazo ou prefere agendar a devolução na biblioteca?`,
+    );
+
+    // O "55" é o código do Brasil. Se o telefone já vier com 55, precisará de um ajuste fino aqui depois.
+    window.open(`https://wa.me/55${numeroLimpo}?text=${mensagem}`, "_blank");
+  };
+
   const renderizarAcoes = () => {
+    const podeRenovar = dados?.renovacoes < 2;
+
     switch (dados.status) {
       case "Solicitado":
         return (
@@ -115,7 +137,6 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
           </>
         );
       case "Emprestado":
-        const podeRenovar = dados.renovacoes < 2;
         return (
           <>
             <Botao variante="outline" disabled={!podeRenovar} onClick={lidarComRenovacao}>
@@ -129,9 +150,19 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
       case "Atrasado":
         return (
           <>
+            {/* O Botão de Contato com visual verde do WhatsApp */}
+            <Botao
+              variante="outline"
+              className="border-green-500 text-green-600 hover:bg-green-50 flex items-center gap-2"
+              onClick={lidarComWhatsApp}
+            >
+              <FaWhatsapp className="text-lg" /> Contatar
+            </Botao>
+
             <Botao variante="outline" disabled={!podeRenovar} onClick={lidarComRenovacao}>
               Renovar ({dados.renovacoes}/2)
             </Botao>
+
             <Botao variante="primary" onClick={lidarComDevolucao}>
               Devolver Livro
             </Botao>
