@@ -64,7 +64,12 @@ export default function LinhaDoTempo(data) {
     {
       chave: "renovadoOuAtrasado",
       titulo: emprestimo.status === "Atrasado" ? "Atrasado" : emprestimo.renovacoes > 0 ? "Renovado" : "Renovação",
-      data: emprestimo.status === "Atrasado" ? emprestimo.prazoDevolucao : emprestimo.renovacoes > 0 ? emprestimo.dataRenovacao : "-",
+      data:
+        emprestimo.status === "Atrasado"
+          ? emprestimo.prazoDevolucao
+          : emprestimo.renovacoes > 0
+            ? emprestimo.ultimaRenovacao
+            : "-",
       icone: <LuCircleAlert className="w-5 h-5" />,
     },
     {

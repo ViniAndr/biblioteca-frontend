@@ -51,10 +51,10 @@ const mapaStatusCabecalho = {
   },
 };
 
-const ItemInfo = ({ label, valor, className }) => (
+const ItemInfo = ({ label, valor, className, valorClassName = "" }) => (
   <div className={className}>
     <p className="text-sm text-zinc-600 leading-6">{label}</p>
-    <p className="font-medium">{valor || "-"}</p>
+    <p className={`font-medium ${valorClassName}`}>{valor || "-"}</p>
   </div>
 );
 
@@ -82,6 +82,8 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
   useEffect(() => {
     if (id) visualizarDetalhes(id);
   }, [id]);
+
+  console.log("dados:", dados);
 
   const lidarComCancelamento = async () => {
     const resposta = await cancelarEmprestimo(dados.id);
@@ -242,13 +244,14 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
             <ItemInfo label="Prazo de retirada" valor={dados.prazoRetirada} />
             <ItemInfo label="Data da retirada/empréstimo" valor={formatarValor(dados.dataEmprestimo)} />
             <ItemInfo label="Prazo para devolução" valor={formatarValor(dados.prazoDevolucao)} />
-          </div>
-          <div className="flex-1 flex flex-col gap-3">
             <ItemInfo
               label="Data do cancelamento"
               valor={dados.dataCancelamento === "Aguardando" ? "-" : dados.dataCancelamento}
             />
+          </div>
+          <div className="flex-1 flex flex-col gap-3">
             <ItemInfo label="Data da devolução" valor={formatarValor(dados.dataDevolucao)} />
+            <ItemInfo label="Data da Última Renovação" valor={dados.ultimaRenovacao} />
             <ItemInfo label="Quantidade de renovações" valor={`${dados.renovacoes}`} />
             <ItemInfo label="Funcionário responsável" valor={formatarValor(dados.funcionario?.nome)} />
           </div>
