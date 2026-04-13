@@ -128,9 +128,14 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
         );
       case "Atrasado":
         return (
-          <Botao variante="primary" onClick={lidarComDevolucao}>
-            Devolver Livro
-          </Botao>
+          <>
+            <Botao variante="outline" disabled={!podeRenovar} onClick={lidarComRenovacao}>
+              Renovar ({dados.renovacoes}/2)
+            </Botao>
+            <Botao variante="primary" onClick={lidarComDevolucao}>
+              Devolver Livro
+            </Botao>
+          </>
         );
       default:
         return null;
