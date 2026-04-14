@@ -3,6 +3,8 @@ import Badge from "../Badge";
 import Botao from "../Botao";
 import LinhaDoTempo from "./LinhaDoTempo";
 import { useAcoesEmprestimo } from "../../../hooks/emprestimo/useAcoesEmprestimo";
+import { useModal } from "../../../contexts/ModalContext";
+
 import {
   LuCircleHelp,
   LuClock,
@@ -13,6 +15,7 @@ import {
   LuUser,
   LuCalendar,
   LuBook,
+  LuExternalLink,
 } from "react-icons/lu";
 
 import { FaWhatsapp } from "react-icons/fa";
@@ -58,17 +61,21 @@ const ItemInfo = ({ label, valor, className, valorClassName = "" }) => (
   </div>
 );
 
-const GrupoInfo = ({ titulo, icone: Icone, children }) => (
+const GrupoInfo = ({ titulo, icone: Icone, acao, children }) => (
   <div>
-    <div className="flex gap-2 items-center my-5">
-      <Icone className="w-5 h-5" />
-      <h2 className="font-bold text-xl">{titulo}</h2>
+    <div className="flex justify-between items-center my-5">
+      <div className="flex gap-2 items-center">
+        <Icone className="w-5 h-5" />
+        <h2 className="font-bold text-xl">{titulo}</h2>
+      </div>
+      {acao && <div>{acao}</div>}
     </div>
     <div className="border border-zinc-300 rounded-lg p-5">{children}</div>
   </div>
 );
-
 const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
+  const { abrirModal } = useModal();
+
   const {
     visualizarDetalhes,
     dados,
@@ -82,8 +89,6 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
   useEffect(() => {
     if (id) visualizarDetalhes(id);
   }, [id]);
-
-  console.log("dados:", dados);
 
   const lidarComCancelamento = async () => {
     const resposta = await cancelarEmprestimo(dados.id);
@@ -121,6 +126,22 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
 
     // O "55" é o código do Brasil. Se o telefone já vier com 55, precisará de um ajuste fino aqui depois.
     window.open(`https://wa.me/55${numeroLimpo}?text=${mensagem}`, "_blank");
+  };
+
+  const abrirFichaDoCliente = () => {
+    abrirModal("detalhesCliente", {
+      titulo: "Ficha do Cliente",
+      tamanho: "xl",
+      props: { cliente: dados.cliente },
+    });
+  };
+
+  const abrirFichaDoLivro = () => {
+    abrirModal("detalhesLivro", {
+      titulo: "Detalhes do Livro",
+      tamanho: "lg",
+      props: { id: dados.livro.id },
+    });
   };
 
   const renderizarAcoes = () => {
@@ -259,7 +280,19 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
       </GrupoInfo>
 
       {/* Informações do Livro */}
-      <GrupoInfo titulo="Informações sobre o Livro" icone={LuBook}>
+      <GrupoInfo
+        titulo="Informações sobre o Livro"
+        icone={LuBook}
+        acao={
+          <Botao
+            variante="ghost"
+            className="text-blue-600 hover:bg-blue-50 py-1.5 px-3 flex gap-2 items-center text-sm"
+            onClick={abrirFichaDoLivro}
+          >
+            Ver Ficha do Livro <LuExternalLink />
+          </Botao>
+        }
+      >
         <div className="flex mt-2 gap-10">
           <div className="flex-1 flex flex-col gap-3">
             <ItemInfo label="Título" valor={dados.livro?.titulo} />
@@ -283,7 +316,19 @@ const ModalDetalhesEmprestimo = ({ id, aoAtualizar, aoFechar }) => {
       </GrupoInfo>
 
       {/* Informações do Cliente */}
-      <GrupoInfo titulo="Informações sobre o Cliente" icone={LuUser}>
+      <GrupoInfo
+        titulo="Informações sobre o Cliente"
+        icone={LuUser}
+        acao={
+          <Botao
+            variante="ghost"
+            className="text-blue-600 hover:bg-blue-50 py-1.5 px-3 flex gap-2 items-center text-sm"
+            onClick={abrirFichaDoCliente}
+          >
+            Ver Ficha do Cliente <LuExternalLink />
+          </Botao>
+        }
+      >
         <div className="flex-1 flex flex-col gap-3">
           <ItemInfo label="Nome" valor={dados.cliente?.nome} />
           <div className="flex">
