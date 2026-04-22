@@ -6,6 +6,7 @@ import ModalDetalhesEmprestimo from "./ModalDetalhesEmprestimo";
 import ModalCriarOuEditarLivro from "./ModalCriarOuEditarLivro";
 import ModalCadastrarOuEditarCliente from "./ModalCadastrarOuEditarCliente";
 import ModalDetalhesCliente from "./ModalDetalhesCliente";
+import ModalEditarPerfilCliente from "./ModalEditarPerfilCliente";
 
 // Registro de tipos de modal e seus componentes correspondentes
 const COMPONENTES_MODAL = {
@@ -17,6 +18,7 @@ const COMPONENTES_MODAL = {
   cadastrarOuEditarCliente: ModalCadastrarOuEditarCliente,
   criarEmprestimo: ModalCriarEmprestimo,
   detalhesCliente: ModalDetalhesCliente,
+  editarPerfilCliente: ModalEditarPerfilCliente,
 };
 
 const ModalRaiz = ({ estaAberto, tipo, onClose, titulo, props, tamanho, fecharNoOverlay = true }) => {

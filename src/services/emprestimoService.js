@@ -71,3 +71,24 @@ export const realizarDevolucaoNaApi = async (id, estadoDevolucao) => {
     return { error: true, message: mensagemDoBackend };
   }
 };
+
+// Buscar histórico de um cliente específico (Rota permitida para o próprio cliente)
+export const listarHistoricoCliente = async (clienteId, filtros = {}, pagina = 1, itensPorPagina = 50) => {
+  let urlBase = `emprestimos/clientes/${clienteId}/historico?pagina=${pagina}&qtdItensPorPagina=${itensPorPagina}`;
+
+  if (filtros.status) {
+    urlBase += `&status=${filtros.status}`;
+  }
+
+  try {
+    const response = await api.get(urlBase);
+    return { error: false, data: response.data };
+  } catch (error) {
+    const mensagemDoBackend =
+      error.response?.data?.mensagem ||
+      error.response?.data?.error ||
+      "Erro inesperado ao buscar histórico. Por favor, tente novamente.";
+
+    return { error: true, message: mensagemDoBackend };
+  }
+};

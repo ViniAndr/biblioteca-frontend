@@ -65,3 +65,46 @@ export const pesquisarClientesParaSelect = async (valorDigitado) => {
     return [];
   }
 };
+
+// Busca os dados do próprio cliente logado
+export const obterPerfilCliente = async () => {
+  try {
+    const response = await api.get("/clientes/perfil");
+    return { error: false, data: response.data };
+  } catch (error) {
+    const mensagemDoBackend =
+      error.response?.data?.mensagem || error.response?.data?.error || "Erro ao carregar perfil do cliente.";
+
+    return { error: true, message: mensagemDoBackend };
+  }
+};
+
+// Atualiza dados básicos e endereço do próprio cliente
+export const atualizarPerfilCliente = async (dados) => {
+  try {
+    const response = await api.put("/clientes/perfil", dados);
+    return { error: false, data: response.data };
+  } catch (error) {
+    console.log(error);
+    const mensagemDoBackend =
+      error.response?.data?.mensagem || error.response?.data?.error || "Erro ao atualizar perfil.";
+    return {
+      error: true,
+      message: mensagemDoBackend,
+    };
+  }
+};
+
+// Rota para alteração de senha (assumindo que seu backend trate isso ou trate no atualizarPerfil)
+export const alterarSenhaCliente = async (senhas) => {
+  try {
+    // Se o seu backend usar a mesma rota de perfil para senha:
+    const response = await api.put("/clientes/perfil", senhas);
+    return { error: false, data: response.data };
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.mensagem || "Senha atual incorreta ou erro no servidor.",
+    };
+  }
+};
