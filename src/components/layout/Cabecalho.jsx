@@ -34,6 +34,7 @@ const Cabecalho = () => {
     { nome: "Home", caminho: "/" },
     { nome: "Catálogo", caminho: "/livros" },
     { nome: "Sobre Nós", caminho: "/sobre" },
+    { nome: "Galeria dos Prefeitos", caminho: "/galeria-dos-prefeitos" },
   ];
 
   return (

@@ -17,6 +17,7 @@ import LoginFuncionarioEAdmin from "./page/auth/LoginFuncionarioEAdmin";
 import Dashboard from "./page/Dashboard";
 import Perfil from "./page/Perfil";
 import ListarLivros from "./page/ListarLivros";
+import GaleriaDosPrefeitos from "./page/galeriaPrefeitos/GaleriaDosPrefeitos";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,14 @@ const router = createBrowserRouter([
           <RotaPrivada papeisPermitidos={["cliente", "funcionario", "admin"]} caminhoRedirecionamento="/">
             <Perfil />
           </RotaPrivada>
+        ),
+      },
+      {
+        path: "/galeria-dos-prefeitos",
+        element: (
+          <RotaPublica>
+            <GaleriaDosPrefeitos />
+          </RotaPublica>
         ),
       },
     ],
